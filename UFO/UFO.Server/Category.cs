@@ -14,4 +14,12 @@ namespace UFO.Server.Data {
             get; set;
         }
     }
+
+    internal interface CategoryDao {
+        List<Category> GetAllCategories();
+        User GetCategoryById(uint id);
+        void UpdateCategory(Category category);
+        void DeleteCategory(Category category);
+        uint CreateCategory(string name);
+    }
 }
