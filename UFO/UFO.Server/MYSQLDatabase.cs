@@ -23,10 +23,8 @@ namespace UFO.Server {
         }
 
         public DbCommand CreateCommand(string sql) {
-            
             return new MySqlCommand(sql);
         }
-
 
         protected DbConnection GetOpenConnection() {
             return CreateOpenConnection();
@@ -82,16 +80,11 @@ namespace UFO.Server {
 
         public int ExecuteNonQuery(DbCommand command) {
             DbConnection conn = null;
-            MySqlCommand mysqlCommand = (MySqlCommand)command;
             try {
                 conn = GetOpenConnection();
                 command.Connection = conn;
-                int executeResult = command.ExecuteNonQuery();
-                if ((int)mysqlCommand.LastInsertedId > 0) {
-                    return (int)mysqlCommand.LastInsertedId;
-                } else {
-                    return executeResult;
-                }
+
+                return command.ExecuteNonQuery();
             } finally {
                 ReleaseConnection(conn);
             }
