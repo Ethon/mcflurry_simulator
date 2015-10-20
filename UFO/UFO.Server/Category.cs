@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -61,7 +60,8 @@ namespace UFO.Server.Data {
             DbCommand cmd = database.CreateCommand(SQL_INSERT);
             database.DefineParameter(cmd, "@shortcut", DbType.String, shortcut);
             database.DefineParameter(cmd, "@name", DbType.String, categoryName);
-            return database.ExecuteNonQuery(cmd) == 1;
+            int lastInsertID = database.ExecuteNonQuery(cmd);
+            return lastInsertID > 1;
         }
 
         public bool DeleteCategory(Category category) {
