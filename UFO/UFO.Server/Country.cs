@@ -18,4 +18,11 @@ namespace UFO.Server.Data {
             get; set;
         }
     }
+    internal interface ICountryDao {
+        List<Country> GetAllCountries();
+        User GetCountryById(uint id);
+        void UpdateCountry(Country country);
+        void DeleteCountry(Country country);
+        uint CreateCountry(string name, string flagPath);
+    }
 }
