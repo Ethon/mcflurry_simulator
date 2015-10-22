@@ -194,3 +194,8 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+UFO/UFO.Server/App.config
+UFO/UFO.Server/App.config
+UFO/UFO.Server/Program.cs
+UFO/UFO.Server/App.config
+UFO/UFO.Server/Program.cs
