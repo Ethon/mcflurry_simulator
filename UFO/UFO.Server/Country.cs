@@ -1,11 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
     public class Country {
+
+        public Country() {
+
+        }
+        public Country(uint id, string name, string flagPath) {
+            this.Id = id;
+            this.Name = name;
+            this.FlagPath = flagPath;
+        }
+
         public uint Id {
             get; set;
         }
@@ -17,12 +29,81 @@ namespace UFO.Server.Data {
         public string FlagPath {
             get; set;
         }
+        public override string ToString() {
+            return Id + ": " + Name +" " + FlagPath;
+        }
     }
     internal interface ICountryDao {
         List<Country> GetAllCountries();
-        User GetCountryById(uint id);
-        void UpdateCountry(Country country);
-        void DeleteCountry(Country country);
-        uint CreateCountry(string name, string flagPath);
+        Country GetCountryById(uint id);
+        bool UpdateCountry(Country country);
+        bool DeleteCountry(Country country);
+        bool CreateCountry(string name, string flagPath);
+    }
+    internal class CountryDao : ICountryDao {
+        private const string SQL_FIND_BY_ID = "SELECT * FROM Country WHERE countryId=@countryId";
+        private const string SQL_FIND_ALL = "SELECT * FROM Country";
+        private const string SQL_UPDATE = "UPDATE Country SET name=@name,flagPath=@flagPath WHERE countryId=@countryId";
+        private const string SQL_INSERT = "INSERT INTO Country (name,flagPath) VALUES(@name,@flagPath)";
+        private const string SQL_DELETE = "DELETE FROM Country WHERE countryId=@countryId";
+
+        private IDatabase database;
+
+        public CountryDao(IDatabase database) {
+            this.database = database;
+        }
+
+        public bool CreateCountry(string name, string flagPath) {
+            DbCommand cmd = database.CreateCommand(SQL_INSERT);
+            database.DefineParameter(cmd, "@name", DbType.String, name);
+            database.DefineParameter(cmd, "@flagPath", DbType.String, flagPath);
+            int lastInsertID = database.ExecuteNonQuery(cmd);
+            return lastInsertID > 1;
+        }
+
+
+        public List<Country> GetAllCountries() {
+            List<Country> countries = new List<Country>();
+            DbCommand cmd = database.CreateCommand(SQL_FIND_ALL);
+            IDataReader reader = database.ExecuteReader(cmd);
+            while (reader.Read()) {
+                Country newCountry = new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
+                countries.Add(newCountry);
+            }
+            return countries;
+        }
+
+        public Country GetCountryById(uint id) {
+            DbCommand cmd = database.CreateCommand(SQL_FIND_BY_ID);
+            database.DefineParameter(cmd, "@countryId", DbType.UInt32,id);
+            IDataReader reader = database.ExecuteReader(cmd);
+            if (reader.Read()) {
+                Console.WriteLine("FOUND");
+                return new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
+            } else {
+                return null;
+            }
+        }
+
+        public bool UpdateCountry(Country country) {
+            if (country != null) {
+                DbCommand cmd = database.CreateCommand(SQL_UPDATE);
+                database.DefineParameter(cmd, "@name", DbType.String, country.Name);
+                database.DefineParameter(cmd, "@flagPath", DbType.String, country.FlagPath);
+                database.DefineParameter(cmd, "@countryId", DbType.String, country.Id);
+                return database.ExecuteNonQuery(cmd) == 1;
+            }
+            return false;
+        }
+
+        public bool DeleteCountry(Country country) {
+            if (country != null) {
+                DbCommand cmd = database.CreateCommand(SQL_DELETE);
+                database.DefineParameter(cmd, "@countryId", DbType.UInt32, country.Id);
+                return database.ExecuteNonQuery(cmd) == 1;
+            }
+            return false;
+        }
+
     }
 }
