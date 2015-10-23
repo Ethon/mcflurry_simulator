@@ -8,28 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server {
-    class MYSQLDatabase : IDatabase {
+    public class MYSQLDatabase : IDatabase {
 
-        private string connectionString;
+        private MySqlConnection con;
 
         public MYSQLDatabase(string connectionString) {
-            this.connectionString = connectionString;
-        }
-        private DbConnection CreateOpenConnection() {
-            DbConnection connection = new MySqlConnection(connectionString);
-            connection.Open();
-
-            return connection;
+            con = new MySqlConnection(connectionString);
+            con.Open();
         }
 
         public DbCommand CreateCommand(string sql) {
-            
             return new MySqlCommand(sql);
         }
 
 
         protected DbConnection GetOpenConnection() {
-            return CreateOpenConnection();
+            return con;
         }
 
         protected void ReleaseConnection(DbConnection connection) {
@@ -42,8 +36,6 @@ namespace UFO.Server {
             return false;
         }
 
-        
-
         public int DeclareParamater(DbCommand command, string name, DbType type) {
             if (!command.Parameters.Contains(name)) {
                 string dbType = type.ToString();
@@ -54,7 +46,6 @@ namespace UFO.Server {
         }
 
         public void DefineParameter(DbCommand command, string name, DbType type, object value) {
-            
             int paramIndex = DeclareParamater(command, name, type);
             command.Parameters[paramIndex].Value = value;
         }
@@ -68,32 +59,21 @@ namespace UFO.Server {
         }
 
         public IDataReader ExecuteReader(DbCommand command) {
-            DbConnection conn = null;
-            try {
-                conn = GetOpenConnection();
-                command.Connection = conn;
-                CommandBehavior commandBehavior = IsSharedConnection() ? CommandBehavior.Default : CommandBehavior.CloseConnection;
-                return command.ExecuteReader(commandBehavior);
-            } catch {
-                ReleaseConnection(conn);
-                throw;
-            }
+            DbConnection conn = GetOpenConnection();
+            command.Connection = conn;
+            CommandBehavior commandBehavior = IsSharedConnection() ? CommandBehavior.Default : CommandBehavior.CloseConnection;
+            return command.ExecuteReader(commandBehavior);
         }
 
         public int ExecuteNonQuery(DbCommand command) {
-            DbConnection conn = null;
+            DbConnection conn = GetOpenConnection();
             MySqlCommand mysqlCommand = (MySqlCommand)command;
-            try {
-                conn = GetOpenConnection();
-                command.Connection = conn;
-                int executeResult = command.ExecuteNonQuery();
-                if ((int)mysqlCommand.LastInsertedId > 0) {
-                    return (int)mysqlCommand.LastInsertedId;
-                } else {
-                    return executeResult;
-                }
-            } finally {
-                ReleaseConnection(conn);
+            command.Connection = conn;
+            int executeResult = command.ExecuteNonQuery();
+            if ((int)mysqlCommand.LastInsertedId > 0) {
+                return (int)mysqlCommand.LastInsertedId;
+            } else {
+                return executeResult;
             }
         }
 
