@@ -30,7 +30,19 @@ namespace UFO.Server.Data {
             get; set;
         }
         public override string ToString() {
-            return Id + ": " + Name +" " + FlagPath;
+            return String.Format("Country(id={0}, name='{1}', flagPath='{2}') ", Id, Name, FlagPath);
+        }
+
+        public override bool Equals(object obj) {
+            Country u = obj as Country;
+            if (u == null) {
+                return false;
+            }
+            return Id.Equals(u.Id) && Name.Equals(u.Name) && FlagPath.Equals(u.FlagPath);
+        }
+
+        public override int GetHashCode() {
+            return (int)Id;
         }
     }
     internal interface ICountryDao {
@@ -38,7 +50,7 @@ namespace UFO.Server.Data {
         Country GetCountryById(uint id);
         bool UpdateCountry(Country country);
         bool DeleteCountry(Country country);
-        bool CreateCountry(string name, string flagPath);
+        Country CreateCountry(string name, string flagPath);
         void DeleteAllCountries();
     }
     internal class CountryDao : ICountryDao {
@@ -55,12 +67,12 @@ namespace UFO.Server.Data {
             this.database = database;
         }
 
-        public bool CreateCountry(string name, string flagPath) {
+        public Country CreateCountry(string name, string flagPath) {
             DbCommand cmd = database.CreateCommand(SQL_INSERT);
             database.DefineParameter(cmd, "@name", DbType.String, name);
             database.DefineParameter(cmd, "@flagPath", DbType.String, flagPath);
             int lastInsertID = database.ExecuteNonQuery(cmd);
-            return lastInsertID > 1;
+            return new Country((uint)lastInsertID, name, flagPath);
         }
 
 
