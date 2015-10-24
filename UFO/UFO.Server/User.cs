@@ -43,7 +43,7 @@ namespace UFO.Server.Data {
         User GetUserByEmailAddress(string email);
         void UpdateUser(User user);
         void DeleteUser(User user);
-        uint CreateUser(string firstName, string lastName, string email);
+        User CreateUser(string firstName, string lastName, string email);
     }
 
     public class UserDaoImpl : IUserDao {
@@ -53,6 +53,7 @@ namespace UFO.Server.Data {
         private const string GETALL_CMD = "SELECT * FROM User";
         private const string GETBYID_CMD = "SELECT * FROM User WHERE userId = @id";
         private const string GETBYEMAIL_CMD = "SELECT * FROM User WHERE email = @email";
+        private const string UPDATE_CMD = "UPDATE User SET firstname=@first, lastname=@last, email=@email WHERE id=@id";
 
         private IDatabase db;
 
@@ -68,12 +69,13 @@ namespace UFO.Server.Data {
             this.db = db;
         }
 
-        public uint CreateUser(string firstName, string lastName, string email) {
+        public User CreateUser(string firstName, string lastName, string email) {
             DbCommand cmd = db.CreateCommand(CREATE_CMD);
             db.DefineParameter(cmd, "@first", System.Data.DbType.String, firstName);
             db.DefineParameter(cmd, "@last", System.Data.DbType.String, lastName);
             db.DefineParameter(cmd, "@email", System.Data.DbType.String, email);
-            return (uint)cmd.ExecuteNonQuery();
+            int id = db.ExecuteNonQuery(cmd);
+            return new User((uint)id, firstName, lastName, email);
         }
 
         public void DeleteUser(User user) {
@@ -118,7 +120,12 @@ namespace UFO.Server.Data {
         }
 
         public void UpdateUser(User user) {
-            throw new NotImplementedException();
+            DbCommand cmd = db.CreateCommand(UPDATE_CMD);
+            db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, user.Id);
+            db.DefineParameter(cmd, "@first", System.Data.DbType.String, user.FirstName);
+            db.DefineParameter(cmd, "@last", System.Data.DbType.String, user.LastName);
+            db.DefineParameter(cmd, "@email", System.Data.DbType.String, user.EmailAddress);
+            db.ExecuteNonQuery(cmd);
         }
 
         public void DeleteAllUsers() {
