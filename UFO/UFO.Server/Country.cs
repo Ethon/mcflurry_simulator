@@ -39,6 +39,7 @@ namespace UFO.Server.Data {
         bool UpdateCountry(Country country);
         bool DeleteCountry(Country country);
         bool CreateCountry(string name, string flagPath);
+        void DeleteAllCountries();
     }
     internal class CountryDao : ICountryDao {
         private const string SQL_FIND_BY_ID = "SELECT * FROM Country WHERE countryId=@countryId";
@@ -46,6 +47,7 @@ namespace UFO.Server.Data {
         private const string SQL_UPDATE = "UPDATE Country SET name=@name,flagPath=@flagPath WHERE countryId=@countryId";
         private const string SQL_INSERT = "INSERT INTO Country (name,flagPath) VALUES(@name,@flagPath)";
         private const string SQL_DELETE = "DELETE FROM Country WHERE countryId=@countryId";
+        private const string SQL_DELETE_ALL = "TRUNCATE TABLE Country";
 
         private IDatabase database;
 
@@ -65,10 +67,11 @@ namespace UFO.Server.Data {
         public List<Country> GetAllCountries() {
             List<Country> countries = new List<Country>();
             DbCommand cmd = database.CreateCommand(SQL_FIND_ALL);
-            IDataReader reader = database.ExecuteReader(cmd);
-            while (reader.Read()) {
-                Country newCountry = new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
-                countries.Add(newCountry);
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
+                while (reader.Read()) {
+                    Country newCountry = new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
+                    countries.Add(newCountry);
+                }
             }
             return countries;
         }
@@ -76,12 +79,13 @@ namespace UFO.Server.Data {
         public Country GetCountryById(uint id) {
             DbCommand cmd = database.CreateCommand(SQL_FIND_BY_ID);
             database.DefineParameter(cmd, "@countryId", DbType.UInt32,id);
-            IDataReader reader = database.ExecuteReader(cmd);
-            if (reader.Read()) {
-                Console.WriteLine("FOUND");
-                return new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
-            } else {
-                return null;
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
+                if (reader.Read()) {
+                    Console.WriteLine("FOUND");
+                    return new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
+                } else {
+                    return null;
+                }
             }
         }
 
@@ -103,6 +107,9 @@ namespace UFO.Server.Data {
                 return database.ExecuteNonQuery(cmd) == 1;
             }
             return false;
+        }
+        public void DeleteAllCountries() {
+            database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
         }
 
     }
