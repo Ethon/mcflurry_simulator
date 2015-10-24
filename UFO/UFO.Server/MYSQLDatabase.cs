@@ -33,7 +33,7 @@ namespace UFO.Server {
         }
 
         protected bool IsSharedConnection() {
-            return false;
+            return true;
         }
 
         public int DeclareParamater(DbCommand command, string name, DbType type) {
