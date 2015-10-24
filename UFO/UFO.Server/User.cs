@@ -34,6 +34,18 @@ namespace UFO.Server.Data {
         public override string ToString() {
             return String.Format("User(id={0}, firstname='{1}', lastname='{2}', email='{3}') ", Id, FirstName, LastName, EmailAddress);
         }
+
+        public override bool Equals(object obj) {
+            User u = obj as User;
+            if(u == null) {
+                return false;
+            }
+            return Id.Equals(u.Id) && FirstName.Equals(u.FirstName) && LastName.Equals(u.LastName) && EmailAddress.Equals(u.EmailAddress);
+        }
+
+        public override int GetHashCode() {
+            return (int)Id;
+        }
     }
 
     public interface IUserDao {
@@ -53,7 +65,7 @@ namespace UFO.Server.Data {
         private const string GETALL_CMD = "SELECT * FROM User";
         private const string GETBYID_CMD = "SELECT * FROM User WHERE userId = @id";
         private const string GETBYEMAIL_CMD = "SELECT * FROM User WHERE email = @email";
-        private const string UPDATE_CMD = "UPDATE User SET firstname=@first, lastname=@last, email=@email WHERE id=@id";
+        private const string UPDATE_CMD = "UPDATE User SET firstname=@first, lastname=@last, email=@email WHERE userId=@id";
 
         private IDatabase db;
 
