@@ -51,8 +51,21 @@ namespace UFO.Server.Data {
         public string VideoPath {
             get; set;
         }
+
         public override string ToString() {
-            return Name + " " + Email + " " + CategoryId + " " + CountryId + " " + PicturePath + " " + VideoPath;
+            return String.Format("Artist(id={0}, name='{1}', email='{2}',categoryId='{3}',countryId='{4}',picturePath='{5}',videoPath='{6}) ", Id, Name, Email,CategoryId,CountryId,PicturePath,VideoPath);
+        }
+
+        public override bool Equals(object obj) {
+            Artist a = obj as Artist;
+            if (a == null) {
+                return false;
+            }
+            return Id.Equals(a.Id) && Name.Equals(a.Name) && Email.Equals(a.Email) && CategoryId.Equals(a.CategoryId) && CountryId.Equals(a.CountryId) && PicturePath.Equals(a.PicturePath) && VideoPath.Equals(a.VideoPath);
+        }
+
+        public override int GetHashCode() {
+            return (int)Id;
         }
 
     }
@@ -63,7 +76,7 @@ internal interface IArtistDao {
     Artist GetArtistByName(string name);
     bool UpdateArtist(Artist artist);
     bool DeleteArtist(Artist artist);
-    bool CreateArtist(string name,string email,uint categoryId, uint countryId,string picturePath,string videoPath);
+    Artist CreateArtist(string name,string email,uint categoryId, uint countryId,string picturePath,string videoPath);
     void DeleteAllArtists();
 }
 
@@ -83,7 +96,7 @@ internal class ArtistDao : IArtistDao {
         this.database = database;
     }
 
-    public bool CreateArtist(string name, string email, uint categoryId, uint countryId, string picturePath, string videoPath) {
+    public Artist CreateArtist(string name, string email, uint categoryId, uint countryId, string picturePath, string videoPath) {
         DbCommand cmd = database.CreateCommand(SQL_INSERT);
         database.DefineParameter(cmd, "@name", DbType.String, name);
         database.DefineParameter(cmd, "@email", DbType.String, email);
@@ -92,7 +105,7 @@ internal class ArtistDao : IArtistDao {
         database.DefineParameter(cmd, "@picturePath", DbType.String, picturePath);
         database.DefineParameter(cmd, "@videoPath", DbType.String, videoPath);
         int lastInsertId = database.ExecuteNonQuery(cmd);
-        return  lastInsertId > 1;
+        return new Artist((uint)lastInsertId, name, email, categoryId, countryId, picturePath, videoPath);
     }
 
     public bool DeleteArtist(Artist artist) {
