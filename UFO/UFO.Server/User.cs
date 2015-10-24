@@ -58,7 +58,7 @@ namespace UFO.Server.Data {
         User CreateUser(string firstName, string lastName, string email);
     }
 
-    public class UserDaoImpl : IUserDao {
+    public class UserDao : IUserDao {
         private const string DELETEALL_CMD = "TRUNCATE TABLE User";
         private const string CREATE_CMD = "INSERT INTO User(firstname, lastname, email) VALUES (@first, @last, @email)";
         private const string DELETE_CMD = "DELETE FROM User WHERE userId = @id";
@@ -77,7 +77,7 @@ namespace UFO.Server.Data {
             return new User(id, firstName, lastName, email);
         }
 
-        public UserDaoImpl(IDatabase db) {
+        public UserDao(IDatabase db) {
             this.db = db;
         }
 
