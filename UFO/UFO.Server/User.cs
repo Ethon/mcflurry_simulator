@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Data.Common;
 
 namespace UFO.Server.Data {
     public class User {
-        internal User(uint id, string firstName, string lastName, string email) {
+        public User(uint id, string firstName, string lastName, string email) {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
@@ -35,58 +36,81 @@ namespace UFO.Server.Data {
         }
     }
 
-    internal interface UserDao {
+    public interface IUserDao {
+        void DeleteAllUsers();
         List<User> GetAllUsers();
         User GetUserById(uint id);
+        User GetUserByEmailAddress(string email);
         void UpdateUser(User user);
         void DeleteUser(User user);
         uint CreateUser(string firstName, string lastName, string email);
     }
 
-    internal class UserDaoImpl : UserDao {
-        private MySqlConnection con;
+    public class UserDaoImpl : IUserDao {
+        private const string DELETEALL_CMD = "TRUNCATE TABLE User";
+        private const string CREATE_CMD = "INSERT INTO User(firstname, lastname, email) VALUES (@first, @last, @email)";
+        private const string DELETE_CMD = "DELETE FROM User WHERE userId = @id";
+        private const string GETALL_CMD = "SELECT * FROM User";
+        private const string GETBYID_CMD = "SELECT * FROM User WHERE userId = @id";
+        private const string GETBYEMAIL_CMD = "SELECT * FROM User WHERE email = @email";
 
-        public UserDaoImpl(MySqlConnection con) {
-            this.con = con;
+        private IDatabase db;
+
+        private User readOne(DbDataReader reader) {
+            uint id = (uint)reader["userID"];
+            string firstName = (string)reader["firstname"];
+            string lastName = (string)reader["lastname"];
+            string email = (string)reader["email"];
+            return new User(id, firstName, lastName, email);
+        }
+
+        public UserDaoImpl(IDatabase db) {
+            this.db = db;
         }
 
         public uint CreateUser(string firstName, string lastName, string email) {
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO User(firstname, lastname, email) VALUES (@first, @last, @email)", con);
-            cmd.Parameters.Add("@first", MySqlDbType.String).Value = firstName;
-            cmd.Parameters.Add("@last", MySqlDbType.String).Value = lastName;
-            cmd.Parameters.Add("@email", MySqlDbType.String).Value = email;
-            cmd.ExecuteNonQuery();
-            return (uint)cmd.LastInsertedId;
+            DbCommand cmd = db.CreateCommand(CREATE_CMD);
+            db.DefineParameter(cmd, "@first", System.Data.DbType.String, firstName);
+            db.DefineParameter(cmd, "@last", System.Data.DbType.String, lastName);
+            db.DefineParameter(cmd, "@email", System.Data.DbType.String, email);
+            return (uint)cmd.ExecuteNonQuery();
         }
 
         public void DeleteUser(User user) {
-            MySqlCommand cmd = new MySqlCommand("DELETE FROM User WHERE userId = " + user.Id, con);
+            DbCommand cmd = db.CreateCommand(DELETE_CMD);
+            db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, user.Id);
             cmd.ExecuteNonQuery();
         }
 
         public List<User> GetAllUsers() {
             List<User> users = new List<User>();
-            MySqlCommand cmd = new MySqlCommand("SELECT * FROM User", con);
-            using(MySqlDataReader reader = cmd.ExecuteReader()) {
+            DbCommand cmd = db.CreateCommand(GETALL_CMD);
+            using(DbDataReader reader = cmd.ExecuteReader()) {
                 while(reader.Read()) {
-                    uint id = (uint)reader["userID"];
-                    string firstName = (string)reader["firstname"];
-                    string lastName = (string)reader["lastname"];
-                    string email = (string)reader["email"];
-                    users.Add(new User(id, firstName, lastName, email));
+                    users.Add(readOne(reader));
                 }
             }
             return users;
         }
 
-        public User GetUserById(uint id) {
-            MySqlCommand cmd = new MySqlCommand("SELECT * FROM User WHERE userId = " + id, con);
-            using (MySqlDataReader reader = cmd.ExecuteReader()) {
+        public User GetUserByEmailAddress(string email) {
+            DbCommand cmd = db.CreateCommand(GETBYEMAIL_CMD);
+            db.DefineParameter(cmd, "@email", System.Data.DbType.String, email);
+            using (DbDataReader reader = cmd.ExecuteReader()) {
                 if (reader.Read()) {
-                    string firstName = (string)reader["firstname"];
-                    string lastName = (string)reader["lastname"];
-                    string email = (string)reader["email"];
-                    return new User(id, firstName, lastName, email);
+                    return readOne(reader);
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        public User GetUserById(uint id) {
+            DbCommand cmd = db.CreateCommand(GETBYID_CMD);
+            db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, id);
+            using (DbDataReader reader = cmd.ExecuteReader()) {
+                if (reader.Read()) {
+                    return readOne(reader);
                 } else {
                     return null;
                 }
@@ -95,6 +119,10 @@ namespace UFO.Server.Data {
 
         public void UpdateUser(User user) {
             throw new NotImplementedException();
+        }
+
+        public void DeleteAllUsers() {
+            db.CreateCommand(DELETEALL_CMD).ExecuteNonQuery();
         }
     }
 }
