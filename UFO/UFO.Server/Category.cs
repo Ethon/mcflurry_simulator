@@ -40,6 +40,7 @@ namespace UFO.Server.Data {
         bool UpdateCategory(Category category);
         bool DeleteCategory(Category category);
         bool CreateCategory(string shortcut,string name);
+        void DeleteAllArtists();
     }
 
     internal class CategoryDao : ICategoryDao {
@@ -49,6 +50,8 @@ namespace UFO.Server.Data {
         private const string SQL_UPDATE = "UPDATE Category SET shortcut=@shortcut,name=@name WHERE categoryId=@categoryId";
         private const string SQL_INSERT = "INSERT INTO Category (shortcut,name) VALUES(@shortcut,@name)";
         private const string SQL_DELETE = "DELETE FROM Category WHERE categoryId=@categoryId";
+        private const string SQL_DELETE_ALL = "TRUNCATE TABLE Category";
+
 
         private IDatabase database;
 
@@ -76,10 +79,11 @@ namespace UFO.Server.Data {
         public List<Category> GetAllCategories() {
             DbCommand cmd = database.CreateCommand(SQL_FIND_ALL);
             List <Category> categories = new List<Category>();
-            IDataReader reader = database.ExecuteReader(cmd);
-            while (reader.Read()) {
-                Category newCat = new Category((uint)reader["categoryId"], (string)reader["shortcut"], (string)reader["name"]);
-                categories.Add(newCat);
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
+                while (reader.Read()) {
+                    Category newCat = new Category((uint)reader["categoryId"], (string)reader["shortcut"], (string)reader["name"]);
+                    categories.Add(newCat);
+                }
             }
             return categories;
         }
@@ -87,12 +91,13 @@ namespace UFO.Server.Data {
         public Category GetCategoryById(uint categoryId) {
             DbCommand cmd = database.CreateCommand(SQL_FIND_BY_ID);
             database.DefineParameter(cmd, "@categoryId", DbType.UInt32 , categoryId);
-            IDataReader reader = database.ExecuteReader(cmd);
-            if (reader.Read()) {
-                return new Category((uint)reader["categoryId"],(string)reader["shortcut"],
-                    (string)reader["name"]);
-            } else {
-                return null;
+            using (IDataReader reader = database.ExecuteReader(cmd)) {
+                if (reader.Read()) {
+                    return new Category((uint)reader["categoryId"], (string)reader["shortcut"],
+                        (string)reader["name"]);
+                } else {
+                    return null;
+                }
             }
         }
 
@@ -105,6 +110,9 @@ namespace UFO.Server.Data {
                 return database.ExecuteNonQuery(cmd) == 1;
             }
             return false;
+        }
+        public void DeleteAllArtists() {
+            database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
         }
     }
 
