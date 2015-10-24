@@ -80,7 +80,6 @@ namespace UFO.Server.Data.Tests {
             for(int i = 0; i < allusers.Count; ++i) {
                 Assert.AreEqual(testusers[i], allusers[i]);
             }
-
         }
 
         [TestMethod()]
