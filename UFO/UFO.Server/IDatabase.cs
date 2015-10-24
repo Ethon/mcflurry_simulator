@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server {
-    public interface IDatabase {
+    public interface IDatabase : IDisposable {
         DbCommand CreateCommand(string sql);
         int DeclareParamater(DbCommand command, string name, DbType type);
         void DefineParameter(DbCommand command, string name, DbType type, object value);

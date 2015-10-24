@@ -21,14 +21,14 @@ namespace UFO.Server {
             return new MySqlCommand(sql);
         }
 
-
         protected DbConnection GetOpenConnection() {
             return con;
         }
 
-        protected void ReleaseConnection(DbConnection connection) {
-            if (connection != null) {
-                connection.Close();
+        protected void ReleaseConnection() {
+            if (con != null) {
+                con.Close();
+                con = null;
             }
         }
 
@@ -77,5 +77,8 @@ namespace UFO.Server {
             }
         }
 
+        public void Dispose() {
+            ReleaseConnection();
+        }
     }
 }
