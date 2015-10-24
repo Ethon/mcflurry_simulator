@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace UFO.Server.Data.Tests {
     [TestClass()]
-    public class UserDaoImplTests {
+    public class UserDaoTests {
 
         private static IDatabase db;
         private IUserDao udao;
@@ -34,7 +34,7 @@ namespace UFO.Server.Data.Tests {
 
         [TestInitialize()]
         public void Startup() {
-            udao = new UserDaoImpl(db);
+            udao = new UserDao(db);
         }
 
         [TestCleanup()]
@@ -80,7 +80,6 @@ namespace UFO.Server.Data.Tests {
             for(int i = 0; i < allusers.Count; ++i) {
                 Assert.AreEqual(testusers[i], allusers[i]);
             }
-
         }
 
         [TestMethod()]
