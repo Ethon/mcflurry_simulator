@@ -64,6 +64,7 @@ internal interface IArtistDao {
     bool UpdateArtist(Artist artist);
     bool DeleteArtist(Artist artist);
     bool CreateArtist(string name,string email,uint categoryId, uint countryId,string picturePath,string videoPath);
+    void DeleteAllArtists();
 }
 
 internal class ArtistDao : IArtistDao {
@@ -74,6 +75,7 @@ internal class ArtistDao : IArtistDao {
     private const string SQL_UPDATE = "UPDATE Artist SET name=@name,email=@email,categoryId=@categoryId,countryId=@countryId,picturePath=@picturePath,videoPath=@videoPath WHERE artistId=@artistId";
     private const string SQL_INSERT = "INSERT INTO Artist (name,email,categoryId,countryId,picturePath,videoPath) VALUES(@name,@email,@categoryId,@countryId,@picturePath,@videoPath)";
     private const string SQL_DELETE = "DELETE FROM Artist WHERE artistId=@artistId";
+    private const string SQL_DELETE_ALL = "TRUNCATE TABLE Artist";
 
     private IDatabase database;
 
@@ -106,33 +108,36 @@ internal class ArtistDao : IArtistDao {
     public List<Artist> GetAllArtists() {
         List<Artist> artists = new List<Artist>();
         DbCommand cmd = database.CreateCommand(SQL_FIND_ALL);
-        IDataReader reader = database.ExecuteReader(cmd);
-        while (reader.Read()) {
-            Artist newArtist = new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
-            artists.Add(newArtist);
+        using (IDataReader reader = database.ExecuteReader(cmd)) {
+            while (reader.Read()) {
+                Artist newArtist = new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
+                artists.Add(newArtist);
+            }
+            return artists;
         }
-        return artists;
     }
 
     public Artist GetArtistById(uint id) {
         DbCommand cmd = database.CreateCommand(SQL_FIND_BY_ID);
         database.DefineParameter(cmd, "@artistId", DbType.UInt32, id);
-        IDataReader reader = database.ExecuteReader(cmd);
-        if (reader.Read()) {
-            return new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
-        } else {
-            return null;
+        using (IDataReader reader = database.ExecuteReader(cmd)) {
+            if (reader.Read()) {
+                return new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
+            } else {
+                return null;
+            }
         }
     }
     public Artist GetArtistByName(string name) {
         
         DbCommand cmd = database.CreateCommand(SQL_FIND_BY_NAME);
         database.DefineParameter(cmd, "@name", DbType.String, name);
-        IDataReader reader = database.ExecuteReader(cmd);
-        if (reader.Read()) {
-            return new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
-        } else {
-            return null;
+        using (IDataReader reader = database.ExecuteReader(cmd)) {
+            if (reader.Read()) {
+                return new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
+            } else {
+                return null;
+            }
         }
     }
 
@@ -151,4 +156,9 @@ internal class ArtistDao : IArtistDao {
         }
         return false;
     }
+
+    public void DeleteAllArtists() {
+        database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
+    }
+    
 }
