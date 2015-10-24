@@ -18,7 +18,7 @@ namespace UFO.Server {
         }
 
         public DbCommand CreateCommand(string sql) {
-            return new MySqlCommand(sql);
+            return new MySqlCommand(sql, con);
         }
 
         protected DbConnection GetOpenConnection() {
