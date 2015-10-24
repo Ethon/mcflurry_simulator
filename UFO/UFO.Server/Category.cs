@@ -40,7 +40,7 @@ namespace UFO.Server.Data {
         bool UpdateCategory(Category category);
         bool DeleteCategory(Category category);
         bool CreateCategory(string shortcut,string name);
-        void DeleteAllArtists();
+        void DeleteAllCategories();
     }
 
     internal class CategoryDao : ICategoryDao {
@@ -111,7 +111,7 @@ namespace UFO.Server.Data {
             }
             return false;
         }
-        public void DeleteAllArtists() {
+        public void DeleteAllCategories() {
             database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
         }
     }
