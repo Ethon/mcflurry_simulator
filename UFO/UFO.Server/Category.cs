@@ -29,21 +29,34 @@ namespace UFO.Server.Data {
         public string Name {
             get; set;
         }
+
         public override string ToString() {
-            return Id+": ("+Shortcut+") "+Name;
+            return String.Format("Category(id={0}, shortcut='{1}', name='{2}') ", Id,Shortcut, Name);
+        }
+
+        public override bool Equals(object obj) {
+            Category c = obj as Category;
+            if (c == null) {
+                return false;
+            }
+            return Id.Equals(c.Id) && Shortcut.Equals(c.Shortcut) && Name.Equals(c.Name);
+        }
+
+        public override int GetHashCode() {
+            return (int)Id;
         }
     }
 
-    internal interface ICategoryDao {
+    public interface ICategoryDao {
         List<Category> GetAllCategories();
         Category GetCategoryById(uint id);
         bool UpdateCategory(Category category);
         bool DeleteCategory(Category category);
-        bool CreateCategory(string shortcut,string name);
+        Category CreateCategory(string shortcut,string name);
         void DeleteAllCategories();
     }
 
-    internal class CategoryDao : ICategoryDao {
+    public class CategoryDao : ICategoryDao {
 
         private const string SQL_FIND_BY_ID = "SELECT * FROM Category WHERE categoryId=@categoryId";
         private const string SQL_FIND_ALL = "SELECT * FROM Category";
@@ -59,12 +72,12 @@ namespace UFO.Server.Data {
             this.database = database;
         }
 
-        public bool CreateCategory(string shortcut,string categoryName) {
+        public Category CreateCategory(string shortcut,string categoryName) {
             DbCommand cmd = database.CreateCommand(SQL_INSERT);
             database.DefineParameter(cmd, "@shortcut", DbType.String, shortcut);
             database.DefineParameter(cmd, "@name", DbType.String, categoryName);
             int lastInsertID = database.ExecuteNonQuery(cmd);
-            return lastInsertID > 1;
+            return new Category((uint)lastInsertID, shortcut, categoryName);
         }
 
         public bool DeleteCategory(Category category) {
