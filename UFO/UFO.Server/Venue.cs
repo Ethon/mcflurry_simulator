@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
     public class Venue {
-        public Venue(string id, string name, string shortcut, uint districtId, double lat, double lng) {
+        public Venue(uint id, string name, string shortcut, uint districtId, double lat, double lng) {
             Id = id;
             Name = name;
             Shortcut = shortcut;
@@ -16,7 +16,7 @@ namespace UFO.Server.Data {
             Longitude = lng;
         }
 
-        public string Id {
+        public uint Id {
             get; set;
         }
 
@@ -59,17 +59,17 @@ namespace UFO.Server.Data {
         }
 
         public override int GetHashCode() {
-            return Id.GetHashCode();
+            return (int)Id;
         }
     }
 
     public interface IVenueDao {
         void DeleteAllVenues();
         List<Venue> GetAllVenues();
-        Venue GetVenueById(string id);
+        Venue GetVenueById(uint id);
         void UpdateVenue(Venue ven);
         void DeleteVenue(Venue ven);
-        Venue CreateVenue(string id, string name, string shortcut, uint districtId, double latitude, double longitude);
+        Venue CreateVenue(string name, string shortcut, uint districtId, double latitude, double longitude);
     }
 
     public class VenueDao : IVenueDao {
@@ -83,7 +83,7 @@ namespace UFO.Server.Data {
         private IDatabase db;
 
         private Venue readOne(DbDataReader reader) {
-            string id = (string)reader["venueId"];
+            uint id = (uint)reader["venueId"];
             string shortcut = (string)reader["shortcut"];
             string name = (string)reader["name"];
             uint districtId = (uint)reader["districtId"];
@@ -96,15 +96,14 @@ namespace UFO.Server.Data {
             this.db = db;
         }
 
-        public Venue CreateVenue(string id, string name, string shortcut, uint districtId, double latitude, double longitude) {
+        public Venue CreateVenue(string name, string shortcut, uint districtId, double latitude, double longitude) {
             DbCommand cmd = db.CreateCommand(CREATE_CMD);
-            db.DefineParameter(cmd, "@id", System.Data.DbType.String, id);
             db.DefineParameter(cmd, "@shortcut", System.Data.DbType.String, shortcut);
             db.DefineParameter(cmd, "@name", System.Data.DbType.String, name);
             db.DefineParameter(cmd, "@districtId", System.Data.DbType.UInt32, districtId);
             db.DefineParameter(cmd, "@lat", System.Data.DbType.Double, latitude);
             db.DefineParameter(cmd, "@lng", System.Data.DbType.Double, longitude);
-            db.ExecuteNonQuery(cmd);
+            uint id = (uint)db.ExecuteNonQuery(cmd);
             return new Venue(id, name, shortcut, districtId, latitude, longitude);
         }
 
@@ -115,7 +114,7 @@ namespace UFO.Server.Data {
 
         public void DeleteVenue(Venue ven) {
             DbCommand cmd = db.CreateCommand(DELETE_CMD);
-            db.DefineParameter(cmd, "@id", System.Data.DbType.String, ven.Id);
+            db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, ven.Id);
             cmd.ExecuteNonQuery();
         }
 
@@ -130,9 +129,9 @@ namespace UFO.Server.Data {
             return venues;
         }
 
-        public Venue GetVenueById(string id) {
+        public Venue GetVenueById(uint id) {
             DbCommand cmd = db.CreateCommand(GETBYID_CMD);
-            db.DefineParameter(cmd, "@id", System.Data.DbType.String, id);
+            db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, id);
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 if (reader.Read()) {
                     return readOne(reader);
@@ -144,7 +143,7 @@ namespace UFO.Server.Data {
 
         public void UpdateVenue(Venue ven) {
             DbCommand cmd = db.CreateCommand(UPDATE_CMD);
-            db.DefineParameter(cmd, "@id", System.Data.DbType.String, ven.Id);
+            db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, ven.Id);
             db.DefineParameter(cmd, "@name", System.Data.DbType.String, ven.Name);
             db.DefineParameter(cmd, "@shortcut", System.Data.DbType.String, ven.Shortcut);
             db.DefineParameter(cmd, "@districtId", System.Data.DbType.UInt32, ven.DistrictId);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
     public class Performance {
-        public Performance(uint id, DateTime date, uint artistId, string venueId) {
+        public Performance(uint id, DateTime date, uint artistId, uint venueId) {
             Id = id;
             Date = date;
             ArtistId = artistId;
@@ -26,7 +26,7 @@ namespace UFO.Server.Data {
             get; set;
         }
 
-        public string VenueId {
+        public uint VenueId {
             get; set;
         }
 
@@ -52,7 +52,7 @@ namespace UFO.Server.Data {
         Performance GetPerformanceById(uint id);
         bool UpdatePerformance(Performance performance);
         bool DeletePerformance(Performance performance);
-        Performance CreatePerformance(DateTime date, uint artistId, string venueId);
+        Performance CreatePerformance(DateTime date, uint artistId, uint venueId);
         void DeleteAllPerformances();
     }
 
@@ -70,7 +70,7 @@ namespace UFO.Server.Data {
             uint id = (uint)reader["performanceId"];
             DateTime date = (DateTime)reader["date"];
             uint artistId = (uint)reader["artistId"];
-            string venueId = (string)reader["venueId"];
+            uint venueId = (uint)reader["venueId"];
             return new Performance(id, date, artistId, venueId);
         }
 
@@ -78,11 +78,11 @@ namespace UFO.Server.Data {
             this.db = db;
         }
 
-        public Performance CreatePerformance(DateTime date, uint artistId, string venueId) {
+        public Performance CreatePerformance(DateTime date, uint artistId, uint venueId) {
             DbCommand cmd = db.CreateCommand(CREATE_CMD);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artistId);
-            db.DefineParameter(cmd, "@venueId", System.Data.DbType.String, venueId);
+            db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, venueId);
             uint id = (uint)db.ExecuteNonQuery(cmd);
             return new Performance(id, date, artistId, venueId);
         }
@@ -126,7 +126,7 @@ namespace UFO.Server.Data {
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, performance.Id);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, performance.Date);
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, performance.ArtistId);
-            db.DefineParameter(cmd, "@venueId", System.Data.DbType.String, performance.VenueId);
+            db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, performance.VenueId);
             return db.ExecuteNonQuery(cmd) == 1;
         }
     }
