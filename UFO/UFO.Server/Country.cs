@@ -7,11 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
+
     public class Country {
-
-        public Country() {
-
-        }
         public Country(uint id, string name, string flagPath) {
             this.Id = id;
             this.Name = name;
@@ -29,6 +26,7 @@ namespace UFO.Server.Data {
         public string FlagPath {
             get; set;
         }
+
         public override string ToString() {
             return String.Format("Country(id={0}, name='{1}', flagPath='{2}') ", Id, Name, FlagPath);
         }
@@ -45,7 +43,8 @@ namespace UFO.Server.Data {
             return (int)Id;
         }
     }
-    internal interface ICountryDao {
+
+    public interface ICountryDao {
         List<Country> GetAllCountries();
         Country GetCountryById(uint id);
         bool UpdateCountry(Country country);
@@ -53,7 +52,8 @@ namespace UFO.Server.Data {
         Country CreateCountry(string name, string flagPath);
         void DeleteAllCountries();
     }
-    internal class CountryDao : ICountryDao {
+
+    public class CountryDao : ICountryDao {
         private const string SQL_FIND_BY_ID = "SELECT * FROM Country WHERE countryId=@countryId";
         private const string SQL_FIND_ALL = "SELECT * FROM Country";
         private const string SQL_UPDATE = "UPDATE Country SET name=@name,flagPath=@flagPath WHERE countryId=@countryId";
@@ -74,7 +74,6 @@ namespace UFO.Server.Data {
             int lastInsertID = database.ExecuteNonQuery(cmd);
             return new Country((uint)lastInsertID, name, flagPath);
         }
-
 
         public List<Country> GetAllCountries() {
             List<Country> countries = new List<Country>();
@@ -120,9 +119,9 @@ namespace UFO.Server.Data {
             }
             return false;
         }
+
         public void DeleteAllCountries() {
             database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
         }
-
     }
 }

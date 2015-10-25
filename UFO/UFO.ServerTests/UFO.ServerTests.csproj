@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ArtistDaoTests.cs" />
     <Compile Include="CategoryDaoTests.cs" />
+    <Compile Include="CountryDaoTests.cs" />
     <Compile Include="DistrictDaoTests.cs" />
     <Compile Include="UserDaoTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

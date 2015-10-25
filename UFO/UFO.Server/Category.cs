@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 namespace UFO.Server.Data {
     [Serializable]
     public class Category {
-        public Category() {
-
-        }
         public Category(uint id, string shortcut, string name) {
             this.Id = id;
             this.Shortcut = shortcut;
@@ -64,7 +61,6 @@ namespace UFO.Server.Data {
         private const string SQL_INSERT = "INSERT INTO Category (shortcut,name) VALUES(@shortcut,@name)";
         private const string SQL_DELETE = "DELETE FROM Category WHERE categoryId=@categoryId";
         private const string SQL_DELETE_ALL = "TRUNCATE TABLE Category";
-
 
         private IDatabase database;
 
@@ -124,6 +120,7 @@ namespace UFO.Server.Data {
             }
             return false;
         }
+
         public void DeleteAllCategories() {
             database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
         }
