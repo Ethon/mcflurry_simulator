@@ -55,6 +55,7 @@
     <Compile Include="CategoryDaoTests.cs" />
     <Compile Include="CountryDaoTests.cs" />
     <Compile Include="DistrictDaoTests.cs" />
+    <Compile Include="PerformanceDaoTests.cs" />
     <Compile Include="UserDaoTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VenueDaoTests.cs" />
