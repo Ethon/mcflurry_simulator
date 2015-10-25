@@ -86,14 +86,14 @@ namespace UFO.Server.Data {
         }
 
         public List<District> GetAllDistricts() {
-            List<District> users = new List<District>();
+            List<District> districts = new List<District>();
             DbCommand cmd = db.CreateCommand(GETALL_CMD);
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 while (reader.Read()) {
-                    users.Add(readOne(reader));
+                    districts.Add(readOne(reader));
                 }
             }
-            return users;
+            return districts;
         }
 
         public District GetDistrictById(uint id) {
