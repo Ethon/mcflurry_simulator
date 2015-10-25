@@ -11,10 +11,6 @@ using UFO.Server.Data;
 namespace UFO.Server.Data {
     [Serializable]
     public class Artist {
-
-        public Artist(){
-            
-        }
         public Artist(uint id,string name, string email, uint categoryId, uint countryId, string picturePath, string videoPath) {
             this.Id = id;
             this.Name = name;
@@ -24,6 +20,7 @@ namespace UFO.Server.Data {
             this.PicturePath = picturePath;
             this.VideoPath = videoPath;
         }
+
         public uint Id {
             get; set;
         }
@@ -70,7 +67,8 @@ namespace UFO.Server.Data {
 
     }
 }
-internal interface IArtistDao {
+
+public interface IArtistDao {
     List<Artist> GetAllArtists();
     Artist GetArtistById(uint id);
     Artist GetArtistByName(string name);
@@ -80,7 +78,7 @@ internal interface IArtistDao {
     void DeleteAllArtists();
 }
 
-internal class ArtistDao : IArtistDao {
+public class ArtistDao : IArtistDao {
 
     private const string SQL_FIND_BY_ID = "SELECT * FROM Artist WHERE artistId=@artistId";
     private const string SQL_FIND_BY_NAME = "SELECT * FROM Artist WHERE name LIKE @name";
@@ -141,6 +139,7 @@ internal class ArtistDao : IArtistDao {
             }
         }
     }
+
     public Artist GetArtistByName(string name) {
         
         DbCommand cmd = database.CreateCommand(SQL_FIND_BY_NAME);
@@ -153,7 +152,6 @@ internal class ArtistDao : IArtistDao {
             }
         }
     }
-
 
     public bool UpdateArtist(Artist artist) {
         if (artist != null) {
