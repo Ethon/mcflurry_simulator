@@ -47,8 +47,8 @@ namespace UFO.Server.Data.Tests {
                 ddao.CreateDistrict(cur.Name);
             }
 
-            var allusers = ddao.GetAllDistricts();
-            Assert.AreEqual(testdis.Count, allusers.Count);
+            var allcountries = ddao.GetAllDistricts();
+            Assert.AreEqual(testdis.Count, allcountries.Count);
         }
 
         [TestMethod()]
