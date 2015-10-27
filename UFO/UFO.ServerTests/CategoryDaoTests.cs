@@ -63,33 +63,64 @@ namespace UFO.Server.Data.Tests {
             
             Category c1 = catDao.CreateCategory(testCategories[0].Shortcut, testCategories[0].Name);
             Category c2 = catDao.CreateCategory(testCategories[1].Shortcut, testCategories[1].Name);
-            var allusers = udao.GetAllUsers();
-            Assert.AreEqual(2, allusers.Count);
-            udao.DeleteUser(u1);
-            allusers = udao.GetAllUsers();
-            Assert.AreEqual(1, allusers.Count);
-            Assert.IsNull(udao.GetUserById(u1.Id));
-            Assert.IsNotNull(udao.GetUserById(u2.Id));
+            var allCategories = catDao.GetAllCategories();
+            Assert.AreEqual(2,2);
+            catDao.DeleteCategory(c1);
+            allCategories = catDao.GetAllCategories();
+            Assert.AreEqual(1, allCategories.Count);
+            Assert.IsNull(catDao.GetCategoryById(c1.Id));
+            Assert.IsNotNull(catDao.GetCategoryById(c2.Id));
         }
 
         [TestMethod()]
         public void GetAllCategoriesTest() {
-            Assert.Fail();
+            var testCategories = GetTestCategoryData();
+            for (int i = 0; i < testCategories.Count; ++i) {
+                testCategories[i] = catDao.CreateCategory(testCategories[i].Shortcut,testCategories[i].Name);
+                Assert.IsNotNull(testCategories[i]);
+            }
+            var allCategories = catDao.GetAllCategories();
+            Assert.AreEqual(testCategories.Count, allCategories.Count);
+            for (int i = 0; i < allCategories.Count; ++i) {
+                Assert.AreEqual(allCategories[i], testCategories[i]);
+            }
         }
 
         [TestMethod()]
         public void GetCategoryByIdTest() {
-            Assert.Fail();
+            var testCategories = GetTestCategoryData();
+            Category c1 = catDao.CreateCategory(testCategories[0].Shortcut, testCategories[0].Name);
+            Category c2 = catDao.CreateCategory(testCategories[1].Shortcut, testCategories[1].Name);
+            Category c3 = catDao.GetCategoryById(c1.Id);
+            Assert.IsNotNull(c3);
+            Assert.AreEqual(c1, c3);
+            Assert.AreNotEqual(c2, c3);
+            catDao.DeleteCategory(c3);
+            Assert.IsNull(catDao.GetCategoryById(c3.Id));
         }
 
         [TestMethod()]
         public void UpdateCategoryTest() {
-            Assert.Fail();
+            var testCategories = GetTestCategoryData();
+            Category c1 = catDao.CreateCategory(testCategories[0].Shortcut, testCategories[0].Name);
+            c1.Shortcut = "nC";
+            c1.Name = "newName";
+            catDao.UpdateCategory(c1);
+            Category c2 = catDao.GetCategoryById(c1.Id);
+            Assert.AreEqual(c1, c2);
         }
 
         [TestMethod()]
         public void DeleteAllCategoriesTest() {
-            Assert.Fail();
+            var testCategories = GetTestCategoryData();
+
+            foreach (var item in testCategories) {
+                catDao.CreateCategory(item.Shortcut, item.Name);
+            }
+            Assert.AreEqual(catDao.GetAllCategories().Count, testCategories.Count);
+            catDao.DeleteAllCategories();
+            Assert.AreEqual(0, catDao.GetAllCategories().Count);
+
         }
     }
 }
