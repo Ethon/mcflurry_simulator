@@ -51,8 +51,8 @@ namespace Tests {
                 adao.CreateArtist(cur.Name, cur.Email, cur.CategoryId, cur.CountryId, cur.PicturePath, cur.VideoPath);
             }
 
-            var allcountries = adao.GetAllArtists();
-            Assert.AreEqual(testArtists.Count, allcountries.Count);
+            var allArtists = adao.GetAllArtists();
+            Assert.AreEqual(testArtists.Count, allArtists.Count);
         }
 
         [TestMethod()]
