@@ -68,7 +68,7 @@ namespace UFO.Server.Data {
 
         private Performance readOne(DbDataReader reader) {
             uint id = (uint)reader["performanceId"];
-            DateTime date = (DateTime)reader["date"];
+            DateTime date = db.ConvertDateTimeFromDbFormat(reader["date"]);
             uint artistId = (uint)reader["artistId"];
             uint venueId = (uint)reader["venueId"];
             return new Performance(id, date, artistId, venueId);
@@ -80,7 +80,7 @@ namespace UFO.Server.Data {
 
         public Performance CreatePerformance(DateTime date, uint artistId, uint venueId) {
             DbCommand cmd = db.CreateCommand(CREATE_CMD);
-            db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
+            db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, db.ConvertDateTimeToDbFormat(date));
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artistId);
             db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, venueId);
             uint id = (uint)db.ExecuteNonQuery(cmd);
@@ -124,7 +124,7 @@ namespace UFO.Server.Data {
         public bool UpdatePerformance(Performance performance) {
             DbCommand cmd = db.CreateCommand(UPDATE_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, performance.Id);
-            db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, performance.Date);
+            db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, db.ConvertDateTimeToDbFormat(performance.Date));
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, performance.ArtistId);
             db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, performance.VenueId);
             return db.ExecuteNonQuery(cmd) == 1;

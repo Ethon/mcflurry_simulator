@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using MySql.Data.Types;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -79,6 +80,15 @@ namespace UFO.Server {
 
         public void Dispose() {
             ReleaseConnection();
+        }
+
+        public object ConvertDateTimeToDbFormat(DateTime dt) {
+            return new MySqlDateTime(dt);
+        } 
+
+        public DateTime ConvertDateTimeFromDbFormat(object obj) {
+            MySqlDateTime dt = (MySqlDateTime)obj;
+            return dt.GetDateTime();
         }
     }
 }
