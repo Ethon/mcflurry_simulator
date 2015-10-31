@@ -40,7 +40,11 @@ namespace UFO.Server {
         public int DeclareParamater(DbCommand command, string name, DbType type) {
             if (!command.Parameters.Contains(name)) {
                 string dbType = type.ToString();
-                return command.Parameters.Add(new MySqlParameter(name, dbType));
+                if(type == DbType.DateTime) {
+                    return command.Parameters.Add(new MySqlParameter(name, MySqlDbType.DateTime));
+                } else { 
+                    return command.Parameters.Add(new MySqlParameter(name, dbType));
+                }
             } else {
                 throw new ArgumentException(string.Format("Parameter {0} already exists", name));
             }
@@ -87,6 +91,9 @@ namespace UFO.Server {
         } 
 
         public DateTime ConvertDateTimeFromDbFormat(object obj) {
+            if(obj is DateTime) {
+                return (DateTime)obj;
+            }
             MySqlDateTime dt = (MySqlDateTime)obj;
             return dt.GetDateTime();
         }
