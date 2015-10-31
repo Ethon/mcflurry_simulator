@@ -42,7 +42,11 @@ namespace UFO.Server {
                 string dbType = type.ToString();
                 if(type == DbType.DateTime) {
                     return command.Parameters.Add(new MySqlParameter(name, MySqlDbType.DateTime));
-                } else { 
+                } 
+                else if(type == DbType.Double) {
+                    return command.Parameters.Add(new MySqlParameter(name, MySqlDbType.Double));
+                }
+                else { 
                     return command.Parameters.Add(new MySqlParameter(name, dbType));
                 }
             } else {

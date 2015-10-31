@@ -74,7 +74,7 @@ namespace UFO.Server.Data {
 
     public class VenueDao : IVenueDao {
         private const string DELETEALL_CMD = "TRUNCATE TABLE Venue";
-        private const string CREATE_CMD = "INSERT INTO Venue(venueId, shortcut, name, districtId, latitude, longitude) VALUES (@id, @shortcut, @name, @districtId, @lat, @lng)";
+        private const string CREATE_CMD = "INSERT INTO Venue(shortcut, name, districtId, latitude, longitude) VALUES (@shortcut, @name, @districtId, @lat, @lng)";
         private const string DELETE_CMD = "DELETE FROM Venue WHERE venueId = @id";
         private const string GETALL_CMD = "SELECT * FROM Venue";
         private const string GETBYID_CMD = "SELECT * FROM Venue WHERE venueId = @id";
