@@ -12,44 +12,19 @@ namespace UFO.Server.Data.Tests {
         private static IDatabase db;
         private IPerformanceDao pdao;
 
-        //private IVenueDao vdao;
-        //private IArtistDao adao;
-
-
-        //private List<Artist> GetTestArtistData() {
-        //    return new List<Artist>() {
-        //        new Artist(0,"Max Mustermann","max@mustermann.de",0,0,"0.jpg","0.mp4"),
-        //        new Artist(1,"Theo Test", "test@test.at", 0, 1, "1.jpg", "1.mp4"),
-        //        new Artist(2,"Hans Wurst", "hans@wurst.de", 2, 1, "2.jpg", "2.mp4"),
-        //        new Artist(3,"Karla Tufo Group", "karla@tofu.com", 1, 1, "3.jpg", "3.mp4")
-        //    };
-        //}
-
-        //private List<Venue> GetTestVenueData() {
-        //    return new List<Venue>() {
-        //        new Venue(0,"Hauptplatz","HP",1,12,12),
-        //        new Venue(1,"Taubenmarkt","TM",1,3,8),
-        //        new Venue(2,"OK-Platz","OP",2,3,3),
-        //    };
-        //}
+        private IVenueDao vdao;
+        private IArtistDao adao;
+        private ICategoryDao catDao;
+        private ICountryDao couDao;
+        private uint venueId, artistId, categoryId,countryId, otherVenueId, otherArtistId,otherCategoryId,otherCountryId;
 
         private List<Performance> GetTestPerformanceData() {
-
-            //var testVenues = GetTestVenueData();
-            //var testArtists = GetTestArtistData();
-
-            //foreach (var item in testArtists) {
-            //    adao.CreateArtist(item.Name, item.Email, item.CategoryId, item.CountryId, item.PicturePath, item.VideoPath);
-            //}
-            //foreach (var item in testVenues) {
-            //    vdao.CreateVenue(item.Name, item.Shortcut, item.DistrictId, item.Latitude, item.Longitude);
-            //}
             return new List<Performance>() {
-                new Performance(0,new DateTime(2016,7,1,12,0,0),0,0),
-                new Performance(1,new DateTime(2016,7,3,10,30,0),1,1),
-                new Performance(2,new DateTime(2016,7,3,8,0,0),2,2),
-                new Performance(3,new DateTime(2016,7,2,11,0,0),0,2),
-                new Performance(4,new DateTime(2016,7,2,7,0,0),1,0)
+                new Performance(0,new DateTime(2016,7,1,12,0,0),categoryId,countryId),
+                new Performance(1,new DateTime(2016,7,3,10,30,0),categoryId,countryId),
+                new Performance(2,new DateTime(2016,7,3,8,0,0),categoryId,countryId),
+                new Performance(3,new DateTime(2016,7,2,11,0,0),categoryId,countryId),
+                new Performance(4,new DateTime(2016,7,2,7,0,0),categoryId,countryId)
             };
         }
 
@@ -67,17 +42,29 @@ namespace UFO.Server.Data.Tests {
 
         [TestInitialize()]
         public void Startup() {
-            //vdao = new VenueDao(db);
-            //adao = new ArtistDao(db);
+            vdao = new VenueDao(db);
+            adao = new ArtistDao(db);
             pdao = new PerformanceDao(db);
+            catDao = new CategoryDao(db);
+            couDao = new CountryDao(db);
+
+            artistId = adao.CreateArtist("Max", "m@m.de", categoryId, countryId, "max.png", "max.mp4").Id;
+            otherArtistId = adao.CreateArtist("Moritz", "mo@m.at", otherCategoryId, otherCountryId, "mo.png", "mo.mp4").Id;
+            venueId = vdao.CreateVenue("Hauptplatz", "HP", 0, 1.234, 2.345).Id;
+            otherVenueId = vdao.CreateVenue("Taubenmarkt", "TM", 0, 1.321,3.321).Id;
+            categoryId = catDao.CreateCategory("TA", "Tanzakrobatik").Id;
+            otherCategoryId = catDao.CreateCategory("MU", "Musik").Id;
+            countryId = couDao.CreateCountry("Austria", "austria.png").Id;
+            otherCountryId = couDao.CreateCountry("Germany", "germany.png").Id;
         }
 
         [TestCleanup()]
         public void Cleanup() {
             pdao.DeleteAllPerformances();
-
-            //vdao.DeleteAllVenues();
-            //adao.DeleteAllArtists();
+            vdao.DeleteAllVenues();
+            adao.DeleteAllArtists();
+            catDao.DeleteAllCategories();
+            couDao.DeleteAllCountries();
         }
 
         [TestMethod()]
@@ -151,8 +138,8 @@ namespace UFO.Server.Data.Tests {
             var testPerformances = GetTestPerformanceData();
             Performance p1 = pdao.CreatePerformance(testPerformances[0].Date,testPerformances[0].ArtistId,testPerformances[0].VenueId);
             p1.Date = new DateTime(2016, 7, 12, 12, 0, 0);
-            p1.ArtistId = 2;
-            p1.VenueId = 1;
+            p1.ArtistId = otherArtistId;
+            p1.VenueId = otherVenueId;
             pdao.UpdatePerformance(p1);
             Performance p2 = pdao.GetPerformanceById(p1.Id);
             Assert.AreEqual(p1, p2);
