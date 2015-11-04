@@ -68,7 +68,6 @@ namespace UFO.Server.Data {
     }
 
     public class VenueDao : IVenueDao {
-        private const string DELETEALL_CMD = "TRUNCATE TABLE Venue";
         private const string CREATE_CMD = "INSERT INTO Venue(shortcut, name, latitude, longitude) VALUES (@shortcut, @name,@lat, @lng)";
         private const string DELETE_CMD = "DELETE FROM Venue WHERE venueId = @id";
         private const string GETALL_CMD = "SELECT * FROM Venue";
@@ -101,8 +100,7 @@ namespace UFO.Server.Data {
         }
 
         public void DeleteAllVenues() {
-            DbCommand cmd = db.CreateCommand(DELETEALL_CMD);
-            db.ExecuteNonQuery(cmd);
+            db.TruncateTable("Venue");
         }
 
         public void DeleteVenue(Venue ven) {

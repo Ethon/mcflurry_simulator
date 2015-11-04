@@ -59,7 +59,6 @@ namespace UFO.Server.Data {
     }
 
     public class UserDao : IUserDao {
-        private const string DELETEALL_CMD = "TRUNCATE TABLE User";
         private const string CREATE_CMD = "INSERT INTO User(firstname, lastname, email) VALUES (@first, @last, @email)";
         private const string DELETE_CMD = "DELETE FROM User WHERE userId = @id";
         private const string GETALL_CMD = "SELECT * FROM User";
@@ -141,7 +140,7 @@ namespace UFO.Server.Data {
         }
 
         public void DeleteAllUsers() {
-            db.CreateCommand(DELETEALL_CMD).ExecuteNonQuery();
+            db.TruncateTable("User");
         }
     }
 }

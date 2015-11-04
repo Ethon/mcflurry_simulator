@@ -57,7 +57,6 @@ namespace UFO.Server.Data {
     }
 
     public class PerformanceDao : IPerformanceDao {
-        private const string DELETEALL_CMD = "TRUNCATE TABLE Performance";
         private const string CREATE_CMD = "INSERT INTO Performance(date, artistId, venueId) VALUES (@date, @artistId, @venueId)";
         private const string DELETE_CMD = "DELETE FROM Performance WHERE performanceId = @id";
         private const string GETALL_CMD = "SELECT * FROM Performance";
@@ -88,8 +87,7 @@ namespace UFO.Server.Data {
         }
 
         public void DeleteAllPerformances() {
-            DbCommand cmd = db.CreateCommand(DELETEALL_CMD);
-            db.ExecuteNonQuery(cmd);
+            db.TruncateTable("Performance");
         }
 
         public bool DeletePerformance(Performance performance) {

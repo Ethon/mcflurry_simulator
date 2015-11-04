@@ -101,5 +101,10 @@ namespace UFO.Server {
             MySqlDateTime dt = (MySqlDateTime)obj;
             return dt.GetDateTime();
         }
+
+        public int TruncateTable(string tableName) {
+            return CreateCommand("SET FOREIGN_KEY_CHECKS = 0; TRUNCATE " +
+                tableName + "; SET FOREIGN_KEY_CHECKS = 1;").ExecuteNonQuery();
+        }
     }
 }

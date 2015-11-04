@@ -16,6 +16,8 @@ namespace UFO.Server {
         IDataReader ExecuteReader(DbCommand command);
         int ExecuteNonQuery(DbCommand command);
 
+        int TruncateTable(string tableName);
+
         object ConvertDateTimeToDbFormat(DateTime dt);
         DateTime ConvertDateTimeFromDbFormat(object obj);
     }

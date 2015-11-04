@@ -59,7 +59,6 @@ namespace UFO.Server.Data {
         private const string SQL_UPDATE = "UPDATE Country SET name=@name,flagPath=@flagPath WHERE countryId=@countryId";
         private const string SQL_INSERT = "INSERT INTO Country (name,flagPath) VALUES(@name,@flagPath)";
         private const string SQL_DELETE = "DELETE FROM Country WHERE countryId=@countryId";
-        private const string SQL_DELETE_ALL = "TRUNCATE TABLE Country";
 
         private IDatabase database;
 
@@ -121,7 +120,7 @@ namespace UFO.Server.Data {
         }
 
         public void DeleteAllCountries() {
-            database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
+            database.TruncateTable("Country");
         }
     }
 }

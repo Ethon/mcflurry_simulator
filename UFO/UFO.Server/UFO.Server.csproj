@@ -52,7 +52,6 @@
     <Compile Include="Category.cs" />
     <Compile Include="Artist.cs" />
     <Compile Include="Country.cs" />
-    <Compile Include="District.cs" />
     <Compile Include="IDatabase.cs" />
     <Compile Include="MYSQLDatabase.cs" />
     <Compile Include="Performance.cs" />

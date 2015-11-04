@@ -86,7 +86,6 @@ public class ArtistDao : IArtistDao {
     private const string SQL_UPDATE = "UPDATE Artist SET name=@name,email=@email,categoryId=@categoryId,countryId=@countryId,picturePath=@picturePath,videoPath=@videoPath WHERE artistId=@artistId";
     private const string SQL_INSERT = "INSERT INTO Artist (name,email,categoryId,countryId,picturePath,videoPath) VALUES(@name,@email,@categoryId,@countryId,@picturePath,@videoPath)";
     private const string SQL_DELETE = "DELETE FROM Artist WHERE artistId=@artistId";
-    private const string SQL_DELETE_ALL = "TRUNCATE TABLE Artist";
 
     private IDatabase database;
 
@@ -169,7 +168,7 @@ public class ArtistDao : IArtistDao {
     }
 
     public void DeleteAllArtists() {
-        database.CreateCommand(SQL_DELETE_ALL).ExecuteNonQuery();
+        database.TruncateTable("Artist");
     }
     
 }
