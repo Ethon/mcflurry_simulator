@@ -48,14 +48,15 @@ namespace UFO.Server.Data.Tests {
             catDao = new CategoryDao(db);
             couDao = new CountryDao(db);
 
-            artistId = adao.CreateArtist("Max", "m@m.de", categoryId, countryId, "max.png", "max.mp4").Id;
-            otherArtistId = adao.CreateArtist("Moritz", "mo@m.at", otherCategoryId, otherCountryId, "mo.png", "mo.mp4").Id;
-            venueId = vdao.CreateVenue("Hauptplatz", "HP", 1.234, 2.345).Id;
-            otherVenueId = vdao.CreateVenue("Taubenmarkt", "TM", 1.321,3.321).Id;
             categoryId = catDao.CreateCategory("TA", "Tanzakrobatik").Id;
             otherCategoryId = catDao.CreateCategory("MU", "Musik").Id;
             countryId = couDao.CreateCountry("Austria", "austria.png").Id;
             otherCountryId = couDao.CreateCountry("Germany", "germany.png").Id;
+            artistId = adao.CreateArtist("Max", "m@m.de", categoryId, countryId, "max.png", "max.mp4").Id;
+            otherArtistId = adao.CreateArtist("Moritz", "mo@m.at", otherCategoryId, otherCountryId, "mo.png", "mo.mp4").Id;
+            venueId = vdao.CreateVenue("Hauptplatz", "HP", 1.234, 2.345).Id;
+            otherVenueId = vdao.CreateVenue("Taubenmarkt", "TM", 1.321,3.321).Id;
+
         }
 
         [TestCleanup()]
