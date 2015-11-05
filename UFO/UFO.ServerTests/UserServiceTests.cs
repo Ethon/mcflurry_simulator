@@ -12,17 +12,19 @@ namespace UFO.Server.Tests {
     public class UserServiceTests {
 
         private static IDatabase db;
+        private static IUserDao udao;
         private static UserService us;
 
         [ClassInitialize()]
         public static void ClassInitialize(TestContext testContext) {
             db = new MYSQLDatabase("Server = localhost; Database = ufotest; Uid = root;");
+            udao = new UserDao(db);
             us = new UserService(db);
         }
 
         [ClassCleanup()]
         public static void ClassCleanup() {
-            us.DeleteAllUsers();
+            udao.DeleteAllUsers();
             db.Dispose();
         }
 
