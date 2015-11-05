@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using UFO.Server.Data;
+
+namespace UFO.Server {
+    public class UserService {
+        private static Regex nameRegex = new Regex("[\\w ]+");
+        private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
+
+        private UserDao udao;
+
+        public UserService(IDatabase db) {
+            udao = new UserDao(db);
+        }
+
+        public User CreateUser(string firstName, string lastName, string email) {
+            if(!nameRegex.IsMatch(firstName)) {
+                throw new DataValidationException("Can't create user with invalid first name '" + firstName + "'");
+            } else if(!nameRegex.IsMatch(lastName)) {
+                throw new DataValidationException("Can't create user with invalid last name '" + lastName + "'");
+            } else if(!emailRegex.IsMatch(email)) {
+                throw new DataValidationException("Can't create user with invalid email '" + email + "'");
+            }
+            return udao.CreateUser(firstName, lastName, email);
+        }
+
+        public User GetUserById(uint id) {
+            return udao.GetUserById(id);
+        }
+
+        public User GetUserByEmailAddress(string email) {
+            if (!emailRegex.IsMatch(email)) {
+                throw new DataValidationException("Can't query user with invalid email '" + email + "'");
+            }
+            return udao.GetUserByEmailAddress(email);
+        }
+
+        public void UpdateUser(User user) {
+            if (!nameRegex.IsMatch(user.FirstName)) {
+                throw new DataValidationException("Can't update user to invalid first name '" + user.FirstName + "'");
+            } else if (!nameRegex.IsMatch(user.LastName)) {
+                throw new DataValidationException("Can't update user to invalid last name '" + user.LastName + "'");
+            } else if (!emailRegex.IsMatch(user.EmailAddress)) {
+                throw new DataValidationException("Can't update user to invalid email '" + user.EmailAddress + "'");
+            }
+            udao.UpdateUser(user);
+        }
+
+        public void DeleteUser(User user) {
+            udao.DeleteUser(user);
+        }
+
+        public void DeleteAllUsers() {
+            udao.DeleteAllUsers();
+        }
+    }
+}
