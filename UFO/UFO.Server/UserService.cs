@@ -8,13 +8,14 @@ using UFO.Server.Data;
 
 namespace UFO.Server {
     public class UserService {
-        private static Regex nameRegex = new Regex("[\\w ]+");
+        private static Regex nameRegex = new Regex("[^\\w]+");
         private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
 
         private UserDao udao;
 
         private static bool IsValidName(string name) {
-            return nameRegex.IsMatch(name);
+            Match match = nameRegex.Match(name);
+            return match.Success && match.Value.Equals(name);
         }
 
         private static bool IsValidEmail(string email) {

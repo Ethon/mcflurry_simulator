@@ -18,14 +18,22 @@ namespace UFO.Server.Tests {
         [ClassInitialize()]
         public static void ClassInitialize(TestContext testContext) {
             db = new MYSQLDatabase("Server = localhost; Database = ufotest; Uid = root;");
-            udao = new UserDao(db);
-            us = new UserService(db);
         }
 
         [ClassCleanup()]
         public static void ClassCleanup() {
-            udao.DeleteAllUsers();
             db.Dispose();
+        }
+
+        [TestInitialize()]
+        public void Startup() {
+            udao = new UserDao(db);
+            us = new UserService(db);
+        }
+
+        [TestCleanup()]
+        public void Cleanup() {
+            udao.DeleteAllUsers();
         }
 
         [TestMethod()]
@@ -58,7 +66,6 @@ namespace UFO.Server.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
         public void GetUserWithValidEmail() {
             Assert.IsNull(us.GetUserByEmailAddress("peter@mueller.com"));
         }
