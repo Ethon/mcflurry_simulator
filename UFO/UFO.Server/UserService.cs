@@ -61,9 +61,5 @@ namespace UFO.Server {
         public void DeleteUser(User user) {
             udao.DeleteUser(user);
         }
-
-        public void DeleteAllUsers() {
-            udao.DeleteAllUsers();
-        }
     }
 }
