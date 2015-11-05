@@ -13,12 +13,7 @@ namespace UFO.Server.Data.Tests {
         private ICountryDao cdao;
 
         private List<Country> GetTestCountryData() {
-            return new List<Country>() {
-                new Country(0, "Austria", "austria.png"),
-                new Country(0, "Germany", "germany.png"),
-                new Country(0, "Russia", "russia.png"),
-                new Country(0, "United States Of America", "usa.png"),
-            };
+            return RepresentativeData.GetDefaultCountries();
         }
 
         [ClassInitialize()]

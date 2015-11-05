@@ -14,17 +14,7 @@ namespace UFO.Server.Data.Tests {
         private ICategoryDao catDao;
 
         private List<Category> GetTestCategoryData() {
-            return new List<Category>() {
-            new Category(0, "A", "Akrobatik"),
-            new Category(1, "C", "Comedy & Clownerie"),
-            new Category(2, "F", "Feuershow"),
-            new Category(3, "L", "Luftakrobatik"),
-            new Category(4, "M", "Musik"),
-            new Category(5, "J", "Jonglage"),
-            new Category(6, "OT", "Figuren - und Objekttheater"),
-            new Category(7, "S", "Samba"),
-            new Category(8, "ST", "Stehstill - Statue")
-        };
+            return RepresentativeData.GetDefaultCategories();
         }
 
         [ClassInitialize()]

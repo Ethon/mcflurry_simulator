@@ -14,12 +14,7 @@ namespace UFO.Server.Data.Tests {
         private IUserDao udao;
 
         private List<User> GetTestUserData() {
-            return new List<User>() {
-                new User(0, "Max", "Mustermann", "max.mustermann@gmail.com"),
-                new User(0, "Karla", "Tofu", "karla@tofu.at"),
-                new User(0, "Hans", "Wurst", "hanswurst@gmx.at"),
-                new User(0, "Döner", "Dürüm", "doener@hotmail.de")
-            };
+            return RepresentativeData.GetDefaultUsers();
         }
 
         [ClassInitialize()]

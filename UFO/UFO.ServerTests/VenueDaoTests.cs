@@ -15,11 +15,7 @@ namespace UFO.Server.Data.Tests {
 
 
         private List<Venue> GetTestVenueData() {
-            return new List<Venue>() {
-                new Venue(0, "Posthof", "PH",  134.567, 34.54),
-                new Venue(0, "Musiktheater", "MT",  135.789, 45.67),
-                new Venue(0, "Tischlerei", "T",  166.789, 39.67)
-            };
+            return RepresentativeData.GetDefaultVenues();
         }
 
         [ClassInitialize()]
