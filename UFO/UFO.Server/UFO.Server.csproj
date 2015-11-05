@@ -61,6 +61,7 @@
     <Compile Include="User.cs" />
     <Compile Include="UserService.cs" />
     <Compile Include="Venue.cs" />
+    <Compile Include="VenueService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
