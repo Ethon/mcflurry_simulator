@@ -131,11 +131,11 @@ namespace UFO.Server.Data {
         }
 
         public uint CountOfPerformancesAtVenue(Venue venue) {
-            DbCommand cmd = db.CreateCommand(GETBYID_CMD);
+            DbCommand cmd = db.CreateCommand(COUNTVENUES_CMD);
             db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, venue.Id);
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 reader.Read();
-                return (uint)reader["count"];
+                return (uint)((long)reader["count"]);
             }
         }
     }
