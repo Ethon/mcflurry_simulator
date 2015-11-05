@@ -36,9 +36,14 @@ namespace UFO.Server.Data.Tests {
             vdao = new VenueDao(db);
             catDao = new CategoryDao(db);
             couDao = new CountryDao(db);
-            
             adao = new ArtistDao(db);
             pdao = new PerformanceDao(db);
+
+            pdao.DeleteAllPerformances();
+            vdao.DeleteAllVenues();
+            adao.DeleteAllArtists();
+            catDao.DeleteAllCategories();
+            couDao.DeleteAllCountries();
 
             foreach (var item in RepresentativeData.GetDefaultVenues()) {
                 vdao.CreateVenue(item.Name, item.Shortcut, item.Latitude, item.Longitude);

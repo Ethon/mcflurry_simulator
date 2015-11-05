@@ -30,6 +30,8 @@ namespace UFO.Server.Data.Tests {
         [TestInitialize()]
         public void Startup() {
             catDao = new CategoryDao(db);
+            catDao.DeleteAllCategories();
+            new ArtistDao(db).DeleteAllArtists();
         }
 
         [TestCleanup()]

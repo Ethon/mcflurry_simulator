@@ -29,6 +29,7 @@ namespace UFO.Server.Data.Tests {
         [TestInitialize()]
         public void Startup() {
             cdao = new CountryDao(db);
+            cdao.DeleteAllCountries();
         }
 
         [TestCleanup()]

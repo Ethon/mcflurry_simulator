@@ -13,7 +13,7 @@ namespace UFO.Server {
         private const double LNG_MIN = -180.0;
         private const double LNG_MAX = +180.0;
 
-        private static Regex shortcutRegex = new Regex("[^\\w]+\\d+");
+        private static Regex shortcutRegex = new Regex("\\w+\\d+");
 
         private VenueDao vdao;
         private PerformanceDao pdao;
