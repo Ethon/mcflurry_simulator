@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UFO.Server.Data;
 
@@ -12,6 +13,8 @@ namespace UFO.Server {
         private const double LNG_MIN = -180.0;
         private const double LNG_MAX = +180.0;
 
+        private static Regex shortcutRegex = new Regex("\\w+\\d+");
+
         private VenueDao vdao;
         private PerformanceDao pdao;
 
@@ -20,7 +23,7 @@ namespace UFO.Server {
         }
 
         private static bool IsValidShortcut(string shortcut) {
-            return true;
+            return shortcutRegex.IsMatch(shortcut);
         }
 
         private static bool IsValidLatitude(double lat) {
