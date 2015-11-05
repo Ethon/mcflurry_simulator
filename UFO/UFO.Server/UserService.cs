@@ -13,16 +13,24 @@ namespace UFO.Server {
 
         private UserDao udao;
 
+        private static bool IsValidName(string name) {
+            return nameRegex.IsMatch(name);
+        }
+
+        private static bool IsValidEmail(string email) {
+            return emailRegex.IsMatch(email);
+        }
+
         public UserService(IDatabase db) {
             udao = new UserDao(db);
         }
 
         public User CreateUser(string firstName, string lastName, string email) {
-            if(!nameRegex.IsMatch(firstName)) {
+            if(!IsValidName(firstName)) {
                 throw new DataValidationException("Can't create user with invalid first name '" + firstName + "'");
-            } else if(!nameRegex.IsMatch(lastName)) {
+            } else if(!IsValidName(lastName)) {
                 throw new DataValidationException("Can't create user with invalid last name '" + lastName + "'");
-            } else if(!emailRegex.IsMatch(email)) {
+            } else if(!IsValidEmail(email)) {
                 throw new DataValidationException("Can't create user with invalid email '" + email + "'");
             }
             return udao.CreateUser(firstName, lastName, email);
@@ -33,18 +41,18 @@ namespace UFO.Server {
         }
 
         public User GetUserByEmailAddress(string email) {
-            if (!emailRegex.IsMatch(email)) {
+            if (!IsValidEmail(email)) {
                 throw new DataValidationException("Can't query user with invalid email '" + email + "'");
             }
             return udao.GetUserByEmailAddress(email);
         }
 
         public void UpdateUser(User user) {
-            if (!nameRegex.IsMatch(user.FirstName)) {
+            if (!IsValidName(user.FirstName)) {
                 throw new DataValidationException("Can't update user to invalid first name '" + user.FirstName + "'");
-            } else if (!nameRegex.IsMatch(user.LastName)) {
+            } else if (!IsValidName(user.LastName)) {
                 throw new DataValidationException("Can't update user to invalid last name '" + user.LastName + "'");
-            } else if (!emailRegex.IsMatch(user.EmailAddress)) {
+            } else if (!IsValidEmail(user.EmailAddress)) {
                 throw new DataValidationException("Can't update user to invalid email '" + user.EmailAddress + "'");
             }
             udao.UpdateUser(user);
