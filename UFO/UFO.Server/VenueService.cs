@@ -43,7 +43,7 @@ namespace UFO.Server {
         public Venue CreateVenue(string name, string shortcut, double latitude, double longitude) {
             if(!IsValidName(name)) {
                 throw new DataValidationException("Can't create venue with invalid name '" + name + "'");
-            } else if(IsValidShortcut(shortcut)) {
+            } else if(!IsValidShortcut(shortcut)) {
                 throw new DataValidationException("Can't create venue with invalid shortcut '" + shortcut + "'");
             } else if(!IsValidLatitude(latitude)) {
                 throw new DataValidationException("Can't create venue with invalid latitude '" + latitude + "'");
@@ -61,7 +61,7 @@ namespace UFO.Server {
         public void UpdateVenue(Venue venue) {
             if (!IsValidName(venue.Name)) {
                 throw new DataValidationException("Can't update venue to invalid name '" + venue.Name + "'");
-            } else if (IsValidShortcut(venue.Shortcut)) {
+            } else if (!IsValidShortcut(venue.Shortcut)) {
                 throw new DataValidationException("Can't update venue to invalid shortcut '" + venue.Shortcut + "'");
             } else if (!IsValidLatitude(venue.Latitude)) {
                 throw new DataValidationException("Can't update venue to invalid latitude '" + venue.Latitude + "'");
