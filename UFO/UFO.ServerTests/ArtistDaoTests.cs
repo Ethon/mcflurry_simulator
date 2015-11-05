@@ -15,15 +15,9 @@ namespace Tests {
         private ICategoryDao catDao;
         private ICountryDao couDao;
         private IArtistDao adao;
-        private uint categoryId,otherCategoryId, countryId,otherCountryId;
 
         private List<Artist> GetTestArtistData() {
-            return new List<Artist>() {
-                new Artist(0,"Max Mustermann","max@mustermann.de",categoryId,countryId,"0.jpg","0.mp4"),
-                new Artist(1,"Theo Test", "test@test.at", categoryId, countryId, "1.jpg", "1.mp4"),
-                new Artist(2,"Hans Wurst", "hans@wurst.de", categoryId, countryId, "2.jpg", "2.mp4"),
-                new Artist(3,"Karla Tufo Group", "karla@tofu.com", categoryId, countryId, "3.jpg", "3.mp4")
-            };
+            return RepresentativeData.GetDefaultArtists();
         }
 
         [ClassInitialize()]
@@ -41,18 +35,19 @@ namespace Tests {
             adao = new ArtistDao(db);
             catDao = new CategoryDao(db);
             couDao = new CountryDao(db);
-
-            categoryId = catDao.CreateCategory("TA","Tanzakrobatik").Id;
-            otherCategoryId = catDao.CreateCategory("MU", "Musik").Id;
-            countryId = couDao.CreateCountry("Austria", "austria.png").Id;
-            otherCountryId = couDao.CreateCountry("Germany", "germany.png").Id;
+            foreach (var item in RepresentativeData.GetDefaultCategories()) {
+                catDao.CreateCategory(item.Shortcut, item.Name);
+            }
+            foreach (var item in RepresentativeData.GetDefaultCountries()) {
+                couDao.CreateCountry(item.Name, item.FlagPath);
+            }
         }
 
         [TestCleanup()]
         public void Cleanup() {
             adao.DeleteAllArtists();
             catDao.DeleteAllCategories();
-            couDao.DeleteAllCountries();
+            couDao.DeleteAllCountries(); 
         }
 
 
@@ -124,8 +119,8 @@ namespace Tests {
             Artist a1 = adao.CreateArtist(testArtists[0].Name, testArtists[0].Email, testArtists[0].CategoryId, testArtists[0].CountryId, testArtists[0].PicturePath, testArtists[0].VideoPath);
             a1.Name = "otherName";
             a1.Email = "otherMail";
-            a1.CategoryId = otherCategoryId;
-            a1.CountryId = otherCountryId;
+            a1.CategoryId = 2;
+            a1.CountryId = 2;
             a1.PicturePath = "newPath";
             a1.VideoPath = "newVPath";
             adao.UpdateArtist(a1);
