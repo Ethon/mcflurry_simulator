@@ -51,7 +51,9 @@
   <ItemGroup>
     <Compile Include="Category.cs" />
     <Compile Include="Artist.cs" />
+    <Compile Include="CategoryService.cs" />
     <Compile Include="Country.cs" />
+    <Compile Include="DatabaseException.cs" />
     <Compile Include="DataValidationException.cs" />
     <Compile Include="IDatabase.cs" />
     <Compile Include="MYSQLDatabase.cs" />
