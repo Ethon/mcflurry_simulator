@@ -115,7 +115,7 @@ namespace UFO.Server.Data {
                 database.DefineParameter(cmd, "@shortcut", DbType.String, category.Shortcut);
                 database.DefineParameter(cmd, "@name", DbType.String, category.Name);
                 database.DefineParameter(cmd, "@categoryId", DbType.String, category.Id);
-                return database.ExecuteNonQuery(cmd) == 1;
+                return database.ExecuteNonQuery(cmd) >= 1;
             }
             return false;
         }
