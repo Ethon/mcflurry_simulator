@@ -76,6 +76,8 @@ public interface IArtistDao {
     bool DeleteArtist(Artist artist);
     Artist CreateArtist(string name,string email,uint categoryId, uint countryId,string picturePath,string videoPath);
     void DeleteAllArtists();
+    uint CountArtistsOfCountry(Country country);
+    uint CountArtistsOfCategory(Category category);
 }
 
 public class ArtistDao : IArtistDao {
@@ -86,6 +88,9 @@ public class ArtistDao : IArtistDao {
     private const string SQL_UPDATE = "UPDATE Artist SET name=@name,email=@email,categoryId=@categoryId,countryId=@countryId,picturePath=@picturePath,videoPath=@videoPath WHERE artistId=@artistId";
     private const string SQL_INSERT = "INSERT INTO Artist (name,email,categoryId,countryId,picturePath,videoPath) VALUES(@name,@email,@categoryId,@countryId,@picturePath,@videoPath)";
     private const string SQL_DELETE = "DELETE FROM Artist WHERE artistId=@artistId";
+    private const string SQL_COUNTCATEGORIES = "SELECT COUNT(*) AS count FROM Artist WHERE categoryId=@categoryId";
+    private const string SQL_COUNTCOUNTRIES = "SELECT COUNT(*) AS count FROM Artist WHERE countryId=@countryId";
+
 
     private IDatabase database;
 
@@ -170,5 +175,21 @@ public class ArtistDao : IArtistDao {
     public void DeleteAllArtists() {
         database.TruncateTable("Artist");
     }
-    
+
+    public uint CountArtistsOfCategory(Category category) {
+        DbCommand cmd = database.CreateCommand(SQL_COUNTCATEGORIES);
+        database.DefineParameter(cmd, "@categoryId", System.Data.DbType.UInt32, category.Id);
+        using (DbDataReader reader = cmd.ExecuteReader()) {
+            reader.Read();
+            return (uint)((long)reader["count"]);
+        }
+    }
+    public uint CountArtistsOfCountry(Country country) {
+        DbCommand cmd = database.CreateCommand(SQL_COUNTCOUNTRIES);
+        database.DefineParameter(cmd, "@countryId", System.Data.DbType.UInt32, country.Id);
+        using (DbDataReader reader = cmd.ExecuteReader()) {
+            reader.Read();
+            return (uint)((long)reader["count"]);
+        }
+    }
 }
