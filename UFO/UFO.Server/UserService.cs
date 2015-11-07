@@ -8,14 +8,13 @@ using UFO.Server.Data;
 
 namespace UFO.Server {
     public class UserService {
-        private static Regex nameRegex = new Regex("\\w+");
+        private static Regex nameRegex = new Regex("\\p{L}+");
         private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
 
         private UserDao udao;
 
         private static bool IsValidName(string name) {
-            Match match = nameRegex.Match(name);
-            return match.Success && match.Value.Equals(name);
+            return nameRegex.IsMatch(name);
         }
 
         private static bool IsValidEmail(string email) {
@@ -56,11 +55,15 @@ namespace UFO.Server {
             } else if (!IsValidEmail(user.EmailAddress)) {
                 throw new DataValidationException("Can't update user to invalid email '" + user.EmailAddress + "'");
             }
-            udao.UpdateUser(user);
+            if(!udao.UpdateUser(user)) {
+                throw new DatabaseException("DatabaseError: Can`t update user " + user);
+            }
         }
 
         public void DeleteUser(User user) {
-            udao.DeleteUser(user);
+            if (!udao.DeleteUser(user)) {
+                throw new DatabaseException("DatabaseError: Can`t delete user " + user);
+            }
         }
     }
 }

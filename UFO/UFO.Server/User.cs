@@ -53,8 +53,8 @@ namespace UFO.Server.Data {
         List<User> GetAllUsers();
         User GetUserById(uint id);
         User GetUserByEmailAddress(string email);
-        void UpdateUser(User user);
-        void DeleteUser(User user);
+        bool UpdateUser(User user);
+        bool DeleteUser(User user);
         User CreateUser(string firstName, string lastName, string email);
     }
 
@@ -89,10 +89,10 @@ namespace UFO.Server.Data {
             return new User((uint)id, firstName, lastName, email);
         }
 
-        public void DeleteUser(User user) {
+        public bool DeleteUser(User user) {
             DbCommand cmd = db.CreateCommand(DELETE_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, user.Id);
-            cmd.ExecuteNonQuery();
+            return cmd.ExecuteNonQuery() >= 1;
         }
 
         public List<User> GetAllUsers() {
@@ -130,13 +130,13 @@ namespace UFO.Server.Data {
             }
         }
 
-        public void UpdateUser(User user) {
+        public bool UpdateUser(User user) {
             DbCommand cmd = db.CreateCommand(UPDATE_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, user.Id);
             db.DefineParameter(cmd, "@first", System.Data.DbType.String, user.FirstName);
             db.DefineParameter(cmd, "@last", System.Data.DbType.String, user.LastName);
             db.DefineParameter(cmd, "@email", System.Data.DbType.String, user.EmailAddress);
-            db.ExecuteNonQuery(cmd);
+            return db.ExecuteNonQuery(cmd) >= 1;
         }
 
         public void DeleteAllUsers() {
