@@ -9,8 +9,8 @@ using UFO.Server.Data;
 namespace UFO.Server {
     public class CategoryService {
 
-        private CategoryDao catDao;
-        private ArtistDao aDao;
+        private ICategoryDao catDao;
+        private IArtistDao aDao;
 
         private static Regex shortcutRegex = new Regex("\\p{L}\\p{L}?");
 

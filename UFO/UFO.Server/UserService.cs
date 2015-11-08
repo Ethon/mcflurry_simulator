@@ -11,7 +11,7 @@ namespace UFO.Server {
         private static Regex nameRegex = new Regex("\\p{L}+");
         private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
 
-        private UserDao udao;
+        private IUserDao udao;
 
         private static bool IsValidName(string name) {
             return nameRegex.IsMatch(name);

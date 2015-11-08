@@ -15,8 +15,8 @@ namespace UFO.Server {
 
         private static Regex shortcutRegex = new Regex("\\p{L}+\\d+");
 
-        private VenueDao vdao;
-        private PerformanceDao pdao;
+        private IVenueDao vdao;
+        private IPerformanceDao pdao;
 
         private static bool IsValidName(string name) {
             return true;
