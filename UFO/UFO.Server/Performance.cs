@@ -55,6 +55,7 @@ namespace UFO.Server.Data {
         Performance CreatePerformance(DateTime date, uint artistId, uint venueId);
         void DeleteAllPerformances();
         uint CountOfPerformancesAtVenue(Venue venue);
+        Performance GetPerformanceByVenueAndDate(uint venueId, DateTime date);
     }
 
     public class PerformanceDao : IPerformanceDao {
@@ -64,6 +65,7 @@ namespace UFO.Server.Data {
         private const string GETBYID_CMD = "SELECT * FROM Performance WHERE performanceId = @id";
         private const string UPDATE_CMD = "UPDATE Performance SET date=@date, artistId=@artistId, venueId=@venueId WHERE performanceId=@id";
         private const string COUNTVENUES_CMD = "SELECT COUNT(*) AS count FROM Performance WHERE venueId=@venueId";
+        private const string GETBYVENUEDATE_CMD = "SELECT * FROM Performance WHERE date=@date AND venueId=@venueId";
 
         private IDatabase db;
 
@@ -136,6 +138,19 @@ namespace UFO.Server.Data {
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 reader.Read();
                 return (uint)((long)reader["count"]);
+            }
+        }
+
+        public Performance GetPerformanceByVenueAndDate(uint venueId, DateTime date) {
+            DbCommand cmd = db.CreateCommand(GETBYVENUEDATE_CMD);
+            db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
+            db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, venueId);
+            using (DbDataReader reader = cmd.ExecuteReader()) {
+                if (reader.Read()) {
+                    return readOne(reader);
+                } else {
+                    return null;
+                }
             }
         }
     }

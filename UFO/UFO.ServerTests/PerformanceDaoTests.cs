@@ -86,7 +86,7 @@ namespace UFO.Server.Data.Tests {
         public void DeleteAllPerformancesTest() {
             var testPerformances = GetTestPerformanceData();
             Performance p1 = pdao.CreatePerformance(testPerformances[0].Date,
-                testPerformances[0].ArtistId,testPerformances[0].VenueId);
+                testPerformances[0].ArtistId, testPerformances[0].VenueId);
             Performance p2 = pdao.CreatePerformance(testPerformances[1].Date,
                 testPerformances[1].ArtistId, testPerformances[1].VenueId);
             var allPerformances = pdao.GetAllPerformances();
@@ -103,7 +103,7 @@ namespace UFO.Server.Data.Tests {
             var testPerformances = GetTestPerformanceData();
 
             foreach (var cur in testPerformances) {
-                pdao.CreatePerformance(cur.Date,cur.ArtistId,cur.VenueId);
+                pdao.CreatePerformance(cur.Date, cur.ArtistId, cur.VenueId);
             }
             Assert.AreEqual(pdao.GetAllPerformances().Count, testPerformances.Count);
             pdao.DeleteAllPerformances();
@@ -115,7 +115,7 @@ namespace UFO.Server.Data.Tests {
             var testPerformances = GetTestPerformanceData();
             for (int i = 0; i < testPerformances.Count; ++i) {
                 testPerformances[i] = pdao.CreatePerformance(testPerformances[i].Date,
-                    testPerformances[i].ArtistId,testPerformances[i].VenueId);
+                    testPerformances[i].ArtistId, testPerformances[i].VenueId);
                 Assert.IsNotNull(testPerformances[i]);
             }
 
@@ -142,7 +142,7 @@ namespace UFO.Server.Data.Tests {
         public void UpdatePerformanceTest() {
             var testPerformances = GetTestPerformanceData();
             Performance p1 = pdao.CreatePerformance(testPerformances[0].Date,
-                testPerformances[0].ArtistId,testPerformances[0].VenueId);
+                testPerformances[0].ArtistId, testPerformances[0].VenueId);
             p1.Date = new DateTime(2016, 7, 12, 12, 0, 0);
             p1.ArtistId = 20;
             p1.VenueId = 3;
@@ -159,18 +159,28 @@ namespace UFO.Server.Data.Tests {
             }
 
             Dictionary<uint, uint> venueIdToCountMapping = new Dictionary<uint, uint>();
-            foreach(var cur in testPerformances) {
-                if(!venueIdToCountMapping.ContainsKey(cur.VenueId)) {
+            foreach (var cur in testPerformances) {
+                if (!venueIdToCountMapping.ContainsKey(cur.VenueId)) {
                     venueIdToCountMapping.Add(cur.VenueId, 1);
                 } else {
                     ++venueIdToCountMapping[cur.VenueId];
                 }
             }
 
-            foreach(var pair in venueIdToCountMapping) {
+            foreach (var pair in venueIdToCountMapping) {
                 Assert.AreEqual(pair.Value,
                     pdao.CountOfPerformancesAtVenue(new Venue(pair.Key, null, null, 0, 0)));
             }
+        }
+
+        [TestMethod()]
+        public void GetPerformanceByVenueAndDateTest() {
+            var testPerformances = GetTestPerformanceData();
+            Performance p = pdao.CreatePerformance(testPerformances[0].Date, testPerformances[0].ArtistId, testPerformances[0].VenueId);
+            Venue v = new Venue(testPerformances[0].VenueId, null, null, 0, 0);
+            Assert.IsNotNull(pdao.GetPerformanceByVenueAndDate(v.Id, testPerformances[0].Date));
+            pdao.DeletePerformance(p);
+            Assert.IsNull(pdao.GetPerformanceByVenueAndDate(v.Id, testPerformances[0].Date));
         }
     }
 }
