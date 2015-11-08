@@ -8,8 +8,8 @@ using UFO.Server.Data;
 
 namespace UFO.Server {
     public class UserService {
-        private static Regex nameRegex = new Regex("\\p{L}+");
-        private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
+        private static Regex nameRegex = new Regex("^[\\p{L} ]+$");
+        private static Regex emailRegex = new Regex("^\\w+@\\w+.\\w+$");
 
         private IUserDao udao;
 
