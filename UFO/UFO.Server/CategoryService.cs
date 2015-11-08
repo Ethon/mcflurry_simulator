@@ -12,14 +12,14 @@ namespace UFO.Server {
         private CategoryDao catDao;
         private ArtistDao aDao;
 
-        private static Regex shortcutRegex = new Regex("\\p{L}{1-2}\\d");
+        private static Regex shortcutRegex = new Regex("\\p{L}\\p{L}?");
 
         private static bool IsValidName(string name) {
             return true;
         }
 
         private static bool IsValidShortcut(string shortcut) {
-            return shortcut.Length < 3; //shortcutRegex.IsMatch(shortcut);
+            return shortcutRegex.IsMatch(shortcut) && shortcut.Length <= 2;
         }
         private bool IsUsedCategory(Category category) {
             return aDao.CountArtistsOfCategory(category) > 0;
