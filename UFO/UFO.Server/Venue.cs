@@ -62,8 +62,8 @@ namespace UFO.Server.Data {
         void DeleteAllVenues();
         List<Venue> GetAllVenues();
         Venue GetVenueById(uint id);
-        void UpdateVenue(Venue ven);
-        void DeleteVenue(Venue ven);
+        bool UpdateVenue(Venue ven);
+        bool DeleteVenue(Venue ven);
         Venue CreateVenue(string name, string shortcut, double latitude, double longitude);
     }
 
@@ -103,10 +103,10 @@ namespace UFO.Server.Data {
             db.TruncateTable("Venue");
         }
 
-        public void DeleteVenue(Venue ven) {
+        public bool DeleteVenue(Venue ven) {
             DbCommand cmd = db.CreateCommand(DELETE_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, ven.Id);
-            cmd.ExecuteNonQuery();
+            return cmd.ExecuteNonQuery() >= 1;
         }
 
         public List<Venue> GetAllVenues() {
@@ -132,14 +132,14 @@ namespace UFO.Server.Data {
             }
         }
 
-        public void UpdateVenue(Venue ven) {
+        public bool UpdateVenue(Venue ven) {
             DbCommand cmd = db.CreateCommand(UPDATE_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, ven.Id);
             db.DefineParameter(cmd, "@name", System.Data.DbType.String, ven.Name);
             db.DefineParameter(cmd, "@shortcut", System.Data.DbType.String, ven.Shortcut);
             db.DefineParameter(cmd, "@lat", System.Data.DbType.Double, ven.Latitude);
             db.DefineParameter(cmd, "@lng", System.Data.DbType.Double, ven.Longitude);
-            db.ExecuteNonQuery(cmd);
+            return db.ExecuteNonQuery(cmd) >= 1;
         }
     }
 }

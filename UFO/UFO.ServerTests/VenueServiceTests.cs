@@ -97,7 +97,12 @@ namespace UFO.Server.Tests {
 
         [TestMethod()]
         public void UpdateVenueWithValidInfo() {
-            vs.UpdateVenue(new Venue(0, "Dreifaltigkeitssäule", "H1", 48.30584975, 14.28644065));
+            Venue venue = vs.CreateVenue("Dreifaltigkeitssäule", "H1", 48.30584975, 14.28644065);
+            venue.Name = "Other name";
+            venue.Shortcut = "O1";
+            venue.Longitude = 55.67;
+            venue.Latitude = 22.990;
+            vs.UpdateVenue(venue);
         }
 
         [TestMethod()]
