@@ -76,7 +76,8 @@ namespace UFO.Server.Tests {
         public void UpdateCountryWithValidInfo() {
             Country country = new Country(0, "Deutschland", "de.png");
             country = couS.CreateCountry(country.Name, country.FlagPath);
-            country.Name = "123Land";
+            country.Name = "Frankreich";
+            country.FlagPath = "fr.png";
             coudao.UpdateCountry(country);
         }
 
