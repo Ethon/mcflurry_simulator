@@ -105,7 +105,7 @@ namespace UFO.Server.Data {
                 database.DefineParameter(cmd, "@name", DbType.String, country.Name);
                 database.DefineParameter(cmd, "@flagPath", DbType.String, country.FlagPath);
                 database.DefineParameter(cmd, "@countryId", DbType.String, country.Id);
-                return database.ExecuteNonQuery(cmd) == 1;
+                return database.ExecuteNonQuery(cmd) >= 1;
             }
             return false;
         }

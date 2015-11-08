@@ -56,6 +56,7 @@
     <Compile Include="ArtistDaoTests.cs" />
     <Compile Include="CategoryDaoTests.cs" />
     <Compile Include="CountryDaoTests.cs" />
+    <Compile Include="CountryServiceTest.cs" />
     <Compile Include="PerformanceDaoTests.cs" />
     <Compile Include="CategoryServiceTest.cs" />
     <Compile Include="RepresentativeData.cs" />
