@@ -56,7 +56,7 @@ namespace UFO.Server {
                 throw new DataValidationException("Can`t update category with invalid name '" + category.Name + "'");
             }
             if (!catDao.UpdateCategory(category)) {
-                throw new DatabaseException("DatabaseError: Can`t update category " + category);
+                throw new DatabaseException("Can`t update category with invalid ID: '" + category + ")");
             };
         }
 
