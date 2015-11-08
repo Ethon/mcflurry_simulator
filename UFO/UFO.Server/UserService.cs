@@ -47,6 +47,10 @@ namespace UFO.Server {
             return udao.GetUserByEmailAddress(email);
         }
 
+        public List<User> GetAllUsers() {
+            return udao.GetAllUsers();
+        }
+
         public void UpdateUser(User user) {
             if (!IsValidName(user.FirstName)) {
                 throw new DataValidationException("Can't update user to invalid first name '" + user.FirstName + "'");
