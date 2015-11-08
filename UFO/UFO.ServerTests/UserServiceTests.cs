@@ -90,7 +90,11 @@ namespace UFO.Server.Tests {
 
         [TestMethod()]
         public void UpdateUserWithValidInfo() {
-            us.UpdateUser(new User(0, "Peter", "Müller", "peter@mueller.com"));
+            User user = us.CreateUser("Peter", "Müller", "peter@mueller.com");
+            user.FirstName = "Özgün";
+            user.LastName = "Turkya";
+            user.EmailAddress = "oezguen@turkya.com";
+            us.UpdateUser(user);
         }
     }
 }
