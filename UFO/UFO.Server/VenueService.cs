@@ -76,14 +76,19 @@ namespace UFO.Server {
                 throw new DataValidationException("Can't update venue to invalid longitude '" + venue.Longitude + "'");
             }
 
-            vdao.UpdateVenue(venue);
+            if (!vdao.UpdateVenue(venue)) {
+                throw new DatabaseException("DatabaseError: Can`t update venue " + venue);
+            };
         }
 
         public void DeleteVenue(Venue venue) {
             if(IsUsedVenue(venue)) {
                 throw new DataValidationException("Can't delete used venue '" + venue.Name + "'");
             }
-            vdao.DeleteVenue(venue);
+
+            if (!vdao.DeleteVenue(venue)) {
+                throw new DatabaseException("DatabaseError: Can`t delete venue " + venue);
+            };
         }
     }
 }
