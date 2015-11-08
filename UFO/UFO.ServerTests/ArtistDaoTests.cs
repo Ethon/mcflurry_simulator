@@ -15,6 +15,7 @@ namespace Tests {
         private ICategoryDao catDao;
         private ICountryDao couDao;
         private IArtistDao adao;
+        private IPerformanceDao pDao;
 
         private List<Artist> GetTestArtistData() {
             return RepresentativeData.GetDefaultArtists();
@@ -35,6 +36,11 @@ namespace Tests {
             adao = new ArtistDao(db);
             catDao = new CategoryDao(db);
             couDao = new CountryDao(db);
+            pDao = new PerformanceDao(db);
+            pDao.DeleteAllPerformances();
+            adao.DeleteAllArtists();
+            catDao.DeleteAllCategories();
+            couDao.DeleteAllCountries();
             foreach (var item in RepresentativeData.GetDefaultCategories()) {
                 catDao.CreateCategory(item.Shortcut, item.Name);
             }

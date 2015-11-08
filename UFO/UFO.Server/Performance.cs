@@ -55,6 +55,7 @@ namespace UFO.Server.Data {
         Performance CreatePerformance(DateTime date, uint artistId, uint venueId);
         void DeleteAllPerformances();
         uint CountOfPerformancesAtVenue(Venue venue);
+        uint CountOfPerformancesOfArtist(Artist artist);
         Performance GetPerformanceByVenueAndDate(uint venueId, DateTime date);
     }
 
@@ -65,6 +66,7 @@ namespace UFO.Server.Data {
         private const string GETBYID_CMD = "SELECT * FROM Performance WHERE performanceId = @id";
         private const string UPDATE_CMD = "UPDATE Performance SET date=@date, artistId=@artistId, venueId=@venueId WHERE performanceId=@id";
         private const string COUNTVENUES_CMD = "SELECT COUNT(*) AS count FROM Performance WHERE venueId=@venueId";
+        private const string COUNTARTISTS_CMD = "SELECT COUNT(*) AS count FROM Performance WHERE artistId=@artistId";
         private const string GETBYVENUEDATE_CMD = "SELECT * FROM Performance WHERE date=@date AND venueId=@venueId";
 
         private IDatabase db;
@@ -135,6 +137,15 @@ namespace UFO.Server.Data {
         public uint CountOfPerformancesAtVenue(Venue venue) {
             DbCommand cmd = db.CreateCommand(COUNTVENUES_CMD);
             db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, venue.Id);
+            using (DbDataReader reader = cmd.ExecuteReader()) {
+                reader.Read();
+                return (uint)((long)reader["count"]);
+            }
+        }
+
+        public uint CountOfPerformancesOfArtist(Artist artist) {
+            DbCommand cmd = db.CreateCommand(COUNTARTISTS_CMD);
+            db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artist.Id);
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 reader.Read();
                 return (uint)((long)reader["count"]);

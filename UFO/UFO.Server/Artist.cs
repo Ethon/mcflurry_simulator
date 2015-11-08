@@ -167,7 +167,7 @@ public class ArtistDao : IArtistDao {
             database.DefineParameter(cmd, "@picturePath", DbType.String, artist.PicturePath);
             database.DefineParameter(cmd, "@videoPath", DbType.String, artist.VideoPath);
             database.DefineParameter(cmd, "@artistId", DbType.String, artist.Id);
-            return database.ExecuteNonQuery(cmd) == 1;
+            return database.ExecuteNonQuery(cmd) >= 1;
         }
         return false;
     }

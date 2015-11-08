@@ -49,10 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArtistService.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="Artist.cs" />
     <Compile Include="CategoryService.cs" />
     <Compile Include="Country.cs" />
+    <Compile Include="CountryService.cs" />
     <Compile Include="DatabaseException.cs" />
     <Compile Include="DataValidationException.cs" />
     <Compile Include="IDatabase.cs" />

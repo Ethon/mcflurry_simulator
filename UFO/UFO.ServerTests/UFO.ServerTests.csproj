@@ -54,6 +54,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ArtistDaoTests.cs" />
+    <Compile Include="ArtistServiceTest.cs" />
     <Compile Include="CategoryDaoTests.cs" />
     <Compile Include="CountryDaoTests.cs" />
     <Compile Include="CountryServiceTest.cs" />
