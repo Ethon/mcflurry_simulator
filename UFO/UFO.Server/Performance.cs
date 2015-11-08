@@ -95,7 +95,7 @@ namespace UFO.Server.Data {
         public bool DeletePerformance(Performance performance) {
             DbCommand cmd = db.CreateCommand(DELETE_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, performance.Id);
-            return cmd.ExecuteNonQuery() == 1;
+            return cmd.ExecuteNonQuery() >= 1;
         }
 
         public List<Performance> GetAllPerformances() {
@@ -127,7 +127,7 @@ namespace UFO.Server.Data {
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, db.ConvertDateTimeToDbFormat(performance.Date));
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, performance.ArtistId);
             db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, performance.VenueId);
-            return db.ExecuteNonQuery(cmd) == 1;
+            return db.ExecuteNonQuery(cmd) >= 1;
         }
 
         public uint CountOfPerformancesAtVenue(Venue venue) {
