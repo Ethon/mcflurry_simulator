@@ -12,7 +12,7 @@ namespace UFO.Server {
         private ICountryDao couDao;
         private IArtistDao aDao;
 
-        private static Regex nameRegex = new Regex("^[a-zA-Z]+$");
+        private static Regex nameRegex = new Regex("^\\p{L}+$");
 
         public CountryService(IDatabase db) {
             couDao = new CountryDao(db);
@@ -53,7 +53,7 @@ namespace UFO.Server {
                 throw new DataValidationException("Can't update country to invalid flagpath '" + country.FlagPath+ "'");
             }
             if (!couDao.UpdateCountry(country)) {
-                throw new DatabaseException("DatabaseError: Can`t update country " + country);
+                throw new DatabaseException("Can`t update country with invalid ID: '" + country + ")");
             }
         }
 
