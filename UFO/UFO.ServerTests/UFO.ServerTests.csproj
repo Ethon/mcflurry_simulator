@@ -60,6 +60,7 @@
     <Compile Include="CountryServiceTest.cs" />
     <Compile Include="PerformanceDaoTests.cs" />
     <Compile Include="CategoryServiceTest.cs" />
+    <Compile Include="PerformanceServiceTests.cs" />
     <Compile Include="RepresentativeData.cs" />
     <Compile Include="UserDaoTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

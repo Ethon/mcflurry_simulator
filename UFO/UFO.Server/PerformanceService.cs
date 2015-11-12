@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
-    class PerformanceService {
+    public class PerformanceService {
         private IPerformanceDao pdao;
 
         private static bool IsValidTime(DateTime date) {
@@ -14,7 +14,7 @@ namespace UFO.Server {
         }
 
         private static bool IsValidDate(DateTime date) {
-            return date > DateTime.Now && date < DateTime.Now.AddYears(10);
+            return date.Year >= DateTime.Now.Year && date.Year < DateTime.Now.Year + 10;
         }
 
         private bool IsVenueTakenAtTime(DateTime date, uint venueId) {
