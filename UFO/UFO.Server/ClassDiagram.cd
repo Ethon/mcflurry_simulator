@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="UFO.Server.Data.Artist" Collapsed="true">
+    <Position X="1" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAICAAAgAEgAAAAAQAAAAQAIAAAAAAAAAAQAA=</HashCode>
+      <FileName>Artist.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.Data.ArtistDao" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="1" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAFAUAACBCCAAAAwAAAAIAAQAAAAKAAQAAABg=</HashCode>
+      <FileName>Artist.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UFO.Server.Data.Category" Collapsed="true">
+    <Position X="6.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAEgAAAAAQABAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Category.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.Data.CategoryDao" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAcCAABACAAAIAAIAAAAAQAAAAIAAAAAAAg=</HashCode>
+      <FileName>Category.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UFO.Server.Data.Country" Collapsed="true">
+    <Position X="8" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAEgAAAAAQAAAAgAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Country.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.Data.CountryDao" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABCAAAIAUAAADACAAAAAAAAAAAAQAAggIAAAAAAAA=</HashCode>
+      <FileName>Country.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UFO.Server.Data.Performance" Collapsed="true">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAEgAAAEAAAAAgAAIABAAAAAAAAAAA=</HashCode>
+      <FileName>Performance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.Data.PerformanceDao" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQAIAAAAAABQcgBAAAAAYAAAAggACAAAAgAAIAgAEAA=</HashCode>
+      <FileName>Performance.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UFO.Server.Data.User" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAAAEgAAAAAAAAAAAAIAAAAAAAgAAAAg=</HashCode>
+      <FileName>User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.Data.UserDao" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="2.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAIAQAQYAAEAAAACAAAAQAAAAAAQgAAIAEAMAA=</HashCode>
+      <FileName>User.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UFO.Server.Data.Venue" Collapsed="true">
+    <Position X="4.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAEAAAAAEgAAIAAQABAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Venue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.Data.VenueDao" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAgAAwYAAAAAgIAAAAAEAAAAAAAgAAIAAAEBA=</HashCode>
+      <FileName>Venue.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UFO.Server.ArtistService" Collapsed="true">
+    <Position X="1" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAIAACCAACAiAAAAAgAAABIAAAAAAABCAAAAABE=</HashCode>
+      <FileName>ArtistService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.CategoryService" Collapsed="true">
+    <Position X="6.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACABQAAAAAKCAAAIAAAAIIAAAAAAACAAAAAAAAAAAAg=</HashCode>
+      <FileName>CategoryService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.CountryService" Collapsed="true">
+    <Position X="8" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAABCAAgIACAABCAAAAAAAAAAAAAAAAAgAAAAAAAAAE=</HashCode>
+      <FileName>CountryService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.DatabaseException" Collapsed="true">
+    <Position X="8" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DatabaseException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.DataValidationException" Collapsed="true">
+    <Position X="8" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataValidationException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.MYSQLDatabase" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAECAAGEAEAUAAAAABAIAgAQAAAAAAAQA=</HashCode>
+      <FileName>MYSQLDatabase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="UFO.Server.PerformanceService" Collapsed="true">
+    <Position X="9.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAACAAAAIBAEABAAAAAEAAAAAgAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>PerformanceService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.Program" Collapsed="true">
+    <Position X="1" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.UserService" Collapsed="true">
+    <Position X="2.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIASCAAAAEAAAAAAAAAQAAAAAAAABAABEAIAE=</HashCode>
+      <FileName>UserService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UFO.Server.VenueService" Collapsed="true">
+    <Position X="4.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAgICgAAAAAAgICCIAAAAAFGAIAAACAAAAABA=</HashCode>
+      <FileName>VenueService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="UFO.Server.Data.IArtistDao" Collapsed="true">
+    <Position X="1" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAABAAAACACAAAAAwAAAAIAAAAAAAAAAQAAABA=</HashCode>
+      <FileName>Artist.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="UFO.Server.Data.ICategoryDao" Collapsed="true">
+    <Position X="6.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAICAAAAAAAAIAAIAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Category.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="UFO.Server.Data.ICountryDao" Collapsed="true">
+    <Position X="8" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABCAAAIAAAAACAAAAAAAAAAAAAAAAAggAAAAAAAAA=</HashCode>
+      <FileName>Country.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="UFO.Server.Data.IPerformanceDao" Collapsed="true">
+    <Position X="9.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAIAAAAAABAEgBAAAAAIAAAAAgACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Performance.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="UFO.Server.Data.IUserDao" Collapsed="true">
+    <Position X="2.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAQAAAAAEAAAAAAAAAQAAAAAAQAAAAAEAIAA=</HashCode>
+      <FileName>User.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="UFO.Server.Data.IVenueDao" Collapsed="true">
+    <Position X="4.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAgAAAAAAgIAAAAAEAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Venue.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="UFO.Server.IDatabase" Collapsed="true">
+    <Position X="4.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAECAACEAEAEAAAAABAAAAAQAAAAAAAQA=</HashCode>
+      <FileName>IDatabase.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
