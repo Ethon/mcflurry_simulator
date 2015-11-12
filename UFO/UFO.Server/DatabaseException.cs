@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server {
+    [Serializable]
     public class DatabaseException : Exception {
         public DatabaseException() {
         }

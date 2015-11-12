@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server {
-    public class MYSQLDatabase : IDatabase {
+    public sealed class MYSQLDatabase : IDatabase {
 
         private MySqlConnection con;
 
@@ -22,18 +22,18 @@ namespace UFO.Server {
             return new MySqlCommand(sql, con);
         }
 
-        protected DbConnection GetOpenConnection() {
+        private DbConnection GetOpenConnection() {
             return con;
         }
 
-        protected void ReleaseConnection() {
+        private void ReleaseConnection() {
             if (con != null) {
                 con.Close();
                 con = null;
             }
         }
 
-        protected bool IsSharedConnection() {
+        private bool IsSharedConnection() {
             return true;
         }
 
