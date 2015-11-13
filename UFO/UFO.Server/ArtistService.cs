@@ -36,12 +36,13 @@ namespace UFO.Server {
             return pDao.CountOfPerformancesOfArtist(artist) > 0;
         }
 
-
-
         public ArtistService(IDatabase db) {
-            aDao = new ArtistDao(db);
-            pDao = new PerformanceDao(db);
-
+            if(db is MYSQLDatabase) { 
+                aDao = new ArtistDao(db);
+                pDao = new PerformanceDao(db);
+            } else {
+                throw new NotSupportedException("Database not supported");
+            }
         }
 
         public Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath) {
