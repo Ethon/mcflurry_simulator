@@ -18,7 +18,7 @@ namespace UFO.Server.Tests {
         private static IVenueDao vdao;
         private static IPerformanceDao pdao;
 
-        private static ArtistService aS;
+        private static IArtistService aS;
 
         private Country country;
         private Category category;
@@ -54,12 +54,11 @@ namespace UFO.Server.Tests {
             adao = new ArtistDao(db);
             vdao = new VenueDao(db);
             pdao = new PerformanceDao(db);
-            aS = new ArtistService(db);
+            aS = ServiceFactory.CreateArtistService(db);
             category = RepresentativeData.GetDefaultCategories()[0];
             country = RepresentativeData.GetDefaultCountries()[0];
             category = catdao.CreateCategory(category.Shortcut, category.Name);
             country = coudao.CreateCountry(country.Name, country.FlagPath);
-
         }
 
         [TestCleanup()]
