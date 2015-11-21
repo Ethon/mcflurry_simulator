@@ -19,6 +19,7 @@ namespace UFO.Server.Data {
             this.CountryId = countryId;
             this.PicturePath = picturePath;
             this.VideoPath = videoPath;
+            this.IsDeleted = false;
         }
 
         public uint Id {
@@ -49,6 +50,11 @@ namespace UFO.Server.Data {
             get; set;
         }
 
+        public bool IsDeleted {
+            get;
+            set;
+        }
+
         public override string ToString() {
             return String.Format("Artist(id={0}, name='{1}', email='{2}',categoryId='{3}',countryId='{4}',picturePath='{5}',videoPath='{6}) ", Id, Name, Email, CategoryId, CountryId, PicturePath, VideoPath);
         }
@@ -72,6 +78,7 @@ namespace UFO.Server.Data {
         Artist GetArtistById(uint id);
         Artist GetArtistByName(string name);
         bool UpdateArtist(Artist artist);
+        bool MarkAsDeleted(Artist artist);
         bool DeleteArtist(Artist artist);
         Artist CreateArtist(string name, string email, uint categoryId, uint countryId, string picturePath, string videoPath);
         void DeleteAllArtists();
@@ -107,6 +114,11 @@ namespace UFO.Server.Data {
             database.DefineParameter(cmd, "@videoPath", DbType.String, videoPath);
             int lastInsertId = database.ExecuteNonQuery(cmd);
             return new Artist((uint)lastInsertId, name, email, categoryId, countryId, picturePath, videoPath);
+        }
+
+        public bool MarkAsDeleted(Artist artist) {
+            artist.IsDeleted = true;
+            return UpdateArtist(artist);
         }
 
         public bool DeleteArtist(Artist artist) {
@@ -166,6 +178,7 @@ namespace UFO.Server.Data {
                 database.DefineParameter(cmd, "@picturePath", DbType.String, artist.PicturePath);
                 database.DefineParameter(cmd, "@videoPath", DbType.String, artist.VideoPath);
                 database.DefineParameter(cmd, "@artistId", DbType.String, artist.Id);
+                database.DefineParameter(cmd, "@deleted", DbType.Boolean, artist.IsDeleted);
                 return database.ExecuteNonQuery(cmd) >= 1;
             }
             return false;
@@ -191,5 +204,7 @@ namespace UFO.Server.Data {
                 return (uint)((long)reader["count"]);
             }
         }
+
+
     }
 }
