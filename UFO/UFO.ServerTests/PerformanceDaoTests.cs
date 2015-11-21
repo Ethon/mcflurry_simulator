@@ -127,6 +127,61 @@ namespace UFO.Server.Data.Tests {
         }
 
         [TestMethod()]
+        public void GetPerformancesByArtistBeforeDateTest() {
+            var testPerformances = GetTestPerformanceData();
+            Category cat = catDao.CreateCategory("TA", "Turnakrobatik");
+            Country cou = couDao.CreateCountry("Wien", "wien.png");
+            Artist a1 = adao.CreateArtist("Max", "max@max.de", cat.Id,  cou.Id , "max.png", "max.video");
+            Artist a2 = adao.CreateArtist("Hermann Maier", "hermann@max.de", cat.Id, cou.Id, "max.png", "max.video");
+            Venue v = vdao.CreateVenue("Hauptplatz", "HP", 1.23456, 1.2346);
+
+            //Main Artist Before
+            Performance pBefore1 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 12, 0, 0), a1.Id, v.Id);
+            Performance pBefore2 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 15, 0, 0), a1.Id, v.Id);
+            Performance pBefore3 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 18, 0, 0), a1.Id, v.Id);
+            Performance pBefore4 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 20, 0, 0), a1.Id, v.Id);
+
+            //Main Artist After
+            Performance pAfter1 = pdao.CreatePerformance(new DateTime(2016, 1, 2, 15, 0, 0), a1.Id, v.Id);
+            Performance pAfter2 = pdao.CreatePerformance(new DateTime(2016, 1, 2, 19, 0, 0), a1.Id, v.Id);
+            Performance pAfter3 = pdao.CreatePerformance(new DateTime(2016, 1, 2, 20, 0, 0), a1.Id, v.Id);
+
+            //Other Artist
+            Performance pOtherBefore = pdao.CreatePerformance(new DateTime(2016, 1, 1, 12, 0, 0), a2.Id, v.Id);
+            Performance pOtherAfter = pdao.CreatePerformance(new DateTime(2016, 1, 2, 20, 0, 0), a2.Id, v.Id);
+
+            Assert.AreEqual(4, pdao.GetPerformancesByArtistBeforeDate(a1.Id, new DateTime(2016, 1, 1, 22, 0, 0)).Count);
+        }
+
+        [TestMethod()]
+        public void GetPerformancesByArtistAfterDateTest() {
+            var testPerformances = GetTestPerformanceData();
+            Category cat = catDao.CreateCategory("TA", "Turnakrobatik");
+            Country cou = couDao.CreateCountry("Wien", "wien.png");
+            Artist a1 = adao.CreateArtist("Max", "max@max.de", cat.Id, cou.Id, "max.png", "max.video");
+            Artist a2 = adao.CreateArtist("Hermann Maier", "hermann@max.de", cat.Id, cou.Id, "max.png", "max.video");
+            Venue v = vdao.CreateVenue("Hauptplatz", "HP", 1.23456, 1.2346);
+
+            //Main Artist Before
+            Performance pBefore1 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 12, 0, 0), a1.Id, v.Id);
+            Performance pBefore2 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 15, 0, 0), a1.Id, v.Id);
+            Performance pBefore3 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 18, 0, 0), a1.Id, v.Id);
+            Performance pBefore4 = pdao.CreatePerformance(new DateTime(2016, 1, 1, 20, 0, 0), a1.Id, v.Id);
+
+            //Main Artist After
+            Performance pAfter1 = pdao.CreatePerformance(new DateTime(2016, 1, 2, 15, 0, 0), a1.Id, v.Id);
+            Performance pAfter2 = pdao.CreatePerformance(new DateTime(2016, 1, 2, 19, 0, 0), a1.Id, v.Id);
+            Performance pAfter3 = pdao.CreatePerformance(new DateTime(2016, 1, 2, 20, 0, 0), a1.Id, v.Id);
+
+            //Other Artist
+            Performance pOtherBefore = pdao.CreatePerformance(new DateTime(2016, 1, 1, 12, 0, 0), a2.Id, v.Id);
+            Performance pOtherAfter = pdao.CreatePerformance(new DateTime(2016, 1, 2, 20, 0, 0), a2.Id, v.Id);
+
+            Assert.AreEqual(3, pdao.GetPerformancesByArtistAfterDate(a1.Id, new DateTime(2016, 1, 1, 22, 0, 0)).Count);
+        }
+
+
+        [TestMethod()]
         public void GetPerformanceByIdTest() {
             var testPerformances = GetTestPerformanceData();
             Performance p1 = pdao.CreatePerformance(testPerformances[0].Date,
