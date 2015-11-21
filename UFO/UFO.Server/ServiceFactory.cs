@@ -9,5 +9,9 @@ namespace UFO.Server {
         public static IArtistService CreateArtistService(IDatabase db) {
             return new ArtistService(db);
         }
+
+        public static IVenueService CreateVenueService(IDatabase db) {
+            return new VenueService(db);
+        }
     }
 }
