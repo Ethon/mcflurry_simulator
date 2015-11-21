@@ -69,6 +69,23 @@ namespace Tests {
         }
 
         [TestMethod()]
+        public void MarkAsDeleteTest() {
+            var testArtists = GetTestArtistData();
+            for (int i = 0; i < testArtists.Count; ++i) {
+                testArtists[i] = adao.CreateArtist(testArtists[i].Name, testArtists[i].Email, testArtists[i].CategoryId, testArtists[i].CountryId, testArtists[i].PicturePath, testArtists[i].VideoPath);
+            }
+            var allArtist = adao.GetAllArtists();
+
+
+            adao.MarkAsDeleted(adao.GetArtistById(1));
+            adao.MarkAsDeleted(adao.GetArtistById(2));
+            adao.MarkAsDeleted(adao.GetArtistById(3));
+            Assert.AreEqual(allArtist.Count-3, adao.GetAllArtists().Count);
+           
+
+        }
+
+        [TestMethod()]
         public void DeleteArtistTest() {
             var testArtists = GetTestArtistData();
             Artist a1 = adao.CreateArtist(testArtists[0].Name, testArtists[0].Email, testArtists[0].CategoryId, testArtists[0].CountryId, testArtists[0].PicturePath, testArtists[0].VideoPath);

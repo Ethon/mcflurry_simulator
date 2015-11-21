@@ -90,8 +90,8 @@ namespace UFO.Server.Data {
 
         private const string SQL_FIND_BY_ID = "SELECT * FROM Artist WHERE artistId=@artistId";
         private const string SQL_FIND_BY_NAME = "SELECT * FROM Artist WHERE name LIKE @name";
-        private const string SQL_FIND_ALL = "SELECT * FROM Artist";
-        private const string SQL_UPDATE = "UPDATE Artist SET name=@name,email=@email,categoryId=@categoryId,countryId=@countryId,picturePath=@picturePath,videoPath=@videoPath WHERE artistId=@artistId";
+        private const string SQL_FIND_ALL = "SELECT * FROM Artist WHERE deleted=0";
+        private const string SQL_UPDATE = "UPDATE Artist SET name=@name,email=@email,categoryId=@categoryId,countryId=@countryId,picturePath=@picturePath,videoPath=@videoPath,deleted=@deleted WHERE artistId=@artistId";
         private const string SQL_INSERT = "INSERT INTO Artist (name,email,categoryId,countryId,picturePath,videoPath) VALUES(@name,@email,@categoryId,@countryId,@picturePath,@videoPath)";
         private const string SQL_DELETE = "DELETE FROM Artist WHERE artistId=@artistId";
         private const string SQL_COUNTCATEGORIES = "SELECT COUNT(*) AS count FROM Artist WHERE categoryId=@categoryId";
@@ -178,7 +178,7 @@ namespace UFO.Server.Data {
                 database.DefineParameter(cmd, "@picturePath", DbType.String, artist.PicturePath);
                 database.DefineParameter(cmd, "@videoPath", DbType.String, artist.VideoPath);
                 database.DefineParameter(cmd, "@artistId", DbType.String, artist.Id);
-                database.DefineParameter(cmd, "@deleted", DbType.Boolean, artist.IsDeleted);
+                database.DefineParameter(cmd, "@deleted", DbType.Int16, artist.IsDeleted ? 1 : 0);
                 return database.ExecuteNonQuery(cmd) >= 1;
             }
             return false;
