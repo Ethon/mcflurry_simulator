@@ -25,5 +25,9 @@ namespace UFO.Server {
         public static IPerformanceService CreatePerformanceService(IDatabase db) {
             return new PerformanceService(db);
         }
+
+        public static ICountryService CreateCountryService(IDatabase db) {
+            return new CountryService(db);
+        }
     }
 }
