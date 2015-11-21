@@ -7,6 +7,7 @@ using MySql.Data.MySqlClient;
 using System.Data.Common;
 
 namespace UFO.Server.Data {
+    [Serializable]
     public class User {
         public User(uint id, string firstName, string lastName, string email) {
             Id = id;

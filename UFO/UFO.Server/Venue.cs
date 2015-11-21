@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
+    [Serializable]
     public class Venue {
         public Venue(uint id, string name, string shortcut, double lat, double lng) {
             Id = id;

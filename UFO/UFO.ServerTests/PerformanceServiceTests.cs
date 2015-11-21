@@ -16,7 +16,7 @@ namespace UFO.ServerTests {
         private static ICountryDao countrydao;
         private static ICategoryDao categorydao;
         private static IVenueDao vdao;
-        private static PerformanceService ps;
+        private static IPerformanceService ps;
 
         private Artist createTestArtist(int index = 0) {
             Country co = RepresentativeData.GetDefaultCountries()[index];
@@ -57,7 +57,7 @@ namespace UFO.ServerTests {
             countrydao = new CountryDao(db);
             categorydao = new CategoryDao(db);
             vdao = new VenueDao(db);
-            ps = new PerformanceService(db);
+            ps = ServiceFactory.CreatePerformanceService(db);
         }
 
         [TestCleanup()]

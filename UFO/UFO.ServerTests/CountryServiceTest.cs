@@ -14,7 +14,7 @@ namespace UFO.Server.Tests {
         private static ICategoryDao catdao;
         private static ICountryDao coudao;
         private static IArtistDao adao;
-        private static CountryService couS;
+        private static ICountryService couS;
 
         private Artist createTestArtistOfCountry(Country country) {
             Category categoryData = RepresentativeData.GetDefaultCategories()[0];
@@ -32,7 +32,7 @@ namespace UFO.Server.Tests {
             catdao = new CategoryDao(db);
             coudao = new CountryDao(db);
             adao = new ArtistDao(db);
-            couS = new CountryService(db);
+            couS = ServiceFactory.CreateCountryService(db);
         }
 
         [ClassCleanup()]

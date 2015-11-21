@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
-    public class CountryService {
+    public interface ICountryService {
+        Country CreateCountry(string name, string flagPath);
+        Country GetCountryById(uint id);
+        List<Country> GetAllCountries();
+        void UpdateCountry(Country country);
+        void DeleteCountry(Country country);
+    }
 
+    internal class CountryService : ICountryService {
         private ICountryDao couDao;
         private IArtistDao aDao;
 

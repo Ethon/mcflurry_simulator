@@ -9,5 +9,25 @@ namespace UFO.Server {
         public static IArtistService CreateArtistService(IDatabase db) {
             return new ArtistService(db);
         }
+
+        public static IVenueService CreateVenueService(IDatabase db) {
+            return new VenueService(db);
+        }
+
+        public static IUserService CreateUserService(IDatabase db) {
+            return new UserService(db);
+        }
+
+        public static ICategoryService CreateCategoryService(IDatabase db) {
+            return new CategoryService(db);
+        }
+
+        public static IPerformanceService CreatePerformanceService(IDatabase db) {
+            return new PerformanceService(db);
+        }
+
+        public static ICountryService CreateCountryService(IDatabase db) {
+            return new CountryService(db);
+        }
     }
 }

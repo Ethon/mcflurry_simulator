@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
-    public class PerformanceService {
+    public interface IPerformanceService {
+        Performance CreatePerformance(DateTime date, Artist artist, Venue venue);
+        List<Performance> GetAllPerformances();
+        Performance GetPerformanceById(uint id);
+        void UpdatePerformance(Performance performance);
+        void DeletePerformance(Performance performance);
+    }
+
+    internal class PerformanceService : IPerformanceService {
         private IPerformanceDao pdao;
 
         private static bool IsValidTime(DateTime date) {

@@ -16,7 +16,7 @@ namespace UFO.Server.Tests {
         private static CountryDao coudao;
         private static ArtistDao adao;
         private static PerformanceDao pdao;
-        private static VenueService vs;
+        private static IVenueService vs;
 
         private Performance createTestPerformanceAtVenue(Venue venue) {
             Category categoryData = RepresentativeData.GetDefaultCategories()[0];
@@ -41,7 +41,7 @@ namespace UFO.Server.Tests {
             coudao = new CountryDao(db);
             adao = new ArtistDao(db);
             pdao = new PerformanceDao(db);
-            vs = new VenueService(db);
+            vs = ServiceFactory.CreateVenueService(db);
         }
 
         [ClassCleanup()]

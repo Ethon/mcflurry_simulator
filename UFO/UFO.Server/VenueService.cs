@@ -7,7 +7,15 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
-    public class VenueService {
+    public interface IVenueService {
+        Venue CreateVenue(string name, string shortcut, double latitude, double longitude);
+        List<Venue> GetAllVenues();
+        Venue GetVenueById(uint id);
+        void UpdateVenue(Venue venue);
+        void DeleteVenue(Venue venue);
+    }
+
+    internal class VenueService : IVenueService {
         private const double LAT_MIN = -90.0;
         private const double LAT_MAX = +90.0;
         private const double LNG_MIN = -180.0;
