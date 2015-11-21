@@ -22,7 +22,11 @@ namespace UFO.Server {
         }
 
         public PerformanceService(IDatabase db) {
-            pdao = new PerformanceDao(db);
+            if (db is MYSQLDatabase) {
+                pdao = new PerformanceDao(db);
+            } else {
+                throw new NotSupportedException("Database not supported");
+            }
         }
 
         public Performance CreatePerformance(DateTime date, Artist artist, Venue venue) {

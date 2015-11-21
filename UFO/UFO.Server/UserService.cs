@@ -22,7 +22,11 @@ namespace UFO.Server {
         }
 
         public UserService(IDatabase db) {
-            udao = new UserDao(db);
+            if (db is MYSQLDatabase) {
+                udao = new UserDao(db);
+            } else {
+                throw new NotSupportedException("Database not supported");
+            }
         }
 
         public User CreateUser(string firstName, string lastName, string email) {

@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
-    public class ArtistService {
+    public interface IArtistService {
+        Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath);
+        Artist GetArtistById(uint id);
+        List<Artist> GetAllArtists();
+        void UpdateArtist(Artist artist);
+        void DeleteArtist(Artist artist);
+    }
+
+    internal class ArtistService : IArtistService {
         private IArtistDao aDao;
         private IPerformanceDao pDao;
-
 
         private static Regex nameRegex = new Regex("^[a-zA-Z_öÖäÄüÜß ]*$");
         private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
@@ -36,16 +43,16 @@ namespace UFO.Server {
             return pDao.CountOfPerformancesOfArtist(artist) > 0;
         }
 
-
-
         public ArtistService(IDatabase db) {
-            aDao = new ArtistDao(db);
-            pDao = new PerformanceDao(db);
-
+            if(db is MYSQLDatabase) { 
+                aDao = new ArtistDao(db);
+                pDao = new PerformanceDao(db);
+            } else {
+                throw new NotSupportedException("Database not supported");
+            }
         }
 
         public Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath) {
-            
             if (!IsValidName(name)) {
                 throw new DataValidationException("Can't create artist with invalid name '" + name + "'");
             } else if (!IsValidEmail(email)) {
@@ -84,6 +91,7 @@ namespace UFO.Server {
                 throw new DatabaseException("Can`t update artist with invalid ID: '" + artist + "'");
             }
         }
+
         public void DeleteArtist(Artist artist) {
             if (IsUsedArtist(artist)) {
                 throw new DataValidationException("Can't delete used artist '" + artist.Name + "'");
@@ -92,6 +100,5 @@ namespace UFO.Server {
                 throw new DatabaseException("DatabaseError: Can`t delete artist " + artist);
             }
         }
-
     }
 }

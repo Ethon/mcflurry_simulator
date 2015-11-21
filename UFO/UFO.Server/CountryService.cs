@@ -14,19 +14,25 @@ namespace UFO.Server {
 
         private static Regex nameRegex = new Regex("^\\p{L}+$");
 
-        public CountryService(IDatabase db) {
-            couDao = new CountryDao(db);
-            aDao = new ArtistDao(db);
-        }
-
         private static bool IsValidName(string name) {
             return nameRegex.IsMatch(name);
         }
+
         private static bool IsValidFlagPath(string flagPath) {
             return true;
         }
+
         private bool IsUsedCountry(Country country) {
             return aDao.CountArtistsOfCountry(country) > 0;
+        }
+
+        public CountryService(IDatabase db) {
+            if (db is MYSQLDatabase) {
+                couDao = new CountryDao(db);
+                aDao = new ArtistDao(db);
+            } else {
+                throw new NotSupportedException("Database not supported");
+            }
         }
 
         public Country CreateCountry(string name, string flagPath) {
@@ -38,6 +44,7 @@ namespace UFO.Server {
             }
             return couDao.CreateCountry(name, flagPath);
         }
+
         public Country GetCountryById(uint id) {
             return couDao.GetCountryById(id);
         }

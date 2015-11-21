@@ -39,8 +39,12 @@ namespace UFO.Server {
         }
 
         public VenueService(IDatabase db) {
-            vdao = new VenueDao(db);
-            pdao = new PerformanceDao(db);
+            if (db is MYSQLDatabase) {
+                vdao = new VenueDao(db);
+                pdao = new PerformanceDao(db);
+            } else {
+                throw new NotSupportedException("Database not supported");
+            }
         }
 
         public Venue CreateVenue(string name, string shortcut, double latitude, double longitude) {

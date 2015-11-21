@@ -26,8 +26,12 @@ namespace UFO.Server {
         }
 
         public CategoryService(IDatabase db) {
-            catDao = new CategoryDao(db);
-            aDao = new ArtistDao(db);
+            if (db is MYSQLDatabase) {
+                catDao = new CategoryDao(db);
+                aDao = new ArtistDao(db);
+            } else {
+                throw new NotSupportedException("Database not supported");
+            }
         }
 
         public Category CreateCategory(string shortcut,string name) {
