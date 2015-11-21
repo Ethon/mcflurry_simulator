@@ -58,8 +58,8 @@ namespace UFO.Server.Data {
         uint CountOfPerformancesAtVenue(Venue venue);
         uint CountOfPerformancesOfArtist(Artist artist);
         Performance GetPerformanceByVenueAndDate(uint venueId, DateTime date);
-        List<Performance> GetPerformancesByArtistBeforeDate(Artist artist, DateTime date);
-        List<Performance> GetPerformancesByArtistAfterDate(Artist artist, DateTime date);
+        List<Performance> GetPerformancesByArtistBeforeDate(uint artistId, DateTime date);
+        List<Performance> GetPerformancesByArtistAfterDate(uint artistId, DateTime date);
     }
 
     public class PerformanceDao : IPerformanceDao {
@@ -170,10 +170,10 @@ namespace UFO.Server.Data {
             }
         }
 
-        public List<Performance> GetPerformancesByArtistBeforeDate(Artist artist, DateTime date) {
+        public List<Performance> GetPerformancesByArtistBeforeDate(uint artistId, DateTime date) {
             List<Performance> performances = new List<Performance>();
             DbCommand cmd = db.CreateCommand(GETALLBYARTISTBEFOREDATE);
-            db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artist.Id);
+            db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artistId);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 while (reader.Read()) {
@@ -183,10 +183,10 @@ namespace UFO.Server.Data {
             return performances;
         }
 
-        public List<Performance> GetPerformancesByArtistAfterDate(Artist artist, DateTime date) {
+        public List<Performance> GetPerformancesByArtistAfterDate(uint artistId, DateTime date) {
             List<Performance> performances = new List<Performance>();
             DbCommand cmd = db.CreateCommand(GETALLBYARTISTAFTERDATE);
-            db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artist.Id);
+            db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artistId);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 while (reader.Read()) {
