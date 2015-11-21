@@ -21,5 +21,9 @@ namespace UFO.Server {
         public static ICategoryService CreateCategoryService(IDatabase db) {
             return new CategoryService(db);
         }
+
+        public static IPerformanceService CreatePerformanceService(IDatabase db) {
+            return new PerformanceService(db);
+        }
     }
 }
