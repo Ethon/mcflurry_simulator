@@ -13,5 +13,9 @@ namespace UFO.Server {
         public static IVenueService CreateVenueService(IDatabase db) {
             return new VenueService(db);
         }
+
+        public static IUserService CreateUserService(IDatabase db) {
+            return new UserService(db);
+        }
     }
 }

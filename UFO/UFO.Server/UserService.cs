@@ -7,7 +7,13 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
-    public class UserService {
+    public interface IUserService {
+        User GetUserById(uint id);
+        User GetUserByEmailAddress(string email);
+        List<User> GetAllUsers();
+    }
+
+    internal class UserService : IUserService {
         private static Regex nameRegex = new Regex("^[\\p{L} ]+$");
         private static Regex emailRegex = new Regex("^\\w+@\\w+.\\w+$");
 
@@ -29,17 +35,6 @@ namespace UFO.Server {
             }
         }
 
-        public User CreateUser(string firstName, string lastName, string email) {
-            if(!IsValidName(firstName)) {
-                throw new DataValidationException("Can't create user with invalid first name '" + firstName + "'");
-            } else if(!IsValidName(lastName)) {
-                throw new DataValidationException("Can't create user with invalid last name '" + lastName + "'");
-            } else if(!IsValidEmail(email)) {
-                throw new DataValidationException("Can't create user with invalid email '" + email + "'");
-            }
-            return udao.CreateUser(firstName, lastName, email);
-        }
-
         public User GetUserById(uint id) {
             return udao.GetUserById(id);
         }
@@ -53,25 +48,6 @@ namespace UFO.Server {
 
         public List<User> GetAllUsers() {
             return udao.GetAllUsers();
-        }
-
-        public void UpdateUser(User user) {
-            if (!IsValidName(user.FirstName)) {
-                throw new DataValidationException("Can't update user to invalid first name '" + user.FirstName + "'");
-            } else if (!IsValidName(user.LastName)) {
-                throw new DataValidationException("Can't update user to invalid last name '" + user.LastName + "'");
-            } else if (!IsValidEmail(user.EmailAddress)) {
-                throw new DataValidationException("Can't update user to invalid email '" + user.EmailAddress + "'");
-            }
-            if(!udao.UpdateUser(user)) {
-                throw new DatabaseException("DatabaseError: Can`t update user " + user);
-            }
-        }
-
-        public void DeleteUser(User user) {
-            if (!udao.DeleteUser(user)) {
-                throw new DatabaseException("DatabaseError: Can`t delete user " + user);
-            }
         }
     }
 }

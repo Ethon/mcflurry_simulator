@@ -13,7 +13,7 @@ namespace UFO.Server.Tests {
 
         private static IDatabase db;
         private static IUserDao udao;
-        private static UserService us;
+        private static IUserService us;
 
         [ClassInitialize()]
         public static void ClassInitialize(TestContext testContext) {
@@ -28,37 +28,13 @@ namespace UFO.Server.Tests {
         [TestInitialize()]
         public void Startup() {
             udao = new UserDao(db);
-            us = new UserService(db);
+            us = ServiceFactory.CreateUserService(db);
         }
 
         [TestCleanup()]
         public void Cleanup() {
             udao.DeleteAllUsers();
         }
-
-        [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
-        public void CreateUserWithInvalidFirstName() {
-            us.CreateUser("123_", "Müller", "peter@mueller.com");
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
-        public void CreateUserWithInvalidLastName() {
-            us.CreateUser("Peter", "123_", "peter@mueller.com");
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
-        public void CreateUserWithInvalidEmail() {
-            us.CreateUser("Peter", "Müller", "peter!mueller,com");
-        }
-
-        [TestMethod()]
-        public void CreateUserWithValidInfo() {
-            us.CreateUser("Peter", "Müller", "peter@mueller.com");
-        }
-
         [TestMethod()]
         [ExpectedException(typeof(DataValidationException))]
         public void GetUserWithInvalidEmail() {
@@ -68,33 +44,6 @@ namespace UFO.Server.Tests {
         [TestMethod()]
         public void GetUserWithValidEmail() {
             Assert.IsNull(us.GetUserByEmailAddress("peter@mueller.com"));
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
-        public void UpdateUserWithInvalidFirstName() {
-            us.UpdateUser(new User(0, "123_", "Müller", "peter@mueller.com"));
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
-        public void UpdateUserWithInvalidLastName() {
-            us.UpdateUser(new User(0, "Peter", "123_", "peter@mueller.com"));
-        }
-
-        [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
-        public void UpdateUserWithInvalidEmail() {
-            us.UpdateUser(new User(0, "Peter", "Müller", "peter!mueller,com"));
-        }
-
-        [TestMethod()]
-        public void UpdateUserWithValidInfo() {
-            User user = us.CreateUser("Peter", "Müller", "peter@mueller.com");
-            user.FirstName = "Özgün";
-            user.LastName = "Turkya";
-            user.EmailAddress = "oezguen@turkya.com";
-            us.UpdateUser(user);
         }
     }
 }
