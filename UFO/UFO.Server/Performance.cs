@@ -57,12 +57,16 @@ namespace UFO.Server.Data {
         uint CountOfPerformancesAtVenue(Venue venue);
         uint CountOfPerformancesOfArtist(Artist artist);
         Performance GetPerformanceByVenueAndDate(uint venueId, DateTime date);
+        List<Performance> GetPerformancesByArtistBeforeDate(Artist artist, DateTime date);
+        List<Performance> GetPerformancesByArtistAfterDate(Artist artist, DateTime date);
     }
 
     public class PerformanceDao : IPerformanceDao {
         private const string CREATE_CMD = "INSERT INTO Performance(date, artistId, venueId) VALUES (@date, @artistId, @venueId)";
         private const string DELETE_CMD = "DELETE FROM Performance WHERE performanceId = @id";
         private const string GETALL_CMD = "SELECT * FROM Performance";
+        private const string GETALLBYARTISTAFTERDATE = "SELECT * FROM Performance WHERE artistId=@artistId AND  date > @date";
+        private const string GETALLBYARTISTBEFOREDATE = "SELECT * FROM Performance WHERE artistId=@artistId AND  date < @date";
         private const string GETBYID_CMD = "SELECT * FROM Performance WHERE performanceId = @id";
         private const string UPDATE_CMD = "UPDATE Performance SET date=@date, artistId=@artistId, venueId=@venueId WHERE performanceId=@id";
         private const string COUNTVENUES_CMD = "SELECT COUNT(*) AS count FROM Performance WHERE venueId=@venueId";
@@ -163,6 +167,32 @@ namespace UFO.Server.Data {
                     return null;
                 }
             }
+        }
+
+        public List<Performance> GetPerformancesByArtistBeforeDate(Artist artist, DateTime date) {
+            List<Performance> performances = new List<Performance>();
+            DbCommand cmd = db.CreateCommand(GETALLBYARTISTBEFOREDATE);
+            db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artist.Id);
+            db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
+            using (DbDataReader reader = cmd.ExecuteReader()) {
+                while (reader.Read()) {
+                    performances.Add(readOne(reader));
+                }
+            }
+            return performances;
+        }
+
+        public List<Performance> GetPerformancesByArtistAfterDate(Artist artist, DateTime date) {
+            List<Performance> performances = new List<Performance>();
+            DbCommand cmd = db.CreateCommand(GETALLBYARTISTAFTERDATE);
+            db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artist.Id);
+            db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
+            using (DbDataReader reader = cmd.ExecuteReader()) {
+                while (reader.Read()) {
+                    performances.Add(readOne(reader));
+                }
+            }
+            return performances;
         }
     }
 }
