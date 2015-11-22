@@ -15,6 +15,8 @@ namespace UFO.Server {
     }
 
     internal class PerformanceService : IPerformanceService {
+        private const uint LEGAL_HOUR_DELTA = 2;
+
         private IPerformanceDao pdao;
 
         private static bool IsValidTime(DateTime date) {
@@ -27,6 +29,17 @@ namespace UFO.Server {
 
         private bool IsVenueTakenAtTime(DateTime date, uint venueId) {
             return pdao.GetPerformanceByVenueAndDate(venueId, date) != null;
+        }
+
+        private bool IsArtistAllowedToPlay(DateTime date, uint artistId) {
+            var performancesBefore = pdao.GetPerformancesByArtistBeforeDate(artistId, date);
+            foreach (var per in performancesBefore) {
+                TimeSpan curDelta = date.Subtract(per.Date);
+                if(curDelta.TotalHours < LEGAL_HOUR_DELTA) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public PerformanceService(IDatabase db) {
@@ -46,6 +59,9 @@ namespace UFO.Server {
             }
             if(IsVenueTakenAtTime(date, venue.Id)) {
                 throw new DataValidationException("Can't create performance at venue with another performance at the same time");
+            }
+            if(!IsArtistAllowedToPlay(date, artist.Id)) {
+                throw new DataValidationException("Can't create performance at time artist is not allowed to play again");
             }
             return pdao.CreatePerformance(date, artist.Id, venue.Id);
         }
@@ -67,6 +83,9 @@ namespace UFO.Server {
             }
             if (IsVenueTakenAtTime(performance.Date, performance.VenueId)) {
                 throw new DataValidationException("Can't update performance to venue with another performance at the same time");
+            }
+            if (!IsArtistAllowedToPlay(performance.Date, performance.ArtistId)) {
+                throw new DataValidationException("Can't create performance at time artist is not allowed to play again");
             }
             if (!pdao.UpdatePerformance(performance)) {
                 throw new DatabaseException("Can`t update performance with invalid ID: '" + performance + "'");

@@ -30,6 +30,7 @@ namespace UFO.Server.Data.Tests {
         [TestInitialize()]
         public void Startup() {
             udao = new UserDao(db);
+            udao.DeleteAllUsers();
         }
 
         [TestCleanup()]

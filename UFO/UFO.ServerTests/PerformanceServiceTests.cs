@@ -58,6 +58,12 @@ namespace UFO.ServerTests {
             categorydao = new CategoryDao(db);
             vdao = new VenueDao(db);
             ps = ServiceFactory.CreatePerformanceService(db);
+
+            pdao.DeleteAllPerformances();
+            adoa.DeleteAllArtists();
+            countrydao.DeleteAllCountries();
+            categorydao.DeleteAllCategories();
+            vdao.DeleteAllVenues();
         }
 
         [TestCleanup()]
@@ -97,6 +103,17 @@ namespace UFO.ServerTests {
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(DataValidationException))]
+        public void CreatePerformanceWithIllegalTime() {
+            int year = DateTime.Now.Year + 1;
+            Artist artist = createTestArtist();
+            Venue venue = createTestVenue();
+
+            Performance p1 = ps.CreatePerformance(new DateTime(year, 1, 1, 12, 0, 0), artist, createTestVenue(0));
+            Performance p2 = ps.CreatePerformance(new DateTime(year, 1, 1, 13, 0, 0), artist, createTestVenue(1));
+        }
+
+        [TestMethod()]
         public void CreatePerformanceWithValidInfo() {
             CreateTestPerformance();
         }
@@ -132,6 +149,20 @@ namespace UFO.ServerTests {
             Performance p1 = CreateTestPerformance(0);
             Performance p2 = CreateTestPerformance(1);
             p2.VenueId = p1.VenueId;
+            ps.UpdatePerformance(p2);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(DataValidationException))]
+        public void UpdatePerformanceWithIllegalTime() {
+            int year = DateTime.Now.Year + 1;
+            Artist artist = createTestArtist();
+            Venue venue = createTestVenue();
+
+            Performance p1 = ps.CreatePerformance(new DateTime(year, 1, 1, 12, 0, 0), artist, createTestVenue(0));
+            Performance p2 = ps.CreatePerformance(new DateTime(year, 1, 1, 14, 0, 0), artist, createTestVenue(1));
+
+            p2.Date = new DateTime(year, 1, 1, 13, 0, 0);
             ps.UpdatePerformance(p2);
         }
 
