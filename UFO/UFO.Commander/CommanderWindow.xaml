@@ -1,0 +1,22 @@
+﻿<Window x:Class="UFO.Commander.CommanderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UFO.Commander"
+        mc:Ignorable="d"
+        Title="UFO Commander" Height="768" Width="1024">
+    <StackPanel>
+        <TabControl>
+            <TabItem Header="Performances">
+                <local:PerformanceManagementControl />
+            </TabItem>
+            <TabItem Header="Artists">
+                <local:ArtistManagementControl />
+            </TabItem>
+            <TabItem Header="Venues">
+                <local:VenueManagementControl />
+            </TabItem>
+        </TabControl>
+    </StackPanel>
+</Window>

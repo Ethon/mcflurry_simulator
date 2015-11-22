@@ -1,9 +1,8 @@
 TODO:
 - Send mail to artists when their performances change
 - Generate PDF of performance schedule
-- 1 hour break between performances of an artist
 - User login
 
-
 Done:
+- 1 hour break between performances of an artist
 - IDs of data classes shall be private set.
