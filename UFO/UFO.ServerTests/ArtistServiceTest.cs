@@ -23,13 +23,6 @@ namespace UFO.Server.Tests {
         private Country country;
         private Category category;
 
-        private Performance createTestPerformanceOfArtist(Artist artist) {
-            Venue venueData = RepresentativeData.GetDefaultVenues()[0];
-            Venue venue = vdao.CreateVenue(venueData.Name, venueData.Shortcut, venueData.Latitude, venueData.Longitude);
-            Performance performanceData = RepresentativeData.GetDefaultPerformances()[0];
-            Performance performance = pdao.CreatePerformance(performanceData.Date, artist.Id, venue.Id);
-            return performance;
-        }
 
         [ClassInitialize()]
         public static void ClassInitialize(TestContext testContext) {
@@ -110,17 +103,41 @@ namespace UFO.Server.Tests {
         }
 
         [TestMethod()]
-        [ExpectedException(typeof(DataValidationException))]
-        public void DeleteUsedArtist() {
+        public void DeleteArtistWithPastPerformances() {
+
+            Venue venueData = RepresentativeData.GetDefaultVenues()[0];
+            Venue venue = vdao.CreateVenue(venueData.Name, venueData.Shortcut, venueData.Latitude, venueData.Longitude);
             Artist artist = aS.CreateArtist("Max Muster", "max@muster.de", category, country, "max.png", "max.mp4");
-            createTestPerformanceOfArtist(artist);
+
+            Performance pPast1 = pdao.CreatePerformance(new DateTime(2015, 1, 1, 12, 0, 0), artist.Id, venue.Id);
+            Performance pPast2 = pdao.CreatePerformance(new DateTime(2015, 1, 1, 17, 0, 0), artist.Id, venue.Id);
+
+            Performance pFuture1 = pdao.CreatePerformance(new DateTime(2120, 1, 1, 12, 0, 0), artist.Id, venue.Id);
+            Performance pFuture2 = pdao.CreatePerformance(new DateTime(2120, 1, 1, 17, 0, 0), artist.Id, venue.Id);
+            Performance pFuture3 = pdao.CreatePerformance(new DateTime(2120, 1, 1, 21, 0, 0), artist.Id, venue.Id);
+
+            Assert.AreEqual((uint)5, pdao.CountOfPerformancesOfArtist(artist));
+
             aS.DeleteArtist(artist);
+            var allArtists = aS.GetAllArtists();
+            Assert.AreEqual(0, allArtists.Count);
+            artist = aS.GetArtistById(artist.Id);
+
+            Assert.AreEqual((uint)2, pdao.CountOfPerformancesOfArtist(artist));
         }
 
         [TestMethod()]
-        public void DeleteUnusedCountry() {
+        public void DeleteArtistWithFuturePerformances() {
+            Venue venueData = RepresentativeData.GetDefaultVenues()[0];
+            Venue venue = vdao.CreateVenue(venueData.Name, venueData.Shortcut, venueData.Latitude, venueData.Longitude);
             Artist artist = aS.CreateArtist("Max Muster", "max@muster.de", category, country, "max.png", "max.mp4");
+            Performance pFuture1 = pdao.CreatePerformance(new DateTime(2120, 1, 1, 12, 0, 0), artist.Id, venue.Id);
+            Performance pFuture2 = pdao.CreatePerformance(new DateTime(2120, 1, 1, 17, 0, 0), artist.Id, venue.Id);
+            Performance pFuture3 = pdao.CreatePerformance(new DateTime(2120, 1, 1, 21, 0, 0), artist.Id, venue.Id);
+
             aS.DeleteArtist(artist);
+            Assert.AreEqual(0, aS.GetAllArtists().Count);
+            Assert.AreEqual((uint)0, pdao.CountOfPerformancesOfArtist(artist));
         }
     }
 }

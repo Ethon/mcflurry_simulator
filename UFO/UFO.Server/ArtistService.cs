@@ -39,9 +39,6 @@ namespace UFO.Server {
             return true;
         }
 
-        private bool IsUsedArtist(Artist artist) {
-            return pDao.CountOfPerformancesOfArtist(artist) > 0;
-        }
 
         public ArtistService(IDatabase db) {
             if(db is MYSQLDatabase) { 
@@ -93,11 +90,19 @@ namespace UFO.Server {
         }
 
         public void DeleteArtist(Artist artist) {
-            if (IsUsedArtist(artist)) {
-                throw new DataValidationException("Can't delete used artist '" + artist.Name + "'");
+            var beforeNow = pDao.GetPerformancesByArtistBeforeDate(artist.Id, DateTime.Now);
+            var afterNow = pDao.GetPerformancesByArtistAfterDate(artist.Id, DateTime.Now);
+            if (beforeNow.Count >= 0) {
+                if (!aDao.MarkAsDeleted(artist)) {
+                    throw new DatabaseException("Can`t delete artist with invalid ID: '" + artist + "'");
+                }
+            } else {
+                if (!aDao.DeleteArtist(artist)) {
+                    throw new DatabaseException("Can`t delete artist with invalid ID: '" + artist + "'");
+                }
             }
-            if (!aDao.DeleteArtist(artist)) {
-                throw new DatabaseException("DatabaseError: Can`t delete artist " + artist);
+            foreach (var item in afterNow) {
+                pDao.DeletePerformance(item);
             }
         }
     }
