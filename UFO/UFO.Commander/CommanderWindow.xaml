@@ -8,15 +8,16 @@
         Title="UFO Commander" Height="768" Width="1024">
     <StackPanel>
         <TabControl>
+            <TabItem Header="Venues">
+                <local:VenueManagementControl />
+            </TabItem>
             <TabItem Header="Performances">
                 <local:PerformanceManagementControl />
             </TabItem>
             <TabItem Header="Artists">
                 <local:ArtistManagementControl />
             </TabItem>
-            <TabItem Header="Venues">
-                <local:VenueManagementControl />
-            </TabItem>
+
         </TabControl>
     </StackPanel>
 </Window>

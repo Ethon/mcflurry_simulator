@@ -12,14 +12,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UFO.Commander.ViewModel;
+using UFO.Server;
 
 namespace UFO.Commander {
     /// <summary>
     /// Interaction logic for VenueManagementControl.xaml
     /// </summary>
     public partial class VenueManagementControl : UserControl {
+
+
         public VenueManagementControl() {
             InitializeComponent();
+            this.Loaded += (s, e) => {
+                DataContext = new VenueListViewModel(ServiceFactory.CreateVenueService(new MYSQLDatabase("Server = localhost; Database = ufotest; Uid = root;")));
+            };
+
         }
     }
 }
