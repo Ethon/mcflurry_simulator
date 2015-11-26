@@ -69,7 +69,10 @@
       <DependentUpon>VenueManagementControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ArtistViewModel.cs" />
+    <Compile Include="ViewModel\CategoryListViewModel.cs" />
+    <Compile Include="ViewModel\CategoryViewModel.cs" />
     <Compile Include="ViewModel\PerformanceViewModel.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\VenueViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
