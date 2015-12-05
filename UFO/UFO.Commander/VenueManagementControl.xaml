@@ -16,15 +16,30 @@
 
     </UserControl.Resources>
     <Grid>
-
-        <DataGrid x:Name="Imported" VerticalAlignment="Top" ItemsSource="{Binding Path=Venues}"  AutoGenerateColumns="False" CanUserResizeColumns="True" SelectedItem="{Binding CurrentVenue}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="1" x:Name="venueGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Venues}" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  AutoGenerateColumns="False" CanUserResizeColumns="True" SelectedItem="{Binding CurrentVenue}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="1*" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Shortcut" Width="1*" Binding="{Binding ShortCut}"/>
-                <DataGridTextColumn Header="Name" Width="6*" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Latitude" Width="1*" Binding="{Binding Latitude}"/>
-                <DataGridTextColumn Header="Longitude" Width="1*" Binding="{Binding Longitude}"/>
+                <DataGridTextColumn Header="ID" Width="1*" Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Shortcut" Width="1*" Binding="{Binding ShortCut, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Name" Width="6*" Binding="{Binding Name, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Latitude" Width="1*" Binding="{Binding Latitude, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Longitude" Width="1*" Binding="{Binding Longitude, Mode=TwoWay}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Margin="5,0,0,0" Command="{Binding Path=AddCommand}">
+                Neu anlegen
+            </Button>
+            <Button Grid.Column="1" Margin="5,0,0,0" Command="{Binding Path=DeleteCommand}">
+                Löschen
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

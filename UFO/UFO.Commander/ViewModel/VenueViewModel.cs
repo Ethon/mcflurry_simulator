@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Swk5.MediaAnnotator.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using UFO.Server;
 using UFO.Server.Data;
 
@@ -12,8 +14,10 @@ namespace UFO.Commander.ViewModel {
     public class VenueListViewModel :INotifyPropertyChanged {
         private IVenueService venueService;
         private VenueViewModel currentVenue;
-
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private ICommand addCommand;
+        private ICommand deleteCommand;
 
         public ObservableCollection<VenueViewModel> Venues { get; set; }
 
@@ -41,8 +45,6 @@ namespace UFO.Commander.ViewModel {
 
             while (await Task.Factory.StartNew(
                     () => e.MoveNext())) {
-
-
                 Venues.Add(new VenueViewModel(venueService, e.Current));
             }
         }
@@ -61,13 +63,36 @@ namespace UFO.Commander.ViewModel {
         }
 
 
+        public ICommand AddCommand {
+            get {
+                if (addCommand == null) {
+
+                    
+                    addCommand = new RelayCommand(param => venueService.CreateVenue("Demo","D0",1,1));
+                }
+                return addCommand;
+            }
+        }
+        public ICommand DeleteCommand {
+            get {
+                if (deleteCommand == null) {
+                    deleteCommand = new RelayCommand(param => venueService.DeleteVenue(currentVenue.venue));
+                }
+                return deleteCommand;
+            }
+        }
+
+
+
 
     }
     public class VenueViewModel : INotifyPropertyChanged {
 
         private IVenueService venueService;
-        private Venue venue;
+        public Venue venue;
 
+
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         public VenueViewModel(IVenueService venueService, Venue venue) {
@@ -75,17 +100,16 @@ namespace UFO.Commander.ViewModel {
             this.venue = venue;
         }
 
-
-
-
         public uint Id {
             get { return venue.Id; }
         }
+
         public string ShortCut {
             get { return venue.Shortcut; }
             set {
                 if (venue.Shortcut != value) {
                     venue.Shortcut = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShortCut)));
                 }
             }
@@ -95,6 +119,7 @@ namespace UFO.Commander.ViewModel {
             set {
                 if (venue.Name != value) {
                     venue.Name = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
                 }
             }
@@ -104,6 +129,7 @@ namespace UFO.Commander.ViewModel {
             set {
                 if (venue.Longitude != value) {
                     venue.Longitude = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Longitude)));
                 }
             }
@@ -113,9 +139,12 @@ namespace UFO.Commander.ViewModel {
             set {
                 if (venue.Latitude != value) {
                     venue.Latitude = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Latitude)));
                 }
             }
         }
+
+
     }
 }
