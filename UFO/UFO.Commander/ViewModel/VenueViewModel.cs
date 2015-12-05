@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using UFO.Server;
 using UFO.Server.Data;
@@ -57,7 +58,7 @@ namespace UFO.Commander.ViewModel {
                     this.currentVenue = value;
                     
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentVenue)));
-                    Console.WriteLine(CurrentVenue.Name);
+
                 }
             }
         }
@@ -66,9 +67,7 @@ namespace UFO.Commander.ViewModel {
         public ICommand AddCommand {
             get {
                 if (addCommand == null) {
-
-                    
-                    addCommand = new RelayCommand(param => venueService.CreateVenue("Demo","D0",1,1));
+                    addCommand = new RelayCommand(param => Venues.Add(new VenueViewModel(venueService,venueService.CreateVenue("Demo","D0",1,1))));
                 }
                 return addCommand;
             }
@@ -76,7 +75,16 @@ namespace UFO.Commander.ViewModel {
         public ICommand DeleteCommand {
             get {
                 if (deleteCommand == null) {
-                    deleteCommand = new RelayCommand(param => venueService.DeleteVenue(currentVenue.venue));
+                    deleteCommand = new RelayCommand(param => {
+                        try {
+                            venueService.DeleteVenue(CurrentVenue.venue);
+                            Venues.Remove(CurrentVenue);
+                        } catch (Exception ex) {
+                            MessageBox.Show(ex.Message, "Error",  MessageBoxButton.OK,MessageBoxImage.Warning);
+                        }
+                });
+                    
+                    
                 }
                 return deleteCommand;
             }
