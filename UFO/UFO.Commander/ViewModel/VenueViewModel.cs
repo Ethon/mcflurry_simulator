@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Microsoft.Maps.MapControl.WPF;
+using Swk5.MediaAnnotator.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using UFO.Server;
 using UFO.Server.Data;
 
@@ -12,8 +16,11 @@ namespace UFO.Commander.ViewModel {
     public class VenueListViewModel :INotifyPropertyChanged {
         private IVenueService venueService;
         private VenueViewModel currentVenue;
-
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private ICommand addCommand;
+        private ICommand deleteCommand;
+
 
         public ObservableCollection<VenueViewModel> Venues { get; set; }
 
@@ -24,16 +31,6 @@ namespace UFO.Commander.ViewModel {
             
         }
 
-        //public void LoadVenues() {
-        //    Venues.Clear();
-        //    Console.WriteLine("STARTE MIT LOADING");
-        //    Console.WriteLine(venueService.GetAllVenues().Count);
-        //    foreach (Venue item in venueService.GetAllVenues()) {
-
-        //        Venues.Add(new VenueViewModel(venueService, item));
-        //    }
-        //}
-
         public async void LoadVenues() {
             CurrentVenue = null;
             Venues.Clear();
@@ -41,10 +38,9 @@ namespace UFO.Commander.ViewModel {
 
             while (await Task.Factory.StartNew(
                     () => e.MoveNext())) {
-
-
                 Venues.Add(new VenueViewModel(venueService, e.Current));
             }
+            CurrentVenue = Venues[0];
         }
         public VenueViewModel CurrentVenue {
             get {
@@ -55,10 +51,38 @@ namespace UFO.Commander.ViewModel {
                     this.currentVenue = value;
                     
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentVenue)));
-                    Console.WriteLine(CurrentVenue.Name);
+
                 }
             }
         }
+
+
+        public ICommand AddCommand {
+            get {
+                if (addCommand == null) {
+                    addCommand = new RelayCommand(param => Venues.Add(new VenueViewModel(venueService,venueService.CreateVenue("Demo","D0",1,1))));
+                }
+                return addCommand;
+            }
+        }
+        public ICommand DeleteCommand {
+            get {
+                if (deleteCommand == null) {
+                    deleteCommand = new RelayCommand(param => {
+                        try {
+                            venueService.DeleteVenue(CurrentVenue.venue);
+                            Venues.Remove(CurrentVenue);
+                        } catch (Exception ex) {
+                                                        //MessageBox.Show(ex.Message, "Error",  MessageBoxButton.OK,MessageBoxImage.Warning);
+                        }
+                });
+                    
+                    
+                }
+                return deleteCommand;
+            }
+        }
+
 
 
 
@@ -66,8 +90,10 @@ namespace UFO.Commander.ViewModel {
     public class VenueViewModel : INotifyPropertyChanged {
 
         private IVenueService venueService;
-        private Venue venue;
+        public Venue venue;
 
+
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         public VenueViewModel(IVenueService venueService, Venue venue) {
@@ -75,17 +101,16 @@ namespace UFO.Commander.ViewModel {
             this.venue = venue;
         }
 
-
-
-
         public uint Id {
             get { return venue.Id; }
         }
+
         public string ShortCut {
             get { return venue.Shortcut; }
             set {
                 if (venue.Shortcut != value) {
                     venue.Shortcut = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShortCut)));
                 }
             }
@@ -95,15 +120,28 @@ namespace UFO.Commander.ViewModel {
             set {
                 if (venue.Name != value) {
                     venue.Name = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
                 }
             }
         }
+
+        public Location Location
+        {
+            get { return new Location(venue.Latitude, venue.Longitude); }
+            set
+            {
+                
+
+            }
+        } 
+
         public double Longitude {
             get { return venue.Longitude; }
             set {
                 if (venue.Longitude != value) {
                     venue.Longitude = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Longitude)));
                 }
             }
@@ -113,9 +151,11 @@ namespace UFO.Commander.ViewModel {
             set {
                 if (venue.Latitude != value) {
                     venue.Latitude = value;
+                    venueService.UpdateVenue(venue);
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Latitude)));
                 }
             }
         }
     }
+
 }

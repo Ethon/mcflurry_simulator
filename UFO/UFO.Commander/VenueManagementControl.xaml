@@ -2,29 +2,53 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UFO.Commander"
              xmlns:test ="clr-namespace:UFO.Commander.ViewModel">
     <UserControl.Resources>
         <Style TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Height" Value="35" />
-            <Setter Property="SeparatorBrush" Value="DarkRed" />
-            <Setter Property="FontWeight" Value="Black" />
 
         </Style>
 
     </UserControl.Resources>
     <Grid>
-
-        <DataGrid x:Name="Imported" VerticalAlignment="Top" ItemsSource="{Binding Path=Venues}"  AutoGenerateColumns="False" CanUserResizeColumns="True" SelectedItem="{Binding CurrentVenue}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="250"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="2" x:Name="venueGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Venues}" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  AutoGenerateColumns="False" CanUserResizeColumns="True" SelectedItem="{Binding CurrentVenue}">
+            <DataGrid.ContextMenu>
+                <ContextMenu >
+                    <MenuItem Header="Remove Venue" Command="{Binding Path=DeleteCommand}"  />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="1*" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Shortcut" Width="1*" Binding="{Binding ShortCut}"/>
-                <DataGridTextColumn Header="Name" Width="6*" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Latitude" Width="1*" Binding="{Binding Latitude}"/>
-                <DataGridTextColumn Header="Longitude" Width="1*" Binding="{Binding Longitude}"/>
+                <DataGridTextColumn Header="ID" Width="1*" Binding="{Binding Id}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Shortcut" Width="1*" Binding="{Binding ShortCut, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Name" Width="6*" Binding="{Binding Name, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Latitude" Width="1*" Binding="{Binding Latitude, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Longitude" Width="1*" Binding="{Binding Longitude, Mode=TwoWay}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" MaxHeight="25" Margin="5,0,0,0" Command="{Binding Path=AddCommand}">
+                Add new Venue
+            </Button>
+            <Button Grid.Column="1" MaxHeight="25" Margin="5,0,0,0" IsEnabled="{Binding ElementName=venueGrid, Path=SelectedItems.Count}" Command="{Binding Path=DeleteCommand}">
+                Delete Selected Venue
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <m:Map Name="ufoMap" CredentialsProvider="AthdTpOMc6YRg4aXo8KAax1L_xBjw8fhnWX9m3areCzaZnexHZq-9TOvUjSCpR_f" ZoomLevel="18" Center="48.30584975,14.28644065" MouseDoubleClick="MapWithPushpins_MouseDoubleClick">
+
+                <m:Pushpin Location="{Binding CurrentVenue.Location}"/>
+            </m:Map>
+        </Grid>
     </Grid>
 </UserControl>
