@@ -1,4 +1,5 @@
-﻿using Swk5.MediaAnnotator.ViewModel;
+﻿using Microsoft.Maps.MapControl.WPF;
+using Swk5.MediaAnnotator.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,6 +21,7 @@ namespace UFO.Commander.ViewModel {
         private ICommand addCommand;
         private ICommand deleteCommand;
 
+
         public ObservableCollection<VenueViewModel> Venues { get; set; }
 
         public VenueListViewModel(IVenueService venueService) {
@@ -28,16 +30,6 @@ namespace UFO.Commander.ViewModel {
             LoadVenues();
             
         }
-
-        //public void LoadVenues() {
-        //    Venues.Clear();
-        //    Console.WriteLine("STARTE MIT LOADING");
-        //    Console.WriteLine(venueService.GetAllVenues().Count);
-        //    foreach (Venue item in venueService.GetAllVenues()) {
-
-        //        Venues.Add(new VenueViewModel(venueService, item));
-        //    }
-        //}
 
         public async void LoadVenues() {
             CurrentVenue = null;
@@ -48,6 +40,7 @@ namespace UFO.Commander.ViewModel {
                     () => e.MoveNext())) {
                 Venues.Add(new VenueViewModel(venueService, e.Current));
             }
+            CurrentVenue = Venues[0];
         }
         public VenueViewModel CurrentVenue {
             get {
@@ -80,7 +73,7 @@ namespace UFO.Commander.ViewModel {
                             venueService.DeleteVenue(CurrentVenue.venue);
                             Venues.Remove(CurrentVenue);
                         } catch (Exception ex) {
-                            MessageBox.Show(ex.Message, "Error",  MessageBoxButton.OK,MessageBoxImage.Warning);
+                                                        //MessageBox.Show(ex.Message, "Error",  MessageBoxButton.OK,MessageBoxImage.Warning);
                         }
                 });
                     
@@ -132,6 +125,17 @@ namespace UFO.Commander.ViewModel {
                 }
             }
         }
+
+        public Location Location
+        {
+            get { return new Location(venue.Latitude, venue.Longitude); }
+            set
+            {
+                
+
+            }
+        } 
+
         public double Longitude {
             get { return venue.Longitude; }
             set {
@@ -152,7 +156,6 @@ namespace UFO.Commander.ViewModel {
                 }
             }
         }
-
-
     }
+
 }
