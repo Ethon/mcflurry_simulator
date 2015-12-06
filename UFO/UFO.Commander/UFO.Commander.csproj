@@ -62,12 +62,15 @@
     <Compile Include="ArtistManagementControl.xaml.cs">
       <DependentUpon>ArtistManagementControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IdToCategoryConverter.cs" />
     <Compile Include="PerformanceManagementControl.xaml.cs">
       <DependentUpon>PerformanceManagementControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SharedServices.cs" />
     <Compile Include="VenueManagementControl.xaml.cs">
       <DependentUpon>VenueManagementControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ArtistListViewModel.cs" />
     <Compile Include="ViewModel\ArtistViewModel.cs" />
     <Compile Include="ViewModel\CategoryListViewModel.cs" />
     <Compile Include="ViewModel\CategoryViewModel.cs" />

@@ -10,7 +10,7 @@ using UFO.Server;
 using UFO.Server.Data;
 
 namespace UFO.Commander.ViewModel {
-    class CategoryListViewModel {
+    public class CategoryListViewModel {
         private ICategoryService categoryService;
 
         public CategoryListViewModel(ICategoryService categoryService) {

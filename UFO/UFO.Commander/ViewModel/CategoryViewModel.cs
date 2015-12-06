@@ -9,7 +9,7 @@ using UFO.Server;
 using UFO.Server.Data;
 
 namespace UFO.Commander.ViewModel {
-    class CategoryViewModel {
+    public class CategoryViewModel {
         private Category category;
 
         public CategoryViewModel(Category category) {
@@ -30,6 +30,17 @@ namespace UFO.Commander.ViewModel {
             get {
                 return category.Shortcut;
             }
+        }
+
+        public override string ToString() {
+            return Name;
+        }
+
+        public override bool Equals(object obj) {
+            if(!(obj is CategoryViewModel)) {
+                return false;
+            }
+            return Name.Equals(())
         }
     }
 }

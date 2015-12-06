@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:UFO.Commander"
         mc:Ignorable="d"
         Title="UFO Commander" Height="768" Width="1024">
+    <Window.Resources>
+        <local:IdToCategoryConverter x:Key="IdToCategoryConverter" />
+    </Window.Resources>
     <StackPanel>
         <TabControl>
             <TabItem Header="Venues">
