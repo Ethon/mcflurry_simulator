@@ -11,7 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="500" />
         </Grid.RowDefinitions>
 
         <Grid.Resources>
@@ -19,20 +19,93 @@
         </Grid.Resources>
         <ContentControl Visibility="Collapsed" Content="{StaticResource ProxyElement}"></ContentControl>
 
-        <ComboBox Grid.Row="0" Margin="5" ItemsSource="{Binding Path=Clvm.Categories}">
-        </ComboBox>
+        <Border Margin="10" Grid.Row="0" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <GridSplitter Grid.Row="0" Height="3" />
-        
-        <DataGrid Name="dgArtists" Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Alvm.Artists}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}" />
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
-                <DataGridComboBoxColumn Header="Category" SelectedItemBinding="{Binding Category}"
-                                ItemsSource="{Binding DataContext.Clvm.Categories, Source={StaticResource ProxyElement}}" />
-            </DataGrid.Columns>
-        </DataGrid>
+                <Label Grid.Row="0" Grid.Column="0" Content="Name:" Margin="0,0,0,4" />
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Amvm.NameInput}" Margin="0,0,0,4" />
 
+                <Label Grid.Row="1" Grid.Column="0" Content="Email Address:" Margin="0,0,0,4" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Amvm.EmailInput}" Margin="0,0,0,4" />
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Category:" Margin="0,0,0,4" />
+                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Amvm.Categories}" SelectedItem="{Binding Amvm.CategoryInput}" DisplayMemberPath="Name" Margin="0,0,0,4" />
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Country:" Margin="0,0,0,4" />
+                <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Amvm.Countries}" SelectedItem="{Binding Amvm.CountryInput}" DisplayMemberPath="Name" Margin="0,0,0,4" />
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Artist Picture:" Margin="0,0,0,4" />
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Amvm.PicturePathInput}"  PreviewMouseDown="PicturePathInput_MouseDown" Margin="0,0,0,4" />
+
+                <Label Grid.Row="5" Grid.Column="0" Content="Artist Video:" Margin="0,0,0,4" />
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Amvm.VideoPathInput}" PreviewMouseDown="VideoPathInput_MouseDown" Margin="0,0,0,4" />
+
+                <Button Grid.Row="6" Grid.Column="0" Command="{Binding Amvm.CreateCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="images/add.png" Stretch="Uniform"/>
+                        <Label Padding="0">Add artist</Label>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Margin="10" Grid.Row="1" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+            <ScrollViewer Margin="10">
+                <DataGrid Height="Auto" Name="dgArtists" AutoGenerateColumns="False" ItemsSource="{Binding Amvm.Artists}"
+                            ScrollViewer.CanContentScroll="True" 
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Delete artist">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding DataContext.Amvm, Source={StaticResource ProxyElement}}">
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Source="images/delete.gif"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}"  />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
+                        <DataGridComboBoxColumn Header="Category" SelectedItemBinding="{Binding Category}" DisplayMemberPath="Name"
+                                            ItemsSource="{Binding DataContext.Amvm.Categories, Source={StaticResource ProxyElement}}" />
+                        <DataGridComboBoxColumn Header="Country" SelectedItemBinding="{Binding Country}" DisplayMemberPath="Name"
+                                            ItemsSource="{Binding DataContext.Amvm.Countries, Source={StaticResource ProxyElement}}" />
+                        <DataGridTemplateColumn Header="PicturePath">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding PicturePath, Mode=TwoWay}" MouseDown="PicturePathColumn_MouseDown" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="VideoPath">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding VideoPath, Mode=TwoWay}" MouseDown="VideoPathColumn_MouseDown" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </UserControl>

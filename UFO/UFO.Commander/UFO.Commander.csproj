@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -66,7 +67,10 @@
     <Compile Include="ArtistManagementControl.xaml.cs">
       <DependentUpon>ArtistManagementControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IdToCategoryConverter.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="MediaManager.cs" />
+    <Compile Include="PlatformService.cs" />
+    <Compile Include="ViewModel\ArtistManagementViewModel.cs" />
     <Compile Include="PerformanceManagementControl.xaml.cs">
       <DependentUpon>PerformanceManagementControl.xaml</DependentUpon>
     </Compile>
@@ -74,10 +78,8 @@
     <Compile Include="VenueManagementControl.xaml.cs">
       <DependentUpon>VenueManagementControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\ArtistListViewModel.cs" />
     <Compile Include="ViewModel\ArtistViewModel.cs" />
-    <Compile Include="ViewModel\CategoryListViewModel.cs" />
-    <Compile Include="ViewModel\CategoryViewModel.cs" />
+    <Compile Include="ViewModel\CommanderViewModel.cs" />
     <Compile Include="ViewModel\PerformanceViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\VenueViewModel.cs" />
@@ -136,6 +138,10 @@
       <Project>{10bb256b-85a3-4099-ab2c-2925e7db25fa}</Project>
       <Name>UFO.Server</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\add.png" />
+    <Resource Include="images\delete.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

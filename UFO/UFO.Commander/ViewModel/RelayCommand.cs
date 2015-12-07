@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Swk5.MediaAnnotator.ViewModel {
+namespace UFO.Commander.ViewModel {
 
     // RelayCommand objects delegate to the methods passed
     // as an argument.

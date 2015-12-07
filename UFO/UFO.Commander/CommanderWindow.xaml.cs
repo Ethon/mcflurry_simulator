@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using UFO.Commander.ViewModel;
 
 namespace UFO.Commander {
     /// <summary>
@@ -19,6 +20,19 @@ namespace UFO.Commander {
     public partial class CommanderWindow : Window {
         public CommanderWindow() {
             InitializeComponent();
+
+            Cvm = new CommanderViewModel();
+            this.DataContext = this;
         }
+
+        private void MediaRootTextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            TextBox box = sender as TextBox;
+            string newFolder = PlatformService.Instance.PickFolder();
+            if(newFolder != null) {
+                Cvm.MediaRootPath = newFolder;
+            }
+        }
+
+        public CommanderViewModel Cvm { get; private set; }
     }
 }

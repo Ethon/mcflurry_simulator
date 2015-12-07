@@ -20,11 +20,11 @@ namespace UFO.Server {
         private IArtistDao aDao;
         private IPerformanceDao pDao;
 
-        private static Regex nameRegex = new Regex("^[a-zA-Z_öÖäÄüÜß ]*$");
+        private static Regex nameRegex = new Regex("^[a-zA-Z_öÖäÄüÜß& ]*$");
         private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
 
         private static bool IsValidName(string name) {
-            return nameRegex.IsMatch(name);
+            return name.Length > 0;
         }
 
         private static bool IsValidEmail(string email) {

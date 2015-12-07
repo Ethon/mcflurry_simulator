@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
-using Swk5.MediaAnnotator.ViewModel;
+using UFO.Commander.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -32,15 +32,15 @@ namespace UFO.Commander.ViewModel {
         }
 
         public async void LoadVenues() {
-            CurrentVenue = null;
-            Venues.Clear();
-            IEnumerator<Venue> e = venueService.GetAllVenues().GetEnumerator();
+            //CurrentVenue = null;
+            //Venues.Clear();
+            //IEnumerator<Venue> e = venueService.GetAllVenues().GetEnumerator();
 
-            while (await Task.Factory.StartNew(
-                    () => e.MoveNext())) {
-                Venues.Add(new VenueViewModel(venueService, e.Current));
-            }
-            CurrentVenue = Venues[0];
+            //while (await Task.Factory.StartNew(
+            //        () => e.MoveNext())) {
+            //    Venues.Add(new VenueViewModel(venueService, e.Current));
+            //}
+            //CurrentVenue = Venues[0];
         }
         public VenueViewModel CurrentVenue {
             get {
