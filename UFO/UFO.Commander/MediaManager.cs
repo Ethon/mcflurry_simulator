@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace UFO.Commander {
     public class MediaManager {
-        private const string ICON_DIR = "/icon/";
-        private const string PICTURE_DIR = "/picture/";
-        private const string VIDEO_DIR = "/video/";
+        private const string ICON_DIR = @"\icon\";
+        private const string PICTURE_DIR = @"\picture\";
+        private const string VIDEO_DIR = @"\video\";
 
         private string rootPath;
 

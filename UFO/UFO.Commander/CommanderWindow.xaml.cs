@@ -27,7 +27,7 @@ namespace UFO.Commander {
 
         private void MediaRootTextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
             TextBox box = sender as TextBox;
-            string newFolder = PlatformService.Instance.PickFolder();
+            string newFolder = PlatformService.Instance.PickFolder(null);
             if(newFolder != null) {
                 Cvm.MediaRootPath = newFolder;
             }

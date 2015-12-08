@@ -34,19 +34,26 @@ namespace UFO.Commander {
             base.OnStartup(e);
         }
 
-        public string PickFile(string title, string filter) {
+        public string PickFile(string title, string filter, string rootFolder) {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = filter;
             openFileDialog.Title = title;
+            if (rootFolder != null && rootFolder.Length > 0) {
+                openFileDialog.InitialDirectory = rootFolder;
+            }
+
             if (openFileDialog.ShowDialog() == true) {
                 return openFileDialog.FileName;
             }
             return null;
         }
 
-        public string PickFolder() {
+        public string PickFolder(string defaultPath) {
             var dialog = new System.Windows.Forms.FolderBrowserDialog();
-            if(dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+            if(defaultPath != null && defaultPath.Length > 0) {
+                dialog.SelectedPath = defaultPath;
+            }
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 return dialog.SelectedPath;
             }
             return null;

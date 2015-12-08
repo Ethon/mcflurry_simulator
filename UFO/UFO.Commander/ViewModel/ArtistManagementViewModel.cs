@@ -81,7 +81,13 @@ namespace UFO.Commander.ViewModel {
             get {
                 if(createCommand == null) {
                     createCommand = new RelayCommand((param) => {
-                        Artist artist = artistService.CreateArtist(NameInput, EmailInput, CategoryInput, CountryInput, PicturePathInput, VideoPathInput);
+                        Artist artist;
+                        try { 
+                            artist = artistService.CreateArtist(NameInput, EmailInput, CategoryInput, CountryInput, PicturePathInput, VideoPathInput);
+                        } catch(DataValidationException ex) {
+                            PlatformService.Instance.ShowErrorMessage(ex.Message, "Error creating artist");
+                            return;
+                        }
                         Artists.Add(new ArtistViewModel(artistService, categoryService, countryService, artist));
                   });
                 }

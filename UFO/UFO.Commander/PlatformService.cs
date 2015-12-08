@@ -8,8 +8,8 @@ using System.Windows;
 
 namespace UFO.Commander {
     public interface IPlatformService {
-        string PickFile(string title, string filter);
-        string PickFolder();
+        string PickFile(string title, string filter, string rootFolder);
+        string PickFolder(string defaultPath);
         void ShowInformationMessage(string message, string caption);
         void ShowErrorMessage(string message, string caption);
         bool WarnAndAskForConfirmation(string message, string caption);

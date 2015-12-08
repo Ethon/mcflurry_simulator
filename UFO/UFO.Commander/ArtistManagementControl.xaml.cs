@@ -40,7 +40,7 @@ namespace UFO.Commander {
         private void PicturePathColumn_MouseDown(object sender, MouseButtonEventArgs e) {
             TextBlock block = sender as TextBlock;
             ArtistViewModel model = block.DataContext as ArtistViewModel;
-            string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER);
+            string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER, MediaManager.Instance.RootPath);
             if(newFile != null) {
                 model.PicturePath = MediaManager.Instance.RootPicture(newFile);
             }
@@ -49,21 +49,21 @@ namespace UFO.Commander {
         private void VideoPathColumn_MouseDown(object sender, MouseButtonEventArgs e) {
             TextBlock block = sender as TextBlock;
             ArtistViewModel model = block.DataContext as ArtistViewModel;
-            string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER);
+            string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER, MediaManager.Instance.RootPath);
             if (newFile != null) {
                 model.VideoPath = MediaManager.Instance.RootVideo(newFile);
             }
         }
 
         private void PicturePathInput_MouseDown(object sender, MouseButtonEventArgs e) {
-            string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER);
+            string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER, MediaManager.Instance.RootPath);
             if(newFile != null) {
                 Amvm.PicturePathInput = MediaManager.Instance.RootPicture(newFile);
             }
         }
 
         private void VideoPathInput_MouseDown(object sender, MouseButtonEventArgs e) {
-            string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER);
+            string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER, MediaManager.Instance.RootPath);
             if (newFile != null) {
                 Amvm.VideoPathInput = MediaManager.Instance.RootVideo(newFile);
             }

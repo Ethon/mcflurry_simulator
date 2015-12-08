@@ -43,7 +43,12 @@ namespace UFO.Commander.ViewModel {
             set {
                 if(value != artist.Name) {
                     artist.Name = value;
-                    Update();
+                    try {
+                        Update();
+                    } catch(DataValidationException ex) {
+                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error setting artist name");
+                        return;
+                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));
                 }
             }
@@ -56,7 +61,12 @@ namespace UFO.Commander.ViewModel {
             set {
                 if(value != artist.Email) {
                     artist.Email = value;
-                    Update();
+                    try {
+                        Update();
+                    } catch (DataValidationException ex) {
+                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error setting artist email");
+                        return;
+                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Email)));
                 }
             }
@@ -73,7 +83,12 @@ namespace UFO.Commander.ViewModel {
                 if(category != value) {
                     category = value;
                     artist.CategoryId = category.Id;
-                    Update();
+                    try {
+                        Update();
+                    } catch (DataValidationException ex) {
+                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error setting artist category");
+                        return;
+                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Category)));
                 }
             }
@@ -90,7 +105,12 @@ namespace UFO.Commander.ViewModel {
                 if(country != value) {
                     country = value;
                     artist.CountryId = country.Id;
-                    Update();
+                    try {
+                        Update();
+                    } catch (DataValidationException ex) {
+                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error setting artist country");
+                        return;
+                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Country)));
                 }
             }
@@ -103,7 +123,12 @@ namespace UFO.Commander.ViewModel {
             set {
                 if(artist.PicturePath != value) {
                     artist.PicturePath = value;
-                    Update();
+                    try {
+                        Update();
+                    } catch (DataValidationException ex) {
+                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error setting artist picture path");
+                        return;
+                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PicturePath)));
                 }
             }
@@ -116,7 +141,12 @@ namespace UFO.Commander.ViewModel {
             set {
                 if(value != artist.VideoPath) {
                     artist.VideoPath = value;
-                    Update();
+                    try {
+                        Update();
+                    } catch (DataValidationException ex) {
+                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error setting artist video path");
+                        return;
+                    }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(VideoPath)));
                 }
             }
@@ -128,7 +158,12 @@ namespace UFO.Commander.ViewModel {
                     deleteCommand = new RelayCommand((param) => {
                         if(PlatformService.Instance.WarnAndAskForConfirmation(
                                 "Do you really want to delete the artist " + Name + "?", "Confirm deletion")) {
-                            Delete();
+                            try {
+                                Delete();
+                            } catch (DataValidationException ex) {
+                                PlatformService.Instance.ShowErrorMessage(ex.Message, "Error deleting artist");
+                                return;
+                            }
                             ArtistManagementViewModel amvm = param as ArtistManagementViewModel;
                             amvm.UpdateArtists();
                         }
