@@ -110,7 +110,7 @@
             </Grid>
             <Grid Grid.Column="1">
                 <Border Margin="10" Grid.Row="0" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
-                    <m:Map Name="ufoMap" CredentialsProvider="AthdTpOMc6YRg4aXo8KAax1L_xBjw8fhnWX9m3areCzaZnexHZq-9TOvUjSCpR_f" ZoomLevel="18" Center="48.30584975,14.28644065" MouseDoubleClick="MapWithPushpins_MouseDoubleClick">
+                    <m:Map Name="venueMap" CredentialsProvider="AthdTpOMc6YRg4aXo8KAax1L_xBjw8fhnWX9m3areCzaZnexHZq-9TOvUjSCpR_f" ZoomLevel="18" Center="48.30584975,14.28644065" MouseDoubleClick="MapWithPushpins_MouseDoubleClick">
                         <m:Pushpin Location="{Binding VmVm.CurrentVenue.Location}"/>
                     </m:Map>
                 </Border>

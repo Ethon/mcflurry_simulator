@@ -68,17 +68,17 @@ namespace UFO.Commander {
         }
 
         private void MapWithPushpins_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            // Disables the default mouse double-click action.
-            //e.Handled = true;
+            //Disables the default mouse double-click action.
+            e.Handled = true;
 
-            //// Determin the location to place the pushpin at on the map.
+            // Determin the location to place the pushpin at on the map.
 
-            ////Get the mouse click coordinates
-            //Point mousePosition = e.GetPosition(this);
-            ////Convert the mouse coordinates to a locatoin on the map
-            //Location pinLocation = venueMap.ViewportPointToLocation(mousePosition);
-            //Pushpin current = (Pushpin)venueMap.Children[0];
-            //current.Location = pinLocation;
+            //Get the mouse click coordinates
+            Point mousePosition = e.GetPosition(this);
+            //Convert the mouse coordinates to a locatoin on the map
+            Location pinLocation = venueMap.ViewportPointToLocation(mousePosition);
+            Pushpin current = (Pushpin)venueMap.Children[0];
+            current.Location = pinLocation;
         }
     }
 }

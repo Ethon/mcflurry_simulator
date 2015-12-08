@@ -163,13 +163,17 @@ namespace UFO.Commander.ViewModel {
 
         public Location Location
         {
-            get { return new Location(venue.Latitude, venue.Longitude); }
+            get
+            {
+                return new Location(venue.Latitude, venue.Longitude);
+            }
             set
             {
-                
-
+                Longitude = value.Longitude;
+                Latitude = value.Latitude;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Location)));
             }
-        } 
+        }
 
         public double Longitude {
             get { return venue.Longitude; }
