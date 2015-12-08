@@ -5,50 +5,117 @@
              xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UFO.Commander"
-             xmlns:test ="clr-namespace:UFO.Commander.ViewModel">
-    <UserControl.Resources>
-        <Style TargetType="{x:Type DataGridColumnHeader}">
-
-        </Style>
-
-    </UserControl.Resources>
+             mc:Ignorable="d"
+             Name="amc"
+             DataContext=""
+             d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="250"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <DataGrid Grid.Row="2" x:Name="venueGrid" VerticalAlignment="Top" ItemsSource="{Binding Path=Venues}" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto"  AutoGenerateColumns="False" CanUserResizeColumns="True" SelectedItem="{Binding CurrentVenue}">
-            <DataGrid.ContextMenu>
-                <ContextMenu >
-                    <MenuItem Header="Remove Venue" Command="{Binding Path=DeleteCommand}"  />
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Width="1*" Binding="{Binding Id}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Shortcut" Width="1*" Binding="{Binding ShortCut, Mode=TwoWay}"/>
-                <DataGridTextColumn Header="Name" Width="6*" Binding="{Binding Name, Mode=TwoWay}"/>
-                <DataGridTextColumn Header="Latitude" Width="1*" Binding="{Binding Latitude, Mode=TwoWay}"/>
-                <DataGridTextColumn Header="Longitude" Width="1*" Binding="{Binding Longitude, Mode=TwoWay}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Grid Grid.Row="0">
+        <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" MaxHeight="25" Margin="5,0,0,0" Command="{Binding Path=AddCommand}">
-                Add new Venue
-            </Button>
-            <Button Grid.Column="1" MaxHeight="25" Margin="5,0,0,0" IsEnabled="{Binding ElementName=venueGrid, Path=SelectedItems.Count}" Command="{Binding Path=DeleteCommand}">
-                Delete Selected Venue
-            </Button>
-        </Grid>
-        <Grid Grid.Row="1">
-            <m:Map Name="ufoMap" CredentialsProvider="AthdTpOMc6YRg4aXo8KAax1L_xBjw8fhnWX9m3areCzaZnexHZq-9TOvUjSCpR_f" ZoomLevel="18" Center="48.30584975,14.28644065" MouseDoubleClick="MapWithPushpins_MouseDoubleClick">
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <m:Pushpin Location="{Binding CurrentVenue.Location}"/>
-            </m:Map>
+                <Grid.Resources>
+                    <FrameworkElement x:Key="ProxyElement" DataContext="{Binding}"/>
+                </Grid.Resources>
+                <ContentControl Visibility="Collapsed" Content="{StaticResource ProxyElement}"></ContentControl>
+
+                <Border Margin="10" Grid.Row="0" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Content="Shortcut:" Margin="0,0,0,4" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding VmVm.ShortCutInput, Mode=TwoWay}" Margin="0,0,0,4" MaxLength="2" HorizontalAlignment="Left" Width="25"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Content="Name:" Margin="0,0,0,4" />
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding VmVm.NameInput, Mode=TwoWay}" Margin="0,0,0,4" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Content="Latitude:" Margin="0,0,0,4" />
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding VmVM.LatitudeInput}"  PreviewMouseDown="LatitudeInput_MouseDown" Margin="0,0,0,4" />
+
+                        <Label Grid.Row="5" Grid.Column="0" Content="Longitude:" Margin="0,0,0,4" />
+                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding VmVm.LongitudeInput}" PreviewMouseDown="LongitudeInput_MouseDown" Margin="0,0,0,4" />
+
+                        <Button Grid.Row="6" Grid.Column="0" Command="{Binding VmVm.CreateCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="images/add.png" Stretch="Uniform"/>
+                                <Label Padding="0">Add Venue</Label>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+
+                <Border Margin="10" Grid.Row="1" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+                    <ScrollViewer Margin="10">
+                        <DataGrid Height="Auto" Name="dgVenues" AutoGenerateColumns="False" ItemsSource="{Binding VmVm.Venues}" SelectedItem="{Binding VmVm.CurrentVenue}"
+                                  
+                            ScrollViewer.CanContentScroll="True" 
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Delete venue" Width="20">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding DataContext.VmVm, Source={StaticResource ProxyElement}}">
+                                                <Button.Template>
+                                                    <ControlTemplate>
+                                                        <Image Source="images/delete.gif"/>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}" Width="1*" />
+                                <DataGridTextColumn Header="Shortcut" Binding="{Binding ShortCut}" Width="1*" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="7*" />
+                                <DataGridTemplateColumn Header="Latitude" Width="2*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Latitude, Mode=TwoWay}" MouseDown="LatitudeColumn_MouseDown" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Longitude" Width="2*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Longitude, Mode=TwoWay}" MouseDown="LongitudeColumn_MouseDown" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </ScrollViewer>
+                </Border>
+
+            </Grid>
+            <Grid Grid.Column="1">
+                <Border Margin="10" Grid.Row="0" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+                    <m:Map Name="ufoMap" CredentialsProvider="AthdTpOMc6YRg4aXo8KAax1L_xBjw8fhnWX9m3areCzaZnexHZq-9TOvUjSCpR_f" ZoomLevel="18" Center="48.30584975,14.28644065" MouseDoubleClick="MapWithPushpins_MouseDoubleClick">
+                        <m:Pushpin Location="{Binding VmVm.CurrentVenue.Location}"/>
+                    </m:Map>
+                </Border>
+            </Grid>
         </Grid>
+
     </Grid>
 </UserControl>

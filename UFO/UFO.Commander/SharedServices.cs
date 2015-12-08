@@ -17,6 +17,7 @@ namespace UFO.Commander {
             Instance.CategoryService = ServiceFactory.CreateCategoryService(db);
             Instance.ArtistService = ServiceFactory.CreateArtistService(db);
             Instance.CountryService = ServiceFactory.CreateCountryService(db);
+            Instance.VenueService = ServiceFactory.CreateVenueService(db);
         }
 
         public static SharedServices Instance {
@@ -32,6 +33,10 @@ namespace UFO.Commander {
         }
 
         public ICountryService CountryService {
+            get; private set;
+        }
+        public IVenueService VenueService
+        {
             get; private set;
         }
     }

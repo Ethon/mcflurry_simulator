@@ -22,27 +22,63 @@ namespace UFO.Commander {
     /// </summary>
     public partial class VenueManagementControl : UserControl {
 
-        
+
+
         public VenueManagementControl() {
             InitializeComponent();
-            this.Loaded += (s, e) => {
-                DataContext = new VenueListViewModel(ServiceFactory.CreateVenueService(new MYSQLDatabase("Server = localhost; Database = ufotest; Uid = root;")));
-            };
+            VmVm = new VenueManagementViewModel(SharedServices.Instance.VenueService);
+            this.DataContext = this;
+        }
 
+        public VenueManagementViewModel VmVm
+        {
+            get; private set;
+        }
+
+        private void LatitudeColumn_MouseDown(object sender, MouseButtonEventArgs e) {
+            //TextBlock block = sender as TextBlock;
+            //ArtistViewModel model = block.DataContext as ArtistViewModel;
+            //string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER);
+            //if (newFile != null) {
+            //    model.PicturePath = MediaManager.Instance.RootPicture(newFile);
+            //}
+        }
+
+        private void LongitudeColumn_MouseDown(object sender, MouseButtonEventArgs e) {
+            //TextBlock block = sender as TextBlock;
+            //ArtistViewModel model = block.DataContext as ArtistViewModel;
+            //string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER);
+            //if (newFile != null) {
+            //    model.VideoPath = MediaManager.Instance.RootVideo(newFile);
+            //}
+        }
+
+        private void LatitudeInput_MouseDown(object sender, MouseButtonEventArgs e) {
+            //string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER);
+            //if (newFile != null) {
+            //    Amvm.PicturePathInput = MediaManager.Instance.RootPicture(newFile);
+            //}
+        }
+
+        private void LongitudeInput_MouseDown(object sender, MouseButtonEventArgs e) {
+            //string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER);
+            //if (newFile != null) {
+            //    Amvm.VideoPathInput = MediaManager.Instance.RootVideo(newFile);
+            //}
         }
 
         private void MapWithPushpins_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             // Disables the default mouse double-click action.
-            e.Handled = true;
-           
-            // Determin the location to place the pushpin at on the map.
+            //e.Handled = true;
 
-            //Get the mouse click coordinates
-            Point mousePosition = e.GetPosition(this);
-            //Convert the mouse coordinates to a locatoin on the map
-            Location pinLocation = ufoMap.ViewportPointToLocation(mousePosition);
-            Pushpin current = (Pushpin)ufoMap.Children[0];
-            current.Location = pinLocation;
+            //// Determin the location to place the pushpin at on the map.
+
+            ////Get the mouse click coordinates
+            //Point mousePosition = e.GetPosition(this);
+            ////Convert the mouse coordinates to a locatoin on the map
+            //Location pinLocation = venueMap.ViewportPointToLocation(mousePosition);
+            //Pushpin current = (Pushpin)venueMap.Children[0];
+            //current.Location = pinLocation;
         }
     }
 }

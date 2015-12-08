@@ -13,34 +13,68 @@ using UFO.Server;
 using UFO.Server.Data;
 
 namespace UFO.Commander.ViewModel {
-    public class VenueListViewModel :INotifyPropertyChanged {
+    public class VenueManagementViewModel :INotifyPropertyChanged {
         private IVenueService venueService;
         private VenueViewModel currentVenue;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private ICommand addCommand;
-        private ICommand deleteCommand;
+        public string NameInput { get; set; }
+        public string ShortCutInput { get; set; }
+        public double latitudeInput;
+        public double longitudeInput;
+
+
+
+        public double LatitudeInput
+        {
+            get
+            {
+                return latitudeInput;
+            }
+            set
+            {
+                if (value != latitudeInput) {
+                    latitudeInput = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatitudeInput)));
+                }
+            }
+        }
+
+        public double LongitudeInput
+        {
+            get
+            {
+                return longitudeInput;
+            }
+            set
+            {
+                if (value != longitudeInput) {
+                    longitudeInput = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LongitudeInput)));
+                }
+            }
+        }
+
+
+        private ICommand createCommand;
 
 
         public ObservableCollection<VenueViewModel> Venues { get; set; }
 
-        public VenueListViewModel(IVenueService venueService) {
+        public VenueManagementViewModel(IVenueService venueService) {
             this.venueService = venueService;
             this.Venues = new ObservableCollection<VenueViewModel>();
-            LoadVenues();
+            UpdateVenues();
             
         }
 
-        public async void LoadVenues() {
-            //CurrentVenue = null;
-            //Venues.Clear();
-            //IEnumerator<Venue> e = venueService.GetAllVenues().GetEnumerator();
-
-            //while (await Task.Factory.StartNew(
-            //        () => e.MoveNext())) {
-            //    Venues.Add(new VenueViewModel(venueService, e.Current));
-            //}
-            //CurrentVenue = Venues[0];
+        public void UpdateVenues() {
+            
+            CurrentVenue = null;
+            Venues.Clear();
+            foreach (var venue in venueService.GetAllVenues()) {
+                Venues.Add(new VenueViewModel(venueService, venue));
+            }
         }
         public VenueViewModel CurrentVenue {
             get {
@@ -57,29 +91,30 @@ namespace UFO.Commander.ViewModel {
         }
 
 
-        public ICommand AddCommand {
+        public ICommand CreateCommand {
             get {
-                if (addCommand == null) {
-                    addCommand = new RelayCommand(param => Venues.Add(new VenueViewModel(venueService,venueService.CreateVenue("Demo","D0",1,1))));
+                if (createCommand == null) {
+                    createCommand = new RelayCommand((param) => {
+                    Venue venue;
+                    try {
+                        venue = venueService.CreateVenue(NameInput, ShortCutInput,LongitudeInput ,LatitudeInput);
+                    } catch (DataValidationException ex) {
+                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error creating venue");
+                        return;
+                    }
+                    Venues.Add(new VenueViewModel(venueService, venue));
+                        PlatformService.Instance.ShowInformationMessage("Created venue '" + venue.Name + "'!","Information");
+                        NameInput = "";
+                        ShortCutInput = "";
+                        LongitudeInput = 0;
+                        LatitudeInput = 0;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NameInput)));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShortCutInput)));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatitudeInput)));
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LongitudeInput)));
+                    });
                 }
-                return addCommand;
-            }
-        }
-        public ICommand DeleteCommand {
-            get {
-                if (deleteCommand == null) {
-                    deleteCommand = new RelayCommand(param => {
-                        try {
-                            venueService.DeleteVenue(CurrentVenue.venue);
-                            Venues.Remove(CurrentVenue);
-                        } catch (Exception ex) {
-                                                        //MessageBox.Show(ex.Message, "Error",  MessageBoxButton.OK,MessageBoxImage.Warning);
-                        }
-                });
-                    
-                    
-                }
-                return deleteCommand;
+                return createCommand;
             }
         }
 
@@ -91,9 +126,9 @@ namespace UFO.Commander.ViewModel {
 
         private IVenueService venueService;
         public Venue venue;
+        private ICommand deleteCommand;
 
 
-        
         public event PropertyChangedEventHandler PropertyChanged;
 
         public VenueViewModel(IVenueService venueService, Venue venue) {
@@ -156,6 +191,33 @@ namespace UFO.Commander.ViewModel {
                 }
             }
         }
+
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                if (deleteCommand == null) {
+                    deleteCommand = new RelayCommand((param) => {
+                        if (PlatformService.Instance.WarnAndAskForConfirmation(
+                                "Do you really want to delete the venue '" + Name + "'?", "Confirm deletion")) {
+                    Delete();
+                            VenueManagementViewModel VmVm = param as VenueManagementViewModel;
+                            VmVm.UpdateVenues();
+                        }
+                    });
+                }
+                return deleteCommand;
+            }
+        }
+
+        public void Delete() {
+            try {
+                venueService.DeleteVenue(venue);
+            } catch (Exception ex) {
+                PlatformService.Instance.ShowErrorMessage(ex.Message, "Error");
+            }
+        }
+
     }
 
 }
