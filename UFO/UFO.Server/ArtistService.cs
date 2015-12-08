@@ -53,14 +53,20 @@ namespace UFO.Server {
             if (!IsValidName(name)) {
                 throw new DataValidationException("Can't create artist with invalid name '" + name + "'");
             } else if (!IsValidEmail(email)) {
-                throw new DataValidationException("Can't create artist with invalid emails '" + email + "'");
+                throw new DataValidationException("Can't create artist with invalid email address '" + email + "'");
+            }  else if(category == null) {
+                throw new DataValidationException("Can't create artist without category");
+            } else if(country == null) {
+                throw new DataValidationException("Can't create artist without country");
             } else if (!IsValidPicturePath(picturePath)) {
                 throw new DataValidationException("Can`t create artist with invalid picturePath '" + picturePath + "'");
             } else if (!IsValidVideoPath(videoPath)) {
                 throw new DataValidationException("Can`t create artist with invalid videoPath '" + videoPath + "'");
             }
-            
-            return aDao.CreateArtist(name,email,category.Id,country.Id,picturePath,videoPath);
+
+            picturePath = picturePath == null ? "" : picturePath;
+            videoPath = videoPath == null ? "" : videoPath;
+            return aDao.CreateArtist(name, email, category.Id, country.Id, picturePath, videoPath);
         }
 
         public Artist GetArtistById(uint id) {
