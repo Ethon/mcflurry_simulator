@@ -8,17 +8,27 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
+    public interface IArtistListener {
+        void OnArtistDeletion(Artist artist);
+        void OnArtistCreation(Artist artist);
+        void OnArtistUpdate(Artist artist);
+    }
+
     public interface IArtistService {
         Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath);
         Artist GetArtistById(uint id);
         List<Artist> GetAllArtists();
         void UpdateArtist(Artist artist);
         void DeleteArtist(Artist artist);
+
+        void AddListener(IArtistListener listener);
+        void RemoveListener(IArtistListener listener);
     }
 
     internal class ArtistService : IArtistService {
         private IArtistDao aDao;
         private IPerformanceDao pDao;
+        private List<IArtistListener> listeners;
 
         private static Regex nameRegex = new Regex("^[a-zA-Z_öÖäÄüÜß& ]*$");
         private static Regex emailRegex = new Regex("\\w+@\\w+.\\w+");
@@ -39,7 +49,6 @@ namespace UFO.Server {
             return true;
         }
 
-
         public ArtistService(IDatabase db) {
             if(db is MYSQLDatabase) { 
                 aDao = new ArtistDao(db);
@@ -47,6 +56,7 @@ namespace UFO.Server {
             } else {
                 throw new NotSupportedException("Database not supported");
             }
+            listeners = new List<IArtistListener>();
         }
 
         public Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath) {
@@ -66,7 +76,11 @@ namespace UFO.Server {
 
             picturePath = picturePath == null ? "" : picturePath;
             videoPath = videoPath == null ? "" : videoPath;
-            return aDao.CreateArtist(name, email, category.Id, country.Id, picturePath, videoPath);
+            Artist artist = aDao.CreateArtist(name, email, category.Id, country.Id, picturePath, videoPath);
+            foreach (var listener in listeners) {
+                listener.OnArtistCreation(artist);
+            }
+            return artist;
         }
 
         public Artist GetArtistById(uint id) {
@@ -93,6 +107,9 @@ namespace UFO.Server {
             if (!aDao.UpdateArtist(artist)) {
                 throw new DatabaseException("Can`t update artist with invalid ID: '" + artist + "'");
             }
+            foreach (var listener in listeners) {
+                listener.OnArtistUpdate(artist);
+            }
         }
 
         public void DeleteArtist(Artist artist) {
@@ -110,6 +127,17 @@ namespace UFO.Server {
             foreach (var item in afterNow) {
                 pDao.DeletePerformance(item);
             }
+            foreach (var listener in listeners) {
+                listener.OnArtistDeletion(artist);
+            }
+        }
+
+        public void AddListener(IArtistListener listener) {
+            listeners.Add(listener);
+        }
+
+        public void RemoveListener(IArtistListener listener) {
+            listeners.Remove(listener);
         }
     }
 }

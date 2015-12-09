@@ -7,12 +7,21 @@ using System.Threading.Tasks;
 using UFO.Server.Data;
 
 namespace UFO.Server {
+    public interface IVenueListener {
+        void OnVenueDeletion(Venue venue);
+        void OnVenueCreation(Venue venue);
+        void OnVenueUpdate(Venue venue);
+    }
+
     public interface IVenueService {
         Venue CreateVenue(string name, string shortcut, double latitude, double longitude);
         List<Venue> GetAllVenues();
         Venue GetVenueById(uint id);
         void UpdateVenue(Venue venue);
         void DeleteVenue(Venue venue);
+
+        void AddListener(IVenueListener listener);
+        void RemoveListener(IVenueListener listener);
     }
 
     internal class VenueService : IVenueService {
@@ -25,6 +34,7 @@ namespace UFO.Server {
 
         private IVenueDao vdao;
         private IPerformanceDao pdao;
+        private List<IVenueListener> listeners;
 
         private static bool IsValidName(string name) {
             return true;
@@ -53,6 +63,7 @@ namespace UFO.Server {
             } else {
                 throw new NotSupportedException("Database not supported");
             }
+            listeners = new List<IVenueListener>();
         }
 
         public Venue CreateVenue(string name, string shortcut, double latitude, double longitude) {
@@ -66,7 +77,11 @@ namespace UFO.Server {
                 throw new DataValidationException("Can't create venue with invalid longitude '" + longitude + "'");
             }
 
-            return vdao.CreateVenue(name, shortcut, latitude, longitude);
+            Venue venue = vdao.CreateVenue(name, shortcut, latitude, longitude);
+            foreach (var listener in listeners) {
+                listener.OnVenueCreation(venue);
+            }
+            return venue;
         }
 
         public List<Venue> GetAllVenues() {
@@ -91,6 +106,9 @@ namespace UFO.Server {
             if (!vdao.UpdateVenue(venue)) {
                 throw new DatabaseException("DatabaseError: Can`t update venue " + venue);
             };
+            foreach (var listener in listeners) {
+                listener.OnVenueUpdate(venue);
+            }
         }
 
         public void DeleteVenue(Venue venue) {
@@ -101,6 +119,17 @@ namespace UFO.Server {
             if (!vdao.DeleteVenue(venue)) {
                 throw new DatabaseException("DatabaseError: Can`t delete venue " + venue);
             };
+            foreach (var listener in listeners) {
+                listener.OnVenueDeletion(venue);
+            }
+        }
+
+        public void AddListener(IVenueListener listener) {
+            listeners.Add(listener);
+        }
+
+        public void RemoveListener(IVenueListener listener) {
+            listeners.Remove(listener);
         }
     }
 }
