@@ -35,38 +35,6 @@ namespace UFO.Commander {
             get; private set;
         }
 
-        private void LatitudeColumn_MouseDown(object sender, MouseButtonEventArgs e) {
-            //TextBlock block = sender as TextBlock;
-            //ArtistViewModel model = block.DataContext as ArtistViewModel;
-            //string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER);
-            //if (newFile != null) {
-            //    model.PicturePath = MediaManager.Instance.RootPicture(newFile);
-            //}
-        }
-
-        private void LongitudeColumn_MouseDown(object sender, MouseButtonEventArgs e) {
-            //TextBlock block = sender as TextBlock;
-            //ArtistViewModel model = block.DataContext as ArtistViewModel;
-            //string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER);
-            //if (newFile != null) {
-            //    model.VideoPath = MediaManager.Instance.RootVideo(newFile);
-            //}
-        }
-
-        private void LatitudeInput_MouseDown(object sender, MouseButtonEventArgs e) {
-            //string newFile = PlatformService.Instance.PickFile("Pick picture file", PICTURE_FILTER);
-            //if (newFile != null) {
-            //    Amvm.PicturePathInput = MediaManager.Instance.RootPicture(newFile);
-            //}
-        }
-
-        private void LongitudeInput_MouseDown(object sender, MouseButtonEventArgs e) {
-            //string newFile = PlatformService.Instance.PickFile("Pick video file", VIDEO_FILTER);
-            //if (newFile != null) {
-            //    Amvm.VideoPathInput = MediaManager.Instance.RootVideo(newFile);
-            //}
-        }
-
         private void MapWithPushpins_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             //Disables the default mouse double-click action.
             e.Handled = true;
@@ -78,7 +46,51 @@ namespace UFO.Commander {
             //Convert the mouse coordinates to a locatoin on the map
             Location pinLocation = venueMap.ViewportPointToLocation(mousePosition);
             Pushpin current = (Pushpin)venueMap.Children[0];
-            current.Location = pinLocation;
+            Console.WriteLine(pinLocation.Latitude);
+            current.Location.Latitude = pinLocation.Latitude;
+            current.Location.Longitude = pinLocation.Longitude;
         }
+
+        Vector _mouseToMarker;
+        private bool _dragPin;
+        Location tempLocation;
+        public Pushpin SelectedPushpin { get; set; }
+
+        void pin_MouseDown(object sender, MouseButtonEventArgs e) {
+            
+            e.Handled = true;
+            SelectedPushpin = sender as Pushpin;
+            _dragPin = true;
+            
+            _mouseToMarker = Point.Subtract(
+              venueMap.LocationToViewportPoint(SelectedPushpin.Location),
+              e.GetPosition(venueMap));
+            tempLocation = SelectedPushpin.Location;
+        }
+
+        private void map_MouseMove(object sender, MouseEventArgs e) {
+            if (e.LeftButton == MouseButtonState.Pressed) {
+                if (_dragPin && SelectedPushpin != null) {
+                    SelectedPushpin.Location = venueMap.ViewportPointToLocation(
+                      Point.Add(e.GetPosition(venueMap), _mouseToMarker));
+                    e.Handled = true;
+                }
+            }
+        }
+        void pin_MouseUp(object sender, MouseButtonEventArgs e) {
+            e.Handled = true;
+            _dragPin = false;
+            
+            if (SelectedPushpin.Location != tempLocation) {
+                if (PlatformService.Instance.WarnAndAskForConfirmation(
+                    "Do you want to change the coordinates of the venue '" + VmVm.CurrentVenue.Name + "'?", "Confirm coordination change")) {
+                    VmVm.CurrentVenue.Location = SelectedPushpin.Location;
+                } else {
+                    VmVm.CurrentVenue.Location = tempLocation;
+                }
+            }
+
+        }
+
     }
 }

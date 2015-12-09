@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+
              xmlns:local="clr-namespace:UFO.Commander"
              mc:Ignorable="d"
              Name="amc"
@@ -12,7 +13,7 @@
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
@@ -47,12 +48,12 @@
 
                         <Label Grid.Row="1" Grid.Column="0" Content="Name:" Margin="0,0,0,4" />
                         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding VmVm.NameInput, Mode=TwoWay}" Margin="0,0,0,4" />
-
+                        
                         <Label Grid.Row="4" Grid.Column="0" Content="Latitude:" Margin="0,0,0,4" />
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding VmVM.LatitudeInput}"  PreviewMouseDown="LatitudeInput_MouseDown" Margin="0,0,0,4" />
-
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding VmVm.LatitudeInput}"  Margin="0,0,0,4" />
+                        
                         <Label Grid.Row="5" Grid.Column="0" Content="Longitude:" Margin="0,0,0,4" />
-                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding VmVm.LongitudeInput}" PreviewMouseDown="LongitudeInput_MouseDown" Margin="0,0,0,4" />
+                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding VmVm.LongitudeInput}" Margin="0,0,0,4" />
 
                         <Button Grid.Row="6" Grid.Column="0" Command="{Binding VmVm.CreateCommand}">
                             <StackPanel Orientation="Horizontal">
@@ -72,7 +73,7 @@
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Delete venue" Width="20">
+                                <DataGridTemplateColumn Header="" Width="20">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding DataContext.VmVm, Source={StaticResource ProxyElement}}">
@@ -87,21 +88,10 @@
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}" Width="1*" />
                                 <DataGridTextColumn Header="Shortcut" Binding="{Binding ShortCut}" Width="1*" />
-                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="7*" />
-                                <DataGridTemplateColumn Header="Latitude" Width="2*">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Latitude, Mode=TwoWay}" MouseDown="LatitudeColumn_MouseDown" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Longitude" Width="2*">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Longitude, Mode=TwoWay}" MouseDown="LongitudeColumn_MouseDown" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="6*" />
+                                <DataGridTextColumn Header="Latitude" Binding="{Binding Latitude, Mode=TwoWay}" Width="3*" />
+                                <DataGridTextColumn Header="Longitude" Binding="{Binding Longitude, Mode=TwoWay}" Width="3*" />
+                                
                             </DataGrid.Columns>
                         </DataGrid>
                     </ScrollViewer>
@@ -110,8 +100,8 @@
             </Grid>
             <Grid Grid.Column="1">
                 <Border Margin="10" Grid.Row="0" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
-                    <m:Map Name="venueMap" CredentialsProvider="AthdTpOMc6YRg4aXo8KAax1L_xBjw8fhnWX9m3areCzaZnexHZq-9TOvUjSCpR_f" ZoomLevel="18" Center="48.30584975,14.28644065" MouseDoubleClick="MapWithPushpins_MouseDoubleClick">
-                        <m:Pushpin Location="{Binding VmVm.CurrentVenue.Location}"/>
+                    <m:Map Name="venueMap" CredentialsProvider="AthdTpOMc6YRg4aXo8KAax1L_xBjw8fhnWX9m3areCzaZnexHZq-9TOvUjSCpR_f" ZoomLevel="14" Center="48.30584975,14.28644065" MouseMove="map_MouseMove">
+                        <m:Pushpin Visibility="{Binding Path=VmVm.CurrentVenue, TargetNullValue=Hidden}" Cursor="Hand" Location="{Binding VmVm.CurrentVenue.Location, Mode=TwoWay}"  MouseDown="pin_MouseDown" MouseUp="pin_MouseUp" />
                     </m:Map>
                 </Border>
             </Grid>

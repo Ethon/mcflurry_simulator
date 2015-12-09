@@ -20,40 +20,8 @@ namespace UFO.Commander.ViewModel {
 
         public string NameInput { get; set; }
         public string ShortCutInput { get; set; }
-        public double latitudeInput;
-        public double longitudeInput;
-
-
-
-        public double LatitudeInput
-        {
-            get
-            {
-                return latitudeInput;
-            }
-            set
-            {
-                if (value != latitudeInput) {
-                    latitudeInput = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatitudeInput)));
-                }
-            }
-        }
-
-        public double LongitudeInput
-        {
-            get
-            {
-                return longitudeInput;
-            }
-            set
-            {
-                if (value != longitudeInput) {
-                    longitudeInput = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LongitudeInput)));
-                }
-            }
-        }
+        public double LatitudeInput { get; set; }
+        public double LongitudeInput { get; set; }
 
 
         private ICommand createCommand;
@@ -63,13 +31,14 @@ namespace UFO.Commander.ViewModel {
 
         public VenueManagementViewModel(IVenueService venueService) {
             this.venueService = venueService;
+            NameInput = "";
+            ShortCutInput = "";
             this.Venues = new ObservableCollection<VenueViewModel>();
             UpdateVenues();
             
         }
 
         public void UpdateVenues() {
-            
             CurrentVenue = null;
             Venues.Clear();
             foreach (var venue in venueService.GetAllVenues()) {
@@ -83,9 +52,7 @@ namespace UFO.Commander.ViewModel {
             set {
                 if (this.currentVenue != value) {
                     this.currentVenue = value;
-                    
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentVenue)));
-
                 }
             }
         }
@@ -97,12 +64,13 @@ namespace UFO.Commander.ViewModel {
                     createCommand = new RelayCommand((param) => {
                     Venue venue;
                     try {
-                        venue = venueService.CreateVenue(NameInput, ShortCutInput,LongitudeInput ,LatitudeInput);
+                        venue = venueService.CreateVenue(NameInput, ShortCutInput,LatitudeInput,LongitudeInput);
                     } catch (DataValidationException ex) {
                         PlatformService.Instance.ShowErrorMessage(ex.Message, "Error creating venue");
                         return;
                     }
-                    Venues.Add(new VenueViewModel(venueService, venue));
+                    VenueViewModel newVenue = new VenueViewModel(venueService, venue);
+                    Venues.Add(newVenue);
                         PlatformService.Instance.ShowInformationMessage("Created venue '" + venue.Name + "'!","Information");
                         NameInput = "";
                         ShortCutInput = "";
@@ -112,6 +80,8 @@ namespace UFO.Commander.ViewModel {
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShortCutInput)));
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatitudeInput)));
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LongitudeInput)));
+                        currentVenue = newVenue;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentVenue)));
                     });
                 }
                 return createCommand;
