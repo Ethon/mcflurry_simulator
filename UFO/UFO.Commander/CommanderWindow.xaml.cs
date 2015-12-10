@@ -23,6 +23,9 @@ namespace UFO.Commander {
 
             Cvm = new CommanderViewModel();
             this.DataContext = this;
+           
+            var loginWindow = new LoginControl();
+            loginWindow.ShowDialog();
         }
 
         private void MediaRootTextBox_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
