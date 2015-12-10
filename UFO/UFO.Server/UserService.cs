@@ -10,6 +10,7 @@ namespace UFO.Server {
     public interface IUserService {
         User GetUserById(uint id);
         User GetUserByEmailAddress(string email);
+        bool CheckCredentials(string email, string password);
         List<User> GetAllUsers();
     }
 
@@ -44,6 +45,17 @@ namespace UFO.Server {
                 throw new DataValidationException("Can't query user with invalid email '" + email + "'");
             }
             return udao.GetUserByEmailAddress(email);
+        }
+
+        public bool CheckCredentials(string email,string password) {
+            var user = GetUserByEmailAddress(email);
+            if (user == null) {
+                throw new DataValidationException("Unknown user '" + email + "'");
+            }
+            if( user.Password != password) {
+                throw new DataValidationException("Wrong password for user '" + email + "'");
+            }
+            return true;
         }
 
         public List<User> GetAllUsers() {

@@ -9,11 +9,12 @@ using System.Data.Common;
 namespace UFO.Server.Data {
     [Serializable]
     public class User {
-        public User(uint id, string firstName, string lastName, string email) {
+        public User(uint id, string firstName, string lastName, string email, string password) {
             Id = id;
             FirstName = firstName;
             LastName = lastName;
             EmailAddress = email;
+            Password = password;
         }
 
         public uint Id {
@@ -31,9 +32,13 @@ namespace UFO.Server.Data {
         public string EmailAddress {
             get; set;
         }
+        public string Password
+        {
+            get; set;
+        }
         
         public override string ToString() {
-            return String.Format("User(id={0}, firstname='{1}', lastname='{2}', email='{3}') ", Id, FirstName, LastName, EmailAddress);
+            return String.Format("User(id={0}, firstname='{1}', lastname='{2}', email='{3}', password='{4}') ", Id, FirstName, LastName, EmailAddress, Password);
         }
 
         public override bool Equals(object obj) {
@@ -41,7 +46,7 @@ namespace UFO.Server.Data {
             if(u == null) {
                 return false;
             }
-            return Id.Equals(u.Id) && FirstName.Equals(u.FirstName) && LastName.Equals(u.LastName) && EmailAddress.Equals(u.EmailAddress);
+            return Id.Equals(u.Id) && FirstName.Equals(u.FirstName) && LastName.Equals(u.LastName) && EmailAddress.Equals(u.EmailAddress) && Password.Equals(u.Password);
         }
 
         public override int GetHashCode() {
@@ -56,16 +61,16 @@ namespace UFO.Server.Data {
         User GetUserByEmailAddress(string email);
         bool UpdateUser(User user);
         bool DeleteUser(User user);
-        User CreateUser(string firstName, string lastName, string email);
+        User CreateUser(string firstName, string lastName, string email, string password);
     }
 
     public class UserDao : IUserDao {
-        private const string CREATE_CMD = "INSERT INTO User(firstname, lastname, email) VALUES (@first, @last, @email)";
+        private const string CREATE_CMD = "INSERT INTO User(firstname, lastname, email, password) VALUES (@first, @last, @email,@password)";
         private const string DELETE_CMD = "DELETE FROM User WHERE userId = @id";
         private const string GETALL_CMD = "SELECT * FROM User";
         private const string GETBYID_CMD = "SELECT * FROM User WHERE userId = @id";
         private const string GETBYEMAIL_CMD = "SELECT * FROM User WHERE email = @email";
-        private const string UPDATE_CMD = "UPDATE User SET firstname=@first, lastname=@last, email=@email WHERE userId=@id";
+        private const string UPDATE_CMD = "UPDATE User SET firstname=@first, lastname=@last, email=@email, password=@password WHERE userId=@id";
 
         private IDatabase db;
 
@@ -74,20 +79,22 @@ namespace UFO.Server.Data {
             string firstName = (string)reader["firstname"];
             string lastName = (string)reader["lastname"];
             string email = (string)reader["email"];
-            return new User(id, firstName, lastName, email);
+            string password = (string)reader["password"];
+            return new User(id, firstName, lastName, email, password);
         }
 
         public UserDao(IDatabase db) {
             this.db = db;
         }
 
-        public User CreateUser(string firstName, string lastName, string email) {
+        public User CreateUser(string firstName, string lastName, string email, string password) {
             DbCommand cmd = db.CreateCommand(CREATE_CMD);
             db.DefineParameter(cmd, "@first", System.Data.DbType.String, firstName);
             db.DefineParameter(cmd, "@last", System.Data.DbType.String, lastName);
             db.DefineParameter(cmd, "@email", System.Data.DbType.String, email);
+            db.DefineParameter(cmd, "@password", System.Data.DbType.String, password);
             int id = db.ExecuteNonQuery(cmd);
-            return new User((uint)id, firstName, lastName, email);
+            return new User((uint)id, firstName, lastName, email,password);
         }
 
         public bool DeleteUser(User user) {
@@ -137,6 +144,7 @@ namespace UFO.Server.Data {
             db.DefineParameter(cmd, "@first", System.Data.DbType.String, user.FirstName);
             db.DefineParameter(cmd, "@last", System.Data.DbType.String, user.LastName);
             db.DefineParameter(cmd, "@email", System.Data.DbType.String, user.EmailAddress);
+            db.DefineParameter(cmd, "@password", System.Data.DbType.String, user.Password);
             return db.ExecuteNonQuery(cmd) >= 1;
         }
 
