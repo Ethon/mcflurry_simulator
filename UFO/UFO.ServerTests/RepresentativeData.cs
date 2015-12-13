@@ -15,12 +15,12 @@ namespace UFO.Server {
 
         public static List<User> GetDefaultUsers() {
             return new List<User>() {
-                new User(0,"Max","Mustermann","max@mustermann.de"),
-                new User(0,"Theodor","Test","theodor@test.at"),
-                new User(0,"Moritz","Muster","moritz@muster.de"),
-                new User(0,"Karla","Tofu","karla@tofu.de"),
-                new User(0,"Benjamin","Button","benjamin@button.com"),
-                new User(0,"Lucky","Luke","lucky@luke.de")
+                new User(0,"Max","Mustermann","max@mustermann.de","max123"),
+                new User(0,"Theodor","Test","theodor@test.at","theodor123"),
+                new User(0,"Moritz","Muster","moritz@muster.de","moritz123"),
+                new User(0,"Karla","Tofu","karla@tofu.de","karla123"),
+                new User(0,"Benjamin","Button","benjamin@button.com","benjamin123"),
+                new User(0,"Lucky","Luke","lucky@luke.de","lucky123")
             };
         }
 
