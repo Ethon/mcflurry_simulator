@@ -51,11 +51,12 @@ namespace UFO.Commander {
             return header;
         }
         private String GenerateBody(DateTime date) {
-            String body = "\n<body><div class='container'><div class='table-responsive'>";
+            String body = "\n<body><div class='container'>";
 
-            body += "\n<h3>Program for " + date.Day + "." + date.Month + "." + date.Year + "</h3>";
+            body += "\n<h3>Program for " + date.Day + "." + date.Month + "." + date.Year + ":</h3>";
             body += GenerateTable(date);
-            body += "\n</div></div><body>";
+            body += GenerateLegend();
+            body += "\n</div><body>";
             return body;
         }
         private String GenerateTable(DateTime date) {
@@ -113,27 +114,37 @@ namespace UFO.Commander {
                     }
                     curVId = p.VenueId;
                     curVenuePerf[p.Date.Hour - beginHour] = p;
-
                 }
+                
             }
+            tableContent += "</tbody>";
             return tableContent;
         }
 
-        public String GenerateTableRow(Venue venue, Performance[] performances) {
+        private String GenerateTableRow(Venue venue, Performance[] performances) {
             String tableRow = "<tr class='h4 tableCellCenter small'>";
-            tableRow += "<td class='warning '>" + venue.Shortcut + " " + HttpUtility.HtmlEncode(venue.Name) + "</td>";
+            tableRow += "<td class='warning '><strong>" + HttpUtility.HtmlEncode(venue.Shortcut) + "</br>" + HttpUtility.HtmlEncode(venue.Name) + "</strong></td>";
 
             for (var i = 0; i < performances.Length; i++) {
                 if (performances[i] == null) {
                     tableRow += "<td></td>";
                 } else {
-                    tableRow += "<td>" + HttpUtility.HtmlEncode(aS.GetArtistById(performances[i].ArtistId).Name) + "</td>";
+                    Artist a = aS.GetArtistById(performances[i].ArtistId);
+                    tableRow += "<td><strong>" + HttpUtility.HtmlEncode(a.Name) + " / "+ HttpUtility.HtmlEncode(catS.GetCategoryById(a.CategoryId).Shortcut)+ "</strong></br>(" + HttpUtility.HtmlEncode(couS.GetCountryById(a.CountryId).Name)+")</td>";
                 }
 
             }
             tableRow += "</tr>";
             return tableRow;
-
+        }
+        private String GenerateLegend() {
+            String legend = "<h4>Category-Legend:</h4>";
+            legend += "<ul class='list-group '>";
+            foreach (var category in catS.GetAllCategories()) {
+                legend += "<li class='list-group-item'>" + category.Shortcut + ": " + category.Name + "</li>";
+            }
+            legend += "</ul>";
+            return legend;
         }
     }
 
