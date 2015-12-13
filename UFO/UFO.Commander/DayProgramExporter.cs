@@ -40,7 +40,7 @@ namespace UFO.Commander {
         }
 
         public string exportDayProgram(DateTime date) {
-            return exportDayProgram(date, String.Format("DayProgram_{0}_{0}_{0}.html", date.Year, date.Month, date.Date));
+            return exportDayProgram(date, String.Format("DayProgram_{0}_{1}_{2}.html", date.Year, date.Month, date.Day));
         }
         private String GenerateHeader() {
             String header = "<!DOCTYPE html><html lang='en'>";
