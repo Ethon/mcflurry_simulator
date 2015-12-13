@@ -25,6 +25,8 @@ namespace UFO.Commander.ViewModel {
         public LoginViewModel(IUserService userService) {
             isAuthenticated = false;
             this.userService = userService;
+            this.username = "";
+            this.password = "";
         }
 
         public bool IsAuthenticated

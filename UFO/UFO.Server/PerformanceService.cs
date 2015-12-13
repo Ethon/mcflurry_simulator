@@ -12,6 +12,7 @@ namespace UFO.Server {
         Performance GetPerformanceById(uint id);
         void UpdatePerformance(Performance performance);
         void DeletePerformance(Performance performance);
+        List<Performance> GetPerformancesForDay(DateTime date);
     }
 
     internal class PerformanceService : IPerformanceService {
@@ -92,10 +93,16 @@ namespace UFO.Server {
             }
         }
 
+        
+
         public void DeletePerformance(Performance performance) {
             if (!pdao.DeletePerformance(performance)) {
                 throw new DatabaseException("Can`t delete performance with invalid ID: '" + performance + "'");
             }
+        }
+
+        public List<Performance> GetPerformancesForDay(DateTime date) {
+            return pdao.GetPerformancesForDay(date);
         }
     }
 }

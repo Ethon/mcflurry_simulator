@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="MediaManager.cs" />
     <Compile Include="PlatformService.cs" />
+    <Compile Include="Util\PasswordHelper.cs" />
     <Compile Include="ViewModel\ArtistManagementViewModel.cs" />
     <Compile Include="PerformanceManagementControl.xaml.cs">
       <DependentUpon>PerformanceManagementControl.xaml</DependentUpon>

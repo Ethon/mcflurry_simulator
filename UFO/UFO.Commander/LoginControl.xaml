@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UFO.Commander"
-        Title="Log On" 
-        WindowStartupLocation="CenterScreen" WindowStyle="None"
-        ResizeMode="NoResize" MinWidth="300" BorderThickness="4" AllowsTransparency="True">
+        xmlns:u="clr-namespace:UFO.Commander.Util"
+        Title="UFO-Commander Login" 
+        WindowStartupLocation="CenterScreen" WindowStyle="None" Width="350" Height="200"
+        ResizeMode="CanResize" BorderThickness="4" AllowsTransparency="True">
 
     <Window.Resources>
         <Style TargetType="TextBox">
@@ -38,19 +39,22 @@
         <!-- Header -->
         <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                       FontWeight="Bold" FontSize="16" Content="Log On">
+                       FontWeight="Bold" FontSize="16" Content="UFO-Commander - Login">
             </Label>
         </StackPanel>
         <!-- Main Controls -->
-        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Content="User Name"/>
+        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Content="Username:"/>
         <TextBox Grid.Column="1" Grid.Row="1" x:Name="txtUsername" Text="{Binding LVm.UserName}"/>
-        <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" Content="Password"/>
-        <TextBox Grid.Column="1" Grid.Row="2"  x:Name="txtPassword" Text="{Binding LVm.Password}"/>
-        <Label Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red" FontStyle="Italic" Visibility="{Binding ShowInvalidCredentials}" Content="{Binding LVm.LoginInfo}"/>
-        <StackPanel Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="5" HorizontalAlignment="Right" Height="Auto">
+        <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" Content="Password:"/>
+        <PasswordBox Grid.Column="1" Grid.Row="2" u:PasswordHelper.Attach="True" 
+         u:PasswordHelper.Password="{Binding LVm.Password,Mode=TwoWay}"/>
+
+
+        <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="5" HorizontalAlignment="Right" Height="Auto">
             <Button Content="Log-on" IsDefault="True" Command="{Binding LVm.LoginCommand}"  CommandParameter="{Binding}"/>
             <Button Content="Cancel" IsCancel="True" Command="{Binding LVm.ShutDownCommand}"/>
         </StackPanel>
+        <Label Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red" FontStyle="Italic" Visibility="{Binding ShowInvalidCredentials}" Content="{Binding LVm.LoginInfo}"/>
     </Grid>
 </Window>
 
