@@ -51,11 +51,11 @@ namespace UFO.Commander {
             return header;
         }
         private String GenerateBody(DateTime date) {
-            String body = "\n<body><div class='container'>";
+            String body = "\n<body><div class='container'><div class='table-responsive'>";
             
             body += "\n<h2>Program for "+date.Day+"."+date.Month+"."+date.Year+"</h2>";
             body += GenerateTable(date);
-            body += "\n</div><body>";
+            body += "\n</div></div><body>";
             return body;
         }
         private String GenerateTable(DateTime date) {
@@ -72,7 +72,7 @@ namespace UFO.Commander {
             return table;
         }
         private String GenerateTableHeader(DateTime date,List<Performance>performances, int beginHour, int endHour) {
-            String tableHeader = "<thead><tr class='info h4 tableCellCenter'>";
+            String tableHeader = "<thead><tr class='info h4 tableCellCenter small'>";
             
             if (performances.Count != 0) {
 
@@ -119,8 +119,8 @@ namespace UFO.Commander {
             return tableContent;
         }
         public String GenerateTableRow(Venue venue,Performance[] performances) {
-            String tableRow = "<tr class='h4 tableCellCenter'>";
-            tableRow += "<td class='warning'>"+venue.Shortcut+" " + HttpUtility.HtmlEncode(venue.Name) + "</td>";
+            String tableRow = "<tr class='h4 tableCellCenter small'>";
+            tableRow += "<td class='warning '>"+venue.Shortcut+" " + HttpUtility.HtmlEncode(venue.Name) + "</td>";
             
             for(var i= 0; i < performances.Length; i++) {
                 if (performances[i] == null) {
