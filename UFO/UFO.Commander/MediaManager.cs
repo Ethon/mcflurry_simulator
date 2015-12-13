@@ -10,6 +10,7 @@ namespace UFO.Commander {
         private const string ICON_DIR = @"\icon\";
         private const string PICTURE_DIR = @"\picture\";
         private const string VIDEO_DIR = @"\video\";
+        private const string HTML_DIR = @"\html\";
 
         private string rootPath;
 
@@ -35,6 +36,7 @@ namespace UFO.Commander {
             Directory.CreateDirectory(root + ICON_DIR);
             Directory.CreateDirectory(root + PICTURE_DIR);
             Directory.CreateDirectory(root + VIDEO_DIR);
+            Directory.CreateDirectory(root + HTML_DIR);
         }
 
         public MediaManager(string root) {
@@ -65,6 +67,10 @@ namespace UFO.Commander {
 
         public bool IsFileInVideoDir(string path) {
             return path.StartsWith(RootPath + VIDEO_DIR);
+        }
+
+        public bool IsFileInHtmlDir(string path) {
+            return path.StartsWith(RootPath + HTML_DIR);
         }
 
         public string RootIcon(string path) {
@@ -107,6 +113,21 @@ namespace UFO.Commander {
             string newPath = RootPath + VIDEO_DIR + fileName;
             if (!File.Exists(newPath) || PlatformService.Instance.WarnAndAskForConfirmation(
                     "Do you really want to overwrite video '" + fileName + "'", "Overwrite file")) {
+                File.Copy(path, newPath, true);
+            }
+            return fileName;
+        }
+
+        public string RootHtml(string path) {
+            AssertIsFile(path);
+            string fileName = Path.GetFileName(path);
+            if (IsFileInHtmlDir(path)) {
+                return fileName;
+            }
+
+            string newPath = RootPath + HTML_DIR + fileName;
+            if (!File.Exists(newPath) || PlatformService.Instance.WarnAndAskForConfirmation(
+                    "Do you really want to overwrite html '" + fileName + "'", "Overwrite file")) {
                 File.Copy(path, newPath, true);
             }
             return fileName;
