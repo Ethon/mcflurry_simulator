@@ -6,11 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Commander {
+    public enum MediaType {
+        Icon, Picture, Video, Html, Pdf
+    }
+
     public class MediaManager {
         private const string ICON_DIR = @"\icon\";
         private const string PICTURE_DIR = @"\picture\";
         private const string VIDEO_DIR = @"\video\";
         private const string HTML_DIR = @"\html\";
+        private const string PDF_DIR = @"\pdf\";
 
         private string rootPath;
 
@@ -37,6 +42,7 @@ namespace UFO.Commander {
             Directory.CreateDirectory(root + PICTURE_DIR);
             Directory.CreateDirectory(root + VIDEO_DIR);
             Directory.CreateDirectory(root + HTML_DIR);
+            Directory.CreateDirectory(root + PDF_DIR);
         }
 
         public MediaManager(string root) {
@@ -71,6 +77,10 @@ namespace UFO.Commander {
 
         public bool IsFileInHtmlDir(string path) {
             return path.StartsWith(RootPath + HTML_DIR);
+        }
+
+        public bool IsFileInPdfDir(string path) {
+            return path.StartsWith(RootPath + PDF_DIR);
         }
 
         public string RootIcon(string path) {
@@ -131,6 +141,43 @@ namespace UFO.Commander {
                 File.Copy(path, newPath, true);
             }
             return fileName;
+        }
+
+        public string RootPdf(string path) {
+            AssertIsFile(path);
+            string fileName = Path.GetFileName(path);
+            if (IsFileInPdfDir(path)) {
+                return fileName;
+            }
+
+            string newPath = RootPath + PDF_DIR + fileName;
+            if (!File.Exists(newPath) || PlatformService.Instance.WarnAndAskForConfirmation(
+                    "Do you really want to overwrite pdf '" + fileName + "'", "Overwrite file")) {
+                File.Copy(path, newPath, true);
+            }
+            return fileName;
+        }
+
+        public string GetFullPath(string filename, MediaType type) {
+            string dir = "";
+            switch(type) {
+                case MediaType.Html:
+                    dir = HTML_DIR;
+                    break;
+                case MediaType.Icon:
+                    dir = ICON_DIR;
+                    break;
+                case MediaType.Picture:
+                    dir = PICTURE_DIR;
+                    break;
+                case MediaType.Video:
+                    dir = VIDEO_DIR;
+                    break;
+                case MediaType.Pdf:
+                    dir = PDF_DIR;
+                    break;
+            }
+            return RootPath + dir + filename;
         }
     }
 }

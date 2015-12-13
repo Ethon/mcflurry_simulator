@@ -10,7 +10,7 @@ using UFO.Server.Data;
 
 namespace UFO.Commander {
 
-    
+
 
     public interface IDayProgramExporter {
         string exportDayProgram(DateTime date, string outFile);
@@ -52,8 +52,8 @@ namespace UFO.Commander {
         }
         private String GenerateBody(DateTime date) {
             String body = "\n<body><div class='container'><div class='table-responsive'>";
-            
-            body += "\n<h2>Program for "+date.Day+"."+date.Month+"."+date.Year+"</h2>";
+
+            body += "\n<h2>Program for " + date.Day + "." + date.Month + "." + date.Year + "</h2>";
             body += GenerateTable(date);
             body += "\n</div></div><body>";
             return body;
@@ -65,27 +65,27 @@ namespace UFO.Commander {
                 var beginHour = performances[0].Date.Hour;
                 var endHour = performances[performances.Count - 1].Date.Hour;
                 table += "<table class='table table-bordered'>";
-                table += GenerateTableHeader(date, performances,beginHour,endHour);
-                table += GenerateTableBody(performances,beginHour,endHour);
+                table += GenerateTableHeader(date, performances, beginHour, endHour);
+                table += GenerateTableBody(performances, beginHour, endHour);
                 table += "</table>";
             }
             return table;
         }
-        private String GenerateTableHeader(DateTime date,List<Performance>performances, int beginHour, int endHour) {
+        private String GenerateTableHeader(DateTime date, List<Performance> performances, int beginHour, int endHour) {
             String tableHeader = "<thead><tr class='info h4 tableCellCenter small'>";
-            
+
             if (performances.Count != 0) {
 
 
                 tableHeader += "<th class=''>Location</th>";
                 for (int i = beginHour; i <= endHour; i++) {
-                    tableHeader += "<th>"+i+"-"+(i+1)+" Uhr</th>";
-                }                
+                    tableHeader += "<th>" + i + "-" + (i + 1) + " Uhr</th>";
+                }
             }
             tableHeader += "</tr></thead>";
             return tableHeader;
         }
-        private String GenerateTableBody(List<Performance>performances,int beginHour,int endHour) {
+        private String GenerateTableBody(List<Performance> performances, int beginHour, int endHour) {
 
             String tableContent = "<tbody>";
             performances.Sort((perf1, perf2) => {
@@ -102,27 +102,28 @@ namespace UFO.Commander {
 
 
 
-            Performance[] curVenuePerf = new Performance[endHour - beginHour +1];
+            Performance[] curVenuePerf = new Performance[endHour - beginHour + 1];
             foreach (var p in performances) {
-               if(p.VenueId == curVId) {
+                if (p.VenueId == curVId) {
                     curVenuePerf[p.Date.Hour - beginHour] = p;
                 } else {
-                    tableContent += GenerateTableRow(vS.GetVenueById(curVId),curVenuePerf);
+                    tableContent += GenerateTableRow(vS.GetVenueById(curVId), curVenuePerf);
                     for (int i = 0; i < curVenuePerf.Length; i++) {
                         curVenuePerf[i] = null;
                     }
                     curVId = p.VenueId;
                     curVenuePerf[p.Date.Hour - beginHour] = p;
-                    
-                }               
+
+                }
             }
             return tableContent;
         }
-        public String GenerateTableRow(Venue venue,Performance[] performances) {
+
+        public String GenerateTableRow(Venue venue, Performance[] performances) {
             String tableRow = "<tr class='h4 tableCellCenter small'>";
-            tableRow += "<td class='warning '>"+venue.Shortcut+" " + HttpUtility.HtmlEncode(venue.Name) + "</td>";
-            
-            for(var i= 0; i < performances.Length; i++) {
+            tableRow += "<td class='warning '>" + venue.Shortcut + " " + HttpUtility.HtmlEncode(venue.Name) + "</td>";
+
+            for (var i = 0; i < performances.Length; i++) {
                 if (performances[i] == null) {
                     tableRow += "<td></td>";
                 } else {
@@ -135,5 +136,21 @@ namespace UFO.Commander {
 
         }
     }
+
+    public class DayProgramPdfExporter : IDayProgramExporter {
+        private DayProgramHtmlExporter htmlExporter = new DayProgramHtmlExporter();
+
+        public string exportDayProgram(DateTime date, string outFile) {
+            string htmlFilename = htmlExporter.exportDayProgram(date);
+            string htmlPath = MediaManager.Instance.GetFullPath(htmlFilename, MediaType.Html);
+
+            string pdfPath = "abc";
+            return MediaManager.Instance.RootPdf(pdfPath);
+        }
+
+        public string exportDayProgram(DateTime date) {
+            return exportDayProgram(date, String.Format("DayProgram_{0}_{1}_{2}.pdf", date.Year, date.Month, date.Day));
+        }
+    };
 
 }
