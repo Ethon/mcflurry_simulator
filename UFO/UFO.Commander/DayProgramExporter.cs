@@ -13,7 +13,7 @@ namespace UFO.Commander {
     
 
     public interface IDayProgramExporter {
-        void exportDayProgram(DateTime date, string outFile);
+        string exportDayProgram(DateTime date, string outFile);
     }
 
     public class DayProgramHtmlExporter : IDayProgramExporter {
@@ -25,20 +25,22 @@ namespace UFO.Commander {
         private ICountryService couS = SharedServices.Instance.CountryService;
         private DateTime date;
 
-        public void exportDayProgram(DateTime date, string outName) {
+        public string exportDayProgram(DateTime date, string outName) {
             this.date = date;
             string fileName = System.IO.Path.GetTempPath() + outName;
+            string rootedName = "";
             using (StreamWriter w = new StreamWriter(fileName)) {
                 w.Write(GenerateHeader());
                 w.Write(GenerateBody(date));
                 w.Flush();
-                MediaManager.Instance.RootHtml(fileName);
+                rootedName = MediaManager.Instance.RootHtml(fileName);
             }
-            File.Delete(fileName);  
+            File.Delete(fileName);
+            return rootedName;
         }
 
-        public void exportDayProgram(DateTime date) {
-            exportDayProgram(date, String.Format("DayProgram_{0}_{0}_{0}.html", date.Year, date.Month, date.Date));
+        public string exportDayProgram(DateTime date) {
+            return exportDayProgram(date, String.Format("DayProgram_{0}_{0}_{0}.html", date.Year, date.Month, date.Date));
         }
         private String GenerateHeader() {
             String header = "<!DOCTYPE html><html lang='en'>";
