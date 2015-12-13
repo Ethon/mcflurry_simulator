@@ -32,13 +32,13 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
-        public DisplayDateTime Date {
+        public DateTime Date {
             get {
-                return new DisplayDateTime(performance.Date);
+                return performance.Date;
             }
             set {
-                if(performance.Date != value.DateTime) {
-                    performance.Date = value.DateTime;
+                if(performance.Date != value) {
+                    performance.Date = value;
                     if(Update()) {
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Date)));
                     }

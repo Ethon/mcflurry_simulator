@@ -57,6 +57,7 @@
                 <Label Content="Day program for " />
                 <DatePicker SelectedDateFormat="Long" SelectedDate="{Binding PmVm.CurrentDay.DateTime}"
                             FirstDayOfWeek="Monday" />
+                <Button Content="Export as HTML" Command="{Binding PmVm.ExportHtmlCommand}" />
             </StackPanel>
         </Border>
 
@@ -71,7 +72,7 @@
                         <DataGridTemplateColumn Header="Date/Time">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <xctk:DateTimePicker Value="{Binding Date.DateTime, Mode=TwoWay}" AllowSpin="False" TimePickerAllowSpin="False"
+                                    <xctk:DateTimePicker Value="{Binding Date, Mode=TwoWay}" AllowSpin="False" TimePickerAllowSpin="False"
                                                          TimeFormat="Custom" TimeFormatString="HH"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

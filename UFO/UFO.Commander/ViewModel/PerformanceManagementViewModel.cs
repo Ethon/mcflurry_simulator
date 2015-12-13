@@ -70,6 +70,7 @@ namespace UFO.Commander.ViewModel {
         private Artist artistInput;
 
         private ICommand createCommand;
+        private ICommand exportHtmlCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -178,6 +179,22 @@ namespace UFO.Commander.ViewModel {
                     });
                 }
                 return createCommand;
+            }
+        }
+
+        public ICommand ExportHtmlCommand
+        {
+            get
+            {
+                if(exportHtmlCommand == null) {
+                    exportHtmlCommand = new RelayCommand((param) => {
+                        DayProgramHtmlExporter exporter = new DayProgramHtmlExporter();
+                        string path = MediaManager.Instance.GetFullPath(exporter.exportDayProgram(CurrentDay.DateTime), MediaType.Html);
+                        string url = "file:///" + path.Replace('\\', '/');
+                        System.Diagnostics.Process.Start(url);
+                    });
+                }
+                return exportHtmlCommand;
             }
         }
 

@@ -33,9 +33,12 @@ namespace UFO.Server {
             return perf != null && perf.Id != exclude;
         }
 
-        private bool IsArtistAllowedToPlay(DateTime date, uint artistId) {
+        private bool IsArtistAllowedToPlay(DateTime date, uint artistId, uint excludePerformance = 0) {
             var performancesBefore = pdao.GetPerformancesByArtistBeforeDate(artistId, date);
             foreach (var per in performancesBefore) {
+                if(excludePerformance == per.Id) {
+                    continue;
+                }
                 TimeSpan curDelta = date.Subtract(per.Date);
                 if(curDelta.TotalHours < LEGAL_HOUR_DELTA) {
                     return false;
@@ -87,7 +90,7 @@ namespace UFO.Server {
                 throw new DataValidationException("Can't update performance to venue with another performance at the same time");
             }
             if (!IsArtistAllowedToPlay(performance.Date, performance.ArtistId)) {
-                throw new DataValidationException("Can't create performance at time artist is not allowed to play again");
+                throw new DataValidationException("Can't update performance to time artist is not allowed to play again");
             }
             if (!pdao.UpdatePerformance(performance)) {
                 throw new DatabaseException("Can`t update performance with invalid ID: '" + performance + "'");
