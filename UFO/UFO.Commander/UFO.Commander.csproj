@@ -68,6 +68,7 @@
       <DependentUpon>ArtistManagementControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Config.cs" />
+    <Compile Include="DayProgramExporter.cs" />
     <Compile Include="LoginControl.xaml.cs">
       <DependentUpon>LoginControl.xaml</DependentUpon>
     </Compile>
@@ -152,10 +153,6 @@
   <ItemGroup>
     <Resource Include="images\add.png" />
     <Resource Include="images\delete.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\arrow-left.png" />
-    <Resource Include="images\arrow-right.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
