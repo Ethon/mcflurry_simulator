@@ -32,15 +32,16 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
-        public DateTime Date {
+        public DisplayDateTime Date {
             get {
-                return performance.Date;
+                return new DisplayDateTime(performance.Date);
             }
             set {
-                if(performance.Date != value) {
-                    performance.Date = value;
-                    Update();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Date)));
+                if(performance.Date != value.DateTime) {
+                    performance.Date = value.DateTime;
+                    if(Update()) {
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Date)));
+                    }
                 }
             }
         }
@@ -53,28 +54,36 @@ namespace UFO.Commander.ViewModel {
                 if(venue != value) {
                     venue = value;
                     performance.VenueId = venue.Id;
-                    Update();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Venue)));
+                    if (Update()) {
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Venue)));
+                    }
                 }
             }
         }
 
         public Artist Artist {
             get {
-                return Artist;
+                return artist;
             }
             set {
                 if(artist != value) {
                     artist = value;
                     performance.ArtistId = artist.Id;
-                    Update();
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Artist)));
+                    if (Update()) {
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Artist)));
+                    }
                 }
             }
         }
 
-        public void Update() {
-            performanceService.UpdatePerformance(performance);
+        public bool Update() {
+            try {
+                performanceService.UpdatePerformance(performance);
+                return true;
+            } catch(DataValidationException ex) {
+                PlatformService.Instance.ShowErrorMessage(ex.Message, "Error updating performance");
+            }
+            return false;
         }
     }
 }

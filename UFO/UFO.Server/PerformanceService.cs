@@ -28,8 +28,9 @@ namespace UFO.Server {
             return date.Year >= DateTime.Now.Year && date.Year < DateTime.Now.Year + 10;
         }
 
-        private bool IsVenueTakenAtTime(DateTime date, uint venueId) {
-            return pdao.GetPerformanceByVenueAndDate(venueId, date) != null;
+        private bool IsVenueTakenAtTime(DateTime date, uint venueId, uint exclude = 0) {
+            Performance perf = pdao.GetPerformanceByVenueAndDate(venueId, date);
+            return perf != null && perf.Id != exclude;
         }
 
         private bool IsArtistAllowedToPlay(DateTime date, uint artistId) {
@@ -82,7 +83,7 @@ namespace UFO.Server {
             if (!IsValidDate(performance.Date)) {
                 throw new DataValidationException("Can't update performance to invalid date '" + performance.Date.ToLongDateString() + "'");
             }
-            if (IsVenueTakenAtTime(performance.Date, performance.VenueId)) {
+            if (IsVenueTakenAtTime(performance.Date, performance.VenueId, performance.Id)) {
                 throw new DataValidationException("Can't update performance to venue with another performance at the same time");
             }
             if (!IsArtistAllowedToPlay(performance.Date, performance.ArtistId)) {
@@ -92,8 +93,6 @@ namespace UFO.Server {
                 throw new DatabaseException("Can`t update performance with invalid ID: '" + performance + "'");
             }
         }
-
-        
 
         public void DeletePerformance(Performance performance) {
             if (!pdao.DeletePerformance(performance)) {
