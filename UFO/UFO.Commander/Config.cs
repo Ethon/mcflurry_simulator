@@ -44,6 +44,7 @@ namespace UFO.Commander {
             DatabaseServer = "localhost";
             DatabaseName = "ufo";
             DatabaseUser = "root";
+            RequireCredentials = true;
         }
 
         public string MediaRootPath { get; set; }
@@ -53,5 +54,7 @@ namespace UFO.Commander {
         public string DatabaseName { get; set; }
 
         public string DatabaseUser { get; set; }
+
+        public bool RequireCredentials { get; set; }
     }
 }

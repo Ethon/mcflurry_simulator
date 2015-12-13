@@ -28,7 +28,6 @@ namespace UFO.Server.Data {
             get; set;
         }
 
-
         public double Latitude {
             get; set;
         }
