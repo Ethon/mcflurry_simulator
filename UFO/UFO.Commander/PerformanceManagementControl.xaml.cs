@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using UFO.Commander.ViewModel;
 using UFO.Server;
 using UFO.Server.Data;
 
@@ -22,10 +24,16 @@ namespace UFO.Commander {
     public partial class PerformanceManagementControl : UserControl, IVenueListener, IArtistListener {
         public PerformanceManagementControl() {
             InitializeComponent();
-
             SharedServices.Instance.ArtistService.AddListener(this);
             SharedServices.Instance.VenueService.AddListener(this);
+
+            SharedServices services = SharedServices.Instance;
+            PmVm = new PerformanceManagementViewModel(services.PerformanceService,
+                services.ArtistService, services.VenueService);
+            DataContext = this;
         }
+
+        public PerformanceManagementViewModel PmVm { get; private set; }
 
         public void OnArtistCreation(Artist artist) {
         }

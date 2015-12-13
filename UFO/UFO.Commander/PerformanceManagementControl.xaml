@@ -4,18 +4,85 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UFO.Commander"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="500" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid.Resources>
+            <FrameworkElement x:Key="ProxyElement" DataContext="{Binding}"/>
+        </Grid.Resources>
+        <ContentControl Visibility="Collapsed" Content="{StaticResource ProxyElement}" />
+
         <Border Margin="10" Grid.Row="0" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Date/Time:"  Margin="0,0,0,4" />
+                <xctk:DateTimePicker Grid.Row="0" Grid.Column="1"
+                                     Value="{Binding PmVm.DateTimeInput}" AllowSpin="False" TimePickerAllowSpin="False"
+                                     TimeFormat="Custom" TimeFormatString="HH"  Margin="0,0,0,4"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Venue:"  Margin="0,0,0,4" />
+                <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding PmVm.VenueInput}" DisplayMemberPath="Name" ItemsSource="{Binding PmVm.Venues}"  Margin="0,0,0,4" />
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Artist:"  Margin="0,0,0,4" />
+                <ComboBox Grid.Row="2" Grid.Column="1" SelectedItem="{Binding PmVm.ArtistInput}" DisplayMemberPath="Name" ItemsSource="{Binding PmVm.Artists}"  Margin="0,0,0,4" />
+
+                <Button Grid.Row="3" Grid.Column="0" Command="{Binding PmVm.CreateCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="images/add.png" Stretch="Uniform"/>
+                        <Label Padding="0">Add artist</Label>
+                    </StackPanel>
+                </Button>
+            </Grid>
         </Border>
 
         <Border Margin="10" Grid.Row="1" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <Label Content="Day program for " />
+                <DatePicker SelectedDateFormat="Long" SelectedDate="{Binding PmVm.CurrentDay.DateTime}"
+                            FirstDayOfWeek="Monday" />
+            </StackPanel>
+        </Border>
+
+        <Border Margin="10" Grid.Row="2" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
+            <ScrollViewer Margin="10">
+                <DataGrid Height="Auto" Name="dgDayProgram" AutoGenerateColumns="False" ItemsSource="{Binding PmVm.PerformancesForDay}"
+                            ScrollViewer.CanContentScroll="True" 
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                        <DataGridTemplateColumn Header="Date/Time">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <xctk:DateTimePicker Value="{Binding Date.DateTime, Mode=TwoWay}" AllowSpin="False" TimePickerAllowSpin="False"
+                                                         TimeFormat="Custom" TimeFormatString="HH"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridComboBoxColumn Header="Venue" SelectedItemBinding="{Binding Venue}" DisplayMemberPath="Name"
+                                            ItemsSource="{Binding DataContext.PmVm.Venues, Source={StaticResource ProxyElement}}" />
+                        <DataGridComboBoxColumn Header="Artist" SelectedItemBinding="{Binding Artist}" DisplayMemberPath="Name"
+                                            ItemsSource="{Binding DataContext.PmVm.Artists, Source={StaticResource ProxyElement}}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
         </Border>
     </Grid>
 </UserControl>
