@@ -53,7 +53,7 @@ namespace UFO.Commander {
         private String GenerateBody(DateTime date) {
             String body = "\n<body><div class='container'><div class='table-responsive'>";
             
-            body += "\n<h2>Program for "+date.Day+"."+date.Month+"."+date.Year+"</h2>";
+            body += "\n<h3>Program for "+date.Day+"."+date.Month+"."+date.Year+"</h3>";
             body += GenerateTable(date);
             body += "\n</div></div><body>";
             return body;
