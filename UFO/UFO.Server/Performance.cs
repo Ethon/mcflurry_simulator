@@ -60,6 +60,7 @@ namespace UFO.Server.Data {
         Performance GetPerformanceByVenueAndDate(uint venueId, DateTime date);
         List<Performance> GetPerformancesByArtistBeforeDate(uint artistId, DateTime date);
         List<Performance> GetPerformancesByArtistAfterDate(uint artistId, DateTime date);
+        List<Performance> GetPerformancesForDay(DateTime day);
     }
 
     public class PerformanceDao : IPerformanceDao {
@@ -68,6 +69,7 @@ namespace UFO.Server.Data {
         private const string GETALL_CMD = "SELECT * FROM Performance";
         private const string GETALLBYARTISTAFTERDATE = "SELECT * FROM Performance WHERE artistId=@artistId AND  date > @date";
         private const string GETALLBYARTISTBEFOREDATE = "SELECT * FROM Performance WHERE artistId=@artistId AND  date < @date";
+        private const string GETALLPERFORMANCESFORDAY = "SELECT * FROM Performance WHERE date  >= @beginDay AND date < @endDay ORDER BY date" ;
         private const string GETBYID_CMD = "SELECT * FROM Performance WHERE performanceId = @id";
         private const string UPDATE_CMD = "UPDATE Performance SET date=@date, artistId=@artistId, venueId=@venueId WHERE performanceId=@id";
         private const string COUNTVENUES_CMD = "SELECT COUNT(*) AS count FROM Performance WHERE venueId=@venueId";
@@ -188,6 +190,22 @@ namespace UFO.Server.Data {
             DbCommand cmd = db.CreateCommand(GETALLBYARTISTAFTERDATE);
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artistId);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
+            using (DbDataReader reader = cmd.ExecuteReader()) {
+                while (reader.Read()) {
+                    performances.Add(readOne(reader));
+                }
+            }
+            return performances;
+        }
+
+        public List<Performance> GetPerformancesForDay(DateTime day) {
+            List<Performance> performances = new List<Performance>();
+            DbCommand cmd = db.CreateCommand(GETALLPERFORMANCESFORDAY);
+            var beginDay = new DateTime(day.Year, day.Month, day.Day);
+            var endDay = beginDay.AddDays(1);
+
+            db.DefineParameter(cmd, "@beginDay", System.Data.DbType.DateTime, beginDay);
+            db.DefineParameter(cmd, "@endDay", System.Data.DbType.DateTime, endDay);
             using (DbDataReader reader = cmd.ExecuteReader()) {
                 while (reader.Read()) {
                     performances.Add(readOne(reader));
