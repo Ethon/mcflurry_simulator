@@ -84,6 +84,7 @@
     <Compile Include="ViewModel\ArtistViewModel.cs" />
     <Compile Include="ViewModel\CommanderViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\PerformanceManagementViewModel.cs" />
     <Compile Include="ViewModel\PerformanceViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\VenueViewModel.cs" />
@@ -150,6 +151,10 @@
   <ItemGroup>
     <Resource Include="images\add.png" />
     <Resource Include="images\delete.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\arrow-left.png" />
+    <Resource Include="images\arrow-right.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
