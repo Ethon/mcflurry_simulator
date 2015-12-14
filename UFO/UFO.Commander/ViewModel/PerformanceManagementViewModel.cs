@@ -71,6 +71,7 @@ namespace UFO.Commander.ViewModel {
 
         private ICommand createCommand;
         private ICommand exportHtmlCommand;
+        private ICommand exportPdfCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -182,10 +183,8 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
-        public ICommand ExportHtmlCommand
-        {
-            get
-            {
+        public ICommand ExportHtmlCommand {
+            get {
                 if(exportHtmlCommand == null) {
                     exportHtmlCommand = new RelayCommand((param) => {
                         DayProgramHtmlExporter exporter = new DayProgramHtmlExporter();
@@ -195,6 +194,22 @@ namespace UFO.Commander.ViewModel {
                     });
                 }
                 return exportHtmlCommand;
+            }
+        }
+
+        public ICommand ExportPdfCommand
+        {
+            get
+            {
+                if (exportPdfCommand == null) {
+                    exportPdfCommand = new RelayCommand((param) => {
+                        DayProgramPdfExporter exporter = new DayProgramPdfExporter();
+                        string path = MediaManager.Instance.GetFullPath(exporter.exportDayProgram(CurrentDay.DateTime), MediaType.Pdf);
+                        string url = "file:///" + path.Replace('\\', '/');
+                        System.Diagnostics.Process.Start(url);
+                    });
+                }
+                return exportPdfCommand;
             }
         }
 
