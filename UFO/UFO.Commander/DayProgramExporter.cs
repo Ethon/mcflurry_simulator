@@ -155,16 +155,16 @@ namespace UFO.Commander {
     public class DayProgramPdfExporter : IDayProgramExporter {
         private DayProgramHtmlExporter htmlExporter = new DayProgramHtmlExporter();
 
-        public string exportDayProgram(DateTime date, string outFile) {
+        public string exportDayProgram(DateTime date, string outName) {
             string htmlFilename = htmlExporter.exportDayProgram(date);
             string htmlPath = MediaManager.Instance.GetFullPath(htmlFilename, MediaType.Html);
 
+            string fileName = System.IO.Path.GetTempPath() + outName;
             HtmlToPdf HtmlToPdf = new IronPdf.HtmlToPdf();
             PdfResource pdf = HtmlToPdf.RenderUrlAsPdf(htmlPath);
-   
-            string pdfPath = MediaManager.Instance.GetFullPath(outFile, MediaType.Pdf);
-            pdf.SaveAs(pdfPath);
-            return MediaManager.Instance.RootPdf(pdfPath);
+            pdf.SaveAs(fileName);
+            
+            return MediaManager.Instance.RootPdf(fileName);
         }
 
         public string exportDayProgram(DateTime date) {

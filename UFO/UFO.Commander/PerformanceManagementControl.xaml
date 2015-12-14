@@ -58,6 +58,7 @@
                 <DatePicker SelectedDateFormat="Long" SelectedDate="{Binding PmVm.CurrentDay.DateTime}"
                             FirstDayOfWeek="Monday" />
                 <Button Content="Export as HTML" Command="{Binding PmVm.ExportHtmlCommand}" />
+                <Button Content="Export as PDF" Command="{Binding PmVm.ExportPdfCommand}" />
             </StackPanel>
         </Border>
 
