@@ -72,6 +72,7 @@ namespace UFO.Commander.ViewModel {
         private ICommand createCommand;
         private ICommand exportHtmlCommand;
         private ICommand exportPdfCommand;
+        private ICommand informArtistsCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -197,10 +198,8 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
-        public ICommand ExportPdfCommand
-        {
-            get
-            {
+        public ICommand ExportPdfCommand {
+            get {
                 if (exportPdfCommand == null) {
                     exportPdfCommand = new RelayCommand((param) => {
                         DayProgramPdfExporter exporter = new DayProgramPdfExporter();
@@ -210,6 +209,21 @@ namespace UFO.Commander.ViewModel {
                     });
                 }
                 return exportPdfCommand;
+            }
+        }
+
+        public ICommand InformArtistsCommand {
+            get {
+                if (informArtistsCommand == null) {
+                    informArtistsCommand = new RelayCommand((param) => {
+                        Task.Run(() => {
+                            Config conf = Config.Get();
+                            IMailer mailer = new SmtpMailer(conf.EmailSenderAddress, conf.SmtpServer, conf.SmtpPort, conf.SmtpUser, conf.SmtpPassword);
+                            mailer.OnDayProgramChanged(CurrentDay.DateTime);
+                        });
+                    });
+                }
+                return informArtistsCommand;
             }
         }
 

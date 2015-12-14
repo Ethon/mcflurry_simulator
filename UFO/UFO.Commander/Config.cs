@@ -49,8 +49,9 @@ namespace UFO.Commander {
             SmtpUser = "";
             SmtpPassword = "";
             EmailSenderAddress = "";
-            MailBodyTemplatePath = "";
-            MailBodyItemTemplatePath = "";
+            MailBodyTemplatePath = "Templates\\OnProgramChangedMail_en.txt";
+            MailBodyItemTemplatePath = "Templates\\OnProgramChangedMailItem_en.txt";
+            MailSubjectTemplatePath = "Templates\\OnProgramChangedMailSubject_en.txt";
         }
 
         public string MediaRootPath { get; set; }

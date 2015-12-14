@@ -105,6 +105,7 @@
     <Compile Include="LoginControl.xaml.cs">
       <DependentUpon>LoginControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Mailer.cs" />
     <Compile Include="MediaManager.cs" />
     <Compile Include="PlatformService.cs" />
     <Compile Include="Util\PasswordHelper.cs" />
@@ -186,6 +187,15 @@
   <ItemGroup>
     <Resource Include="images\add.png" />
     <Resource Include="images\delete.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Templates\OnProgramChangedMail_en.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Templates\OnProgramChangedMailItem_en.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Templates\OnProgramChangedMailSubject_en.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

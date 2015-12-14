@@ -90,7 +90,7 @@ namespace UFO.Commander {
         private SmtpClient client;
 
         public SmtpMailer(string sender, string server, int port, string user, string password) {
-            new SmtpClient(server, port) {
+           this.client = new SmtpClient(server, port) {
                 Credentials = new NetworkCredential(user, password),
                 EnableSsl = true
             };
@@ -100,8 +100,16 @@ namespace UFO.Commander {
         protected override void DoSendMail(string recipient, string subject, string body, string attachment) {
             MailMessage message = new MailMessage(sender, recipient, subject, body);
             message.IsBodyHtml = body.Contains("<html>");
-            message.Attachments.Add(new Attachment(attachment, "application/pdf"));
-            client.SendAsync(message, null);
+            if(attachment != null) { 
+                message.Attachments.Add(new Attachment(attachment, "application/pdf"));
+            }
+            try { 
+                client.Send(message);
+                PlatformService.Instance.ShowInformationMessage("Sent update to " + message.To, "Mail was sent");
+            } catch(Exception e) {
+                PlatformService.Instance.ShowErrorMessage("Failed to send mail to " + message.To + " failed: " + e.Message,
+                    "Sending email failed");
+            }
         }
     }
 }

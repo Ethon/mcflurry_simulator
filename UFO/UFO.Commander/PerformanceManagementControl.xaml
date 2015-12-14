@@ -59,6 +59,7 @@
                             FirstDayOfWeek="Monday" />
                 <Button Content="Export as HTML" Command="{Binding PmVm.ExportHtmlCommand}" />
                 <Button Content="Export as PDF" Command="{Binding PmVm.ExportPdfCommand}" />
+                <Button Content="Inform artists about updates" Command="{Binding PmVm.InformArtistsCommand}" />
             </StackPanel>
         </Border>
 

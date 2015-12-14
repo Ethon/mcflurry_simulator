@@ -36,21 +36,27 @@ namespace UFO.Commander {
         public PerformanceManagementViewModel PmVm { get; private set; }
 
         public void OnArtistCreation(Artist artist) {
+            PmVm.UpdateArtists();
         }
 
         public void OnArtistDeletion(Artist artist) {
+            PmVm.UpdateArtists();
         }
 
         public void OnArtistUpdate(Artist artist) {
+            PmVm.UpdateArtists();
         }
 
         public void OnVenueCreation(Venue venue) {
+            PmVm.UpdateVenues();
         }
 
         public void OnVenueDeletion(Venue venue) {
+            PmVm.UpdateVenues();
         }
 
         public void OnVenueUpdate(Venue venue) {
+            PmVm.UpdateVenues();
         }
     }
 }
