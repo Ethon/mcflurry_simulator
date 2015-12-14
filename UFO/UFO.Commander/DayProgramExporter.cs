@@ -128,7 +128,7 @@ namespace UFO.Commander {
 
         private String GenerateTableRow(Venue venue, Performance[] performances) {
             String tableRow = "<tr class='h4 tableCellCenter small'>";
-            tableRow += "<td class='warning '><strong>" + HttpUtility.HtmlEncode(venue.Shortcut) + "</br>" + HttpUtility.HtmlEncode(venue.Name) + "</strong></td>";
+            tableRow += "<td class='warning '><strong>" + HttpUtility.HtmlEncode(venue.Shortcut) + " <br>" + HttpUtility.HtmlEncode(venue.Name) + "</strong></td>";
             for (var i = 0; i < performances.Length; i++) {
                 if (performances[i] == null) {
                     tableRow += "<td></td>";
