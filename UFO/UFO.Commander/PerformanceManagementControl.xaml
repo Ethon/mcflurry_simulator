@@ -70,6 +70,19 @@
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Delete">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding DataContext.PmVm, Source={StaticResource ProxyElement}}">
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Source="images/delete.gif"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
                         <DataGridTemplateColumn Header="Date/Time">
                             <DataGridTemplateColumn.CellTemplate>

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using UFO.Server;
 using UFO.Server.Data;
 
@@ -14,6 +15,8 @@ namespace UFO.Commander.ViewModel {
         private Performance performance;
         private Artist artist;
         private Venue venue;
+
+        private ICommand deleteCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -76,6 +79,29 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
+        public ICommand DeleteCommand
+        {
+            get
+            {
+                if (deleteCommand == null) {
+                    deleteCommand = new RelayCommand((param) => {
+                        if (PlatformService.Instance.WarnAndAskForConfirmation(
+                                "Do you really want to delete the performance?", "Confirm deletion")) {
+                            try {
+                                Delete();
+                            } catch (DataValidationException ex) {
+                                PlatformService.Instance.ShowErrorMessage(ex.Message, "Error deleting performance");
+                                return;
+                            }
+                            PerformanceManagementViewModel pmvm = param as PerformanceManagementViewModel;
+                            pmvm.UpdatePerformancesForDay();
+                        }
+                    });
+                }
+                return deleteCommand;
+            }
+        }
+
         public bool Update() {
             try {
                 performanceService.UpdatePerformance(performance);
@@ -84,6 +110,10 @@ namespace UFO.Commander.ViewModel {
                 PlatformService.Instance.ShowErrorMessage(ex.Message, "Error updating performance");
             }
             return false;
+        }
+
+        public void Delete() {
+            performanceService.DeletePerformance(performance);
         }
     }
 }
