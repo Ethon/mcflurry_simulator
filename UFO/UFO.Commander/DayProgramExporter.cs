@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+
+using IronPdf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,7 +69,7 @@ namespace UFO.Commander {
             if (performances.Count != 0) {
                 var beginHour = performances[0].Date.Hour;
                 var endHour = performances[performances.Count - 1].Date.Hour;
-                table += "<table class='table table-bordered'>";
+                table += "<table class='table table-bordered '>";
                 table += GenerateTableHeader(date, performances, beginHour, endHour);
                 table += GenerateTableBody(performances, beginHour, endHour);
                 table += "</table>";
@@ -100,9 +103,6 @@ namespace UFO.Commander {
                 return perf1.Date.CompareTo(perf2.Date);
             });
             uint curVId = performances[0].VenueId;
-
-
-
 
             Performance[] curVenuePerf = new Performance[endHour - beginHour + 1];
             var last = performances[performances.Count - 1];
@@ -159,7 +159,11 @@ namespace UFO.Commander {
             string htmlFilename = htmlExporter.exportDayProgram(date);
             string htmlPath = MediaManager.Instance.GetFullPath(htmlFilename, MediaType.Html);
 
-            string pdfPath = "abc";
+            HtmlToPdf HtmlToPdf = new IronPdf.HtmlToPdf();
+            PdfResource pdf = HtmlToPdf.RenderUrlAsPdf(htmlPath);
+   
+            string pdfPath = MediaManager.Instance.GetFullPath(outFile, MediaType.Pdf);
+            pdf.SaveAs(pdfPath);
             return MediaManager.Instance.RootPdf(pdfPath);
         }
 
