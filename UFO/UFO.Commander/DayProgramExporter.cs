@@ -14,8 +14,6 @@ using UFO.Server.Data;
 
 namespace UFO.Commander {
 
-
-
     public interface IDayProgramExporter {
         string exportDayProgram(DateTime date, string outFile);
     }
@@ -46,6 +44,7 @@ namespace UFO.Commander {
         public string exportDayProgram(DateTime date) {
             return exportDayProgram(date, String.Format("DayProgram_{0}_{1}_{2}.html", date.Year, date.Month, date.Day));
         }
+
         private String GenerateHeader() {
             String header = "<!DOCTYPE html><html lang='en'>";
             header += "\n<head><meta charset = 'UTF - 8' >\n<link rel = 'stylesheet' type = 'text/css' href = 'css/bootstrap.min.css'>";
@@ -54,6 +53,7 @@ namespace UFO.Commander {
             header += "\n</head>";
             return header;
         }
+
         private String GenerateBody(DateTime date) {
             String body = "\n<body><div class='container'>";
 
@@ -63,6 +63,7 @@ namespace UFO.Commander {
             body += "\n</div><body>";
             return body;
         }
+
         private String GenerateTable(DateTime date) {
             String table = "";
             var performances = pS.GetPerformancesForDay(date);
@@ -76,12 +77,11 @@ namespace UFO.Commander {
             }
             return table;
         }
+
         private String GenerateTableHeader(DateTime date, List<Performance> performances, int beginHour, int endHour) {
             String tableHeader = "<thead><tr class='info h4 tableCellCenter small'>";
 
             if (performances.Count != 0) {
-
-
                 tableHeader += "<th class=''>Location | Time</th>";
                 for (int i = beginHour; i <= endHour; i++) {
                     tableHeader += "<th>" + i + "-" + (i + 1) + " Uhr</th>";
@@ -90,6 +90,7 @@ namespace UFO.Commander {
             tableHeader += "</tr></thead>";
             return tableHeader;
         }
+
         private String GenerateTableBody(List<Performance> performances, int beginHour, int endHour) {
 
             String tableContent = "<tbody>";
@@ -141,6 +142,7 @@ namespace UFO.Commander {
             tableRow += "</tr>";
             return tableRow;
         }
+
         private String GenerateLegend() {
             String legend = "<h4>Category-Legend:</h4>";
             legend += "<ul class='list-group '>";

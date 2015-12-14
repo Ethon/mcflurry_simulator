@@ -45,6 +45,12 @@ namespace UFO.Commander {
             DatabaseName = "ufo";
             DatabaseUser = "root";
             RequireCredentials = true;
+            SmtpServer = "";
+            SmtpUser = "";
+            SmtpPassword = "";
+            EmailSenderAddress = "";
+            MailBodyTemplatePath = "";
+            MailBodyItemTemplatePath = "";
         }
 
         public string MediaRootPath { get; set; }
@@ -56,5 +62,21 @@ namespace UFO.Commander {
         public string DatabaseUser { get; set; }
 
         public bool RequireCredentials { get; set; }
+
+        public string SmtpServer { get; set; }
+
+        public int SmtpPort { get; set; }
+
+        public string SmtpUser { get; set; }
+
+        public string SmtpPassword { get; set; }
+
+        public string EmailSenderAddress { get; set; }
+
+        public string MailBodyTemplatePath { get; set; }
+
+        public string MailBodyItemTemplatePath { get; set; }
+
+        public string MailSubjectTemplatePath { get; set; }
     }
 }

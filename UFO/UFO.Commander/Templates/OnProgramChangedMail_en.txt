@@ -1,0 +1,8 @@
+﻿Dear %ARTIST%!
+
+Due to recent changes to the day program at %DATE% we inform you about all your performances on that day:
+%PERFORMANCELIST%
+
+The updated day program is attached to this email.
+Regards,
+the UFO team
