@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Data.Common;
+using System.Data;
 
 namespace UFO.Server.Data {
     [Serializable]
@@ -74,7 +75,7 @@ namespace UFO.Server.Data {
 
         private IDatabase db;
 
-        private User readOne(DbDataReader reader) {
+        private User readOne(IDataReader reader) {
             uint id = (uint)reader["userID"];
             string firstName = (string)reader["firstname"];
             string lastName = (string)reader["lastname"];
@@ -106,36 +107,42 @@ namespace UFO.Server.Data {
         public List<User> GetAllUsers() {
             List<User> users = new List<User>();
             DbCommand cmd = db.CreateCommand(GETALL_CMD);
-            using(DbDataReader reader = cmd.ExecuteReader()) {
-                while(reader.Read()) {
-                    users.Add(readOne(reader));
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        users.Add(readOne(reader));
+                    }
                 }
-            }
+            });
             return users;
         }
 
         public User GetUserByEmailAddress(string email) {
             DbCommand cmd = db.CreateCommand(GETBYEMAIL_CMD);
             db.DefineParameter(cmd, "@email", System.Data.DbType.String, email);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                if (reader.Read()) {
-                    return readOne(reader);
-                } else {
-                    return null;
+            User user = null;
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        user = readOne(reader);
+                    }
                 }
-            }
+            });
+            return user;
         }
 
         public User GetUserById(uint id) {
             DbCommand cmd = db.CreateCommand(GETBYID_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, id);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                if (reader.Read()) {
-                    return readOne(reader);
-                } else {
-                    return null;
+            User user = null;
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        user = readOne(reader);
+                    }
                 }
-            }
+            });
+            return user;
         }
 
         public bool UpdateUser(User user) {

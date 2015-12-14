@@ -87,26 +87,30 @@ namespace UFO.Server.Data {
         public List<Category> GetAllCategories() {
             DbCommand cmd = database.CreateCommand(SQL_FIND_ALL);
             List <Category> categories = new List<Category>();
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                while (reader.Read()) {
-                    Category newCat = new Category((uint)reader["categoryId"], (string)reader["shortcut"], (string)reader["name"]);
-                    categories.Add(newCat);
+            database.doSynchronized(() => {
+                using (IDataReader reader = database.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        Category newCat = new Category((uint)reader["categoryId"], (string)reader["shortcut"], (string)reader["name"]);
+                        categories.Add(newCat);
+                    }
                 }
-            }
+            });
             return categories;
         }
 
         public Category GetCategoryById(uint categoryId) {
             DbCommand cmd = database.CreateCommand(SQL_FIND_BY_ID);
             database.DefineParameter(cmd, "@categoryId", DbType.UInt32 , categoryId);
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                if (reader.Read()) {
-                    return new Category((uint)reader["categoryId"], (string)reader["shortcut"],
-                        (string)reader["name"]);
-                } else {
-                    return null;
+            Category cat = null;
+            database.doSynchronized(() => {
+                using (IDataReader reader = database.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        cat = new Category((uint)reader["categoryId"], (string)reader["shortcut"],
+                                (string)reader["name"]);
+                    }
                 }
-            }
+            });
+            return cat;
         }
 
         public bool UpdateCategory(Category category) {

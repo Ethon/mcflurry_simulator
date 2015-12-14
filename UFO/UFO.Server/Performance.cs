@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
@@ -78,7 +79,7 @@ namespace UFO.Server.Data {
 
         private IDatabase db;
 
-        private Performance readOne(DbDataReader reader) {
+        private Performance readOne(IDataReader reader) {
             uint id = (uint)reader["performanceId"];
             DateTime date = db.ConvertDateTimeFromDbFormat(reader["date"]);
             uint artistId = (uint)reader["artistId"];
@@ -112,24 +113,28 @@ namespace UFO.Server.Data {
         public List<Performance> GetAllPerformances() {
             List<Performance> performances = new List<Performance>();
             DbCommand cmd = db.CreateCommand(GETALL_CMD);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                while (reader.Read()) {
-                    performances.Add(readOne(reader));
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        performances.Add(readOne(reader));
+                    }
                 }
-            }
+            });
             return performances;
         }
 
         public Performance GetPerformanceById(uint id) {
             DbCommand cmd = db.CreateCommand(GETBYID_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, id);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                if (reader.Read()) {
-                    return readOne(reader);
-                } else {
-                    return null;
+            Performance perf = null;
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        perf = readOne(reader);
+                    }
                 }
-            }
+            });
+            return perf;
         }
 
         public bool UpdatePerformance(Performance performance) {
@@ -144,32 +149,42 @@ namespace UFO.Server.Data {
         public uint CountOfPerformancesAtVenue(Venue venue) {
             DbCommand cmd = db.CreateCommand(COUNTVENUES_CMD);
             db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, venue.Id);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                reader.Read();
-                return (uint)((long)reader["count"]);
-            }
+            uint count = 0;
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    reader.Read();
+                    count = (uint)((long)reader["count"]);
+                }
+            });
+            return count;
         }
 
         public uint CountOfPerformancesOfArtist(Artist artist) {
             DbCommand cmd = db.CreateCommand(COUNTARTISTS_CMD);
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artist.Id);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                reader.Read();
-                return (uint)((long)reader["count"]);
-            }
+            uint count = 0;
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    reader.Read();
+                    count = (uint)((long)reader["count"]);
+                }
+            });
+            return count;
         }
 
         public Performance GetPerformanceByVenueAndDate(uint venueId, DateTime date) {
             DbCommand cmd = db.CreateCommand(GETBYVENUEDATE_CMD);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
             db.DefineParameter(cmd, "@venueId", System.Data.DbType.UInt32, venueId);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                if (reader.Read()) {
-                    return readOne(reader);
-                } else {
-                    return null;
+            Performance perf = null;
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        perf = readOne(reader);
+                    }
                 }
-            }
+            });
+            return perf;
         }
 
         public List<Performance> GetPerformancesByArtistBeforeDate(uint artistId, DateTime date) {
@@ -177,11 +192,13 @@ namespace UFO.Server.Data {
             DbCommand cmd = db.CreateCommand(GETALLBYARTISTBEFOREDATE);
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artistId);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                while (reader.Read()) {
-                    performances.Add(readOne(reader));
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        performances.Add(readOne(reader));
+                    }
                 }
-            }
+            });
             return performances;
         }
 
@@ -190,11 +207,13 @@ namespace UFO.Server.Data {
             DbCommand cmd = db.CreateCommand(GETALLBYARTISTAFTERDATE);
             db.DefineParameter(cmd, "@artistId", System.Data.DbType.UInt32, artistId);
             db.DefineParameter(cmd, "@date", System.Data.DbType.DateTime, date);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                while (reader.Read()) {
-                    performances.Add(readOne(reader));
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        performances.Add(readOne(reader));
+                    }
                 }
-            }
+            });
             return performances;
         }
 
@@ -206,11 +225,13 @@ namespace UFO.Server.Data {
 
             db.DefineParameter(cmd, "@beginDay", System.Data.DbType.DateTime, beginDay);
             db.DefineParameter(cmd, "@endDay", System.Data.DbType.DateTime, endDay);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                while (reader.Read()) {
-                    performances.Add(readOne(reader));
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        performances.Add(readOne(reader));
+                    }
                 }
-            }
+            });
             return performances;
         }
     }

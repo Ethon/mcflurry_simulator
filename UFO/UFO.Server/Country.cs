@@ -77,26 +77,29 @@ namespace UFO.Server.Data {
         public List<Country> GetAllCountries() {
             List<Country> countries = new List<Country>();
             DbCommand cmd = database.CreateCommand(SQL_FIND_ALL);
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                while (reader.Read()) {
-                    Country newCountry = new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
-                    countries.Add(newCountry);
+            database.doSynchronized(() => {
+                using (IDataReader reader = database.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        Country newCountry = new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
+                        countries.Add(newCountry);
+                    }
                 }
-            }
+            });
             return countries;
         }
 
         public Country GetCountryById(uint id) {
             DbCommand cmd = database.CreateCommand(SQL_FIND_BY_ID);
             database.DefineParameter(cmd, "@countryId", DbType.UInt32,id);
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                if (reader.Read()) {
-                    Console.WriteLine("FOUND");
-                    return new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
-                } else {
-                    return null;
+            Country country = null;
+            database.doSynchronized(() => {
+                using (IDataReader reader = database.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        country = new Country((uint)reader["countryId"], (string)reader["name"], (string)reader["flagPath"]);
+                    }
                 }
-            }
+            });
+            return country;
         }
 
         public bool UpdateCountry(Country country) {

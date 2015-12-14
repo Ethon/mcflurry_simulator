@@ -134,38 +134,50 @@ namespace UFO.Server.Data {
         public List<Artist> GetAllArtists() {
             List<Artist> artists = new List<Artist>();
             DbCommand cmd = database.CreateCommand(SQL_FIND_ALL);
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                while (reader.Read()) {
-                    Artist newArtist = new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
-                    artists.Add(newArtist);
+            database.doSynchronized(() => {
+                using (IDataReader reader = database.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        Artist newArtist = new Artist((uint)reader["artistId"], (string)reader["name"],
+                            (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"],
+                            (string)reader["picturePath"], (string)reader["videoPath"]);
+                        artists.Add(newArtist);
+                    }
                 }
-                return artists;
-            }
+            });
+            return artists;
         }
 
         public Artist GetArtistById(uint id) {
             DbCommand cmd = database.CreateCommand(SQL_FIND_BY_ID);
             database.DefineParameter(cmd, "@artistId", DbType.UInt32, id);
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                if (reader.Read()) {
-                    return new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
-                } else {
-                    return null;
+            Artist artist = null;
+            database.doSynchronized(() => {
+                using (IDataReader reader = database.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        artist = new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"],
+                            (uint)reader["categoryId"], (uint)reader["countryId"],
+                            (string)reader["picturePath"], (string)reader["videoPath"]);
+                    }
                 }
-            }
+            });
+            return artist;
         }
 
         public Artist GetArtistByName(string name) {
 
             DbCommand cmd = database.CreateCommand(SQL_FIND_BY_NAME);
             database.DefineParameter(cmd, "@name", DbType.String, name);
-            using (IDataReader reader = database.ExecuteReader(cmd)) {
-                if (reader.Read()) {
-                    return new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"], (uint)reader["categoryId"], (uint)reader["countryId"], (string)reader["picturePath"], (string)reader["videoPath"]);
-                } else {
-                    return null;
+            Artist artist = null;
+            database.doSynchronized(() => {
+                using (IDataReader reader = database.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        artist = new Artist((uint)reader["artistId"], (string)reader["name"], (string)reader["email"],
+                            (uint)reader["categoryId"], (uint)reader["countryId"],
+                            (string)reader["picturePath"], (string)reader["videoPath"]);
+                    }
                 }
-            }
+            });
+            return artist;
         }
 
         public bool UpdateArtist(Artist artist) {

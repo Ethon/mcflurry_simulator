@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
@@ -76,7 +77,7 @@ namespace UFO.Server.Data {
 
         private IDatabase db;
 
-        private Venue readOne(DbDataReader reader) {
+        private Venue readOne(IDataReader reader) {
             uint id = (uint)reader["venueId"];
             string shortcut = (string)reader["shortcut"];
             string name = (string)reader["name"];
@@ -112,24 +113,28 @@ namespace UFO.Server.Data {
         public List<Venue> GetAllVenues() {
             List<Venue> venues = new List<Venue>();
             DbCommand cmd = db.CreateCommand(GETALL_CMD);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                while (reader.Read()) {
-                    venues.Add(readOne(reader));
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    while (reader.Read()) {
+                        venues.Add(readOne(reader));
+                    }
                 }
-            }
+            });
             return venues;
         }
 
         public Venue GetVenueById(uint id) {
             DbCommand cmd = db.CreateCommand(GETBYID_CMD);
             db.DefineParameter(cmd, "@id", System.Data.DbType.UInt32, id);
-            using (DbDataReader reader = cmd.ExecuteReader()) {
-                if (reader.Read()) {
-                    return readOne(reader);
-                } else {
-                    return null;
+            Venue venue = null;
+            db.doSynchronized(() => {
+                using (IDataReader reader = db.ExecuteReader(cmd)) {
+                    if (reader.Read()) {
+                        venue = readOne(reader);
+                    }
                 }
-            }
+            });
+            return venue;
         }
 
         public bool UpdateVenue(Venue ven) {

@@ -106,5 +106,11 @@ namespace UFO.Server {
             return CreateCommand("SET FOREIGN_KEY_CHECKS = 0; TRUNCATE " +
                 tableName + "; SET FOREIGN_KEY_CHECKS = 1;").ExecuteNonQuery();
         }
+
+        public void doSynchronized(Action action) {
+            lock(con) {
+                action();
+            }
+        }
     }
 }

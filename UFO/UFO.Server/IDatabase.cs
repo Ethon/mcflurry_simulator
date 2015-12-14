@@ -13,6 +13,8 @@ namespace UFO.Server {
         void DefineParameter(DbCommand command, string name, DbType type, object value);
         void SetParameter(DbCommand command, string name, object value);
 
+        void doSynchronized(Action action);
+
         IDataReader ExecuteReader(DbCommand command);
         int ExecuteNonQuery(DbCommand command);
 
