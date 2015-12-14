@@ -33,9 +33,9 @@
                 </Grid.RowDefinitions>
 
                 <Label Grid.Row="0" Grid.Column="0" Content="Date/Time:"  Margin="0,0,0,4" />
-                <xctk:DateTimePicker Grid.Row="0" Grid.Column="1"
-                                     Value="{Binding PmVm.DateTimeInput}" AllowSpin="False" TimePickerAllowSpin="False"
-                                     TimeFormat="Custom" TimeFormatString="HH"  Margin="0,0,0,4"/>
+                <xctk:TimePicker Grid.Row="0" Grid.Column="1"
+                                 Value="{Binding PmVm.TimeInput}" AllowSpin="False"
+                                 Format="Custom" FormatString="HH"  Margin="0,0,0,4"/>
 
                 <Label Grid.Row="1" Grid.Column="0" Content="Venue:"  Margin="0,0,0,4" />
                 <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding PmVm.VenueInput}" DisplayMemberPath="Name" ItemsSource="{Binding PmVm.Venues}"  Margin="0,0,0,4" />

@@ -65,7 +65,7 @@ namespace UFO.Commander.ViewModel {
 
         private DisplayDateTime currentDay;
 
-        private DateTime dateTimeInput;
+        private DateTime timeInput;
         private Venue venueInput;
         private Artist artistInput;
 
@@ -91,7 +91,7 @@ namespace UFO.Commander.ViewModel {
             UpdateArtists();
 
             DateTime now = DateTime.Now;
-            dateTimeInput = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0);
+            timeInput = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0);
             if(Venues.Count > 0) {
                 VenueInput = Venues[0];
             }
@@ -120,14 +120,14 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
-        public DateTime DateTimeInput {
+        public DateTime TimeInput {
             get {
-                return dateTimeInput;
+                return timeInput;
             }
             set {
-                if(dateTimeInput != value) {
-                    dateTimeInput = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DateTimeInput)));
+                if(timeInput != value) {
+                    timeInput = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TimeInput)));
                 }
             }
         }
@@ -173,7 +173,9 @@ namespace UFO.Commander.ViewModel {
                 if(createCommand == null) {
                     createCommand = new RelayCommand((param) => {
                         try {
-                            Performance p = performanceService.CreatePerformance(DateTimeInput, ArtistInput, VenueInput);
+                            DateTime day = CurrentDay.DateTime;
+                            DateTime date = new DateTime(day.Year, day.Month, day.Day, timeInput.Hour, 0, 0);
+                            Performance p = performanceService.CreatePerformance(date, ArtistInput, VenueInput);
                             UpdatePerformancesForDay();
                             PlatformService.Instance.ShowInformationMessage("Performance added", "Success");
                         } catch(DataValidationException ex) {
@@ -189,10 +191,12 @@ namespace UFO.Commander.ViewModel {
             get {
                 if(exportHtmlCommand == null) {
                     exportHtmlCommand = new RelayCommand((param) => {
-                        DayProgramHtmlExporter exporter = new DayProgramHtmlExporter();
-                        string path = MediaManager.Instance.GetFullPath(exporter.exportDayProgram(CurrentDay.DateTime), MediaType.Html);
-                        string url = "file:///" + path.Replace('\\', '/');
-                        System.Diagnostics.Process.Start(url);
+                        Task.Run(() => {
+                            DayProgramHtmlExporter exporter = new DayProgramHtmlExporter();
+                            string path = MediaManager.Instance.GetFullPath(exporter.exportDayProgram(CurrentDay.DateTime), MediaType.Html);
+                            string url = "file:///" + path.Replace('\\', '/');
+                            System.Diagnostics.Process.Start(url);
+                        });
                     });
                 }
                 return exportHtmlCommand;
@@ -203,10 +207,12 @@ namespace UFO.Commander.ViewModel {
             get {
                 if (exportPdfCommand == null) {
                     exportPdfCommand = new RelayCommand((param) => {
-                        DayProgramPdfExporter exporter = new DayProgramPdfExporter();
-                        string path = MediaManager.Instance.GetFullPath(exporter.exportDayProgram(CurrentDay.DateTime), MediaType.Pdf);
-                        string url = "file:///" + path.Replace('\\', '/');
-                        System.Diagnostics.Process.Start(url);
+                        Task.Run(() => {
+                            DayProgramPdfExporter exporter = new DayProgramPdfExporter();
+                            string path = MediaManager.Instance.GetFullPath(exporter.exportDayProgram(CurrentDay.DateTime), MediaType.Pdf);
+                            string url = "file:///" + path.Replace('\\', '/');
+                            System.Diagnostics.Process.Start(url);
+                        });
                     });
                 }
                 return exportPdfCommand;
