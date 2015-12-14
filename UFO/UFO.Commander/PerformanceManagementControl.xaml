@@ -46,7 +46,7 @@
                 <Button Grid.Row="3" Grid.Column="0" Command="{Binding PmVm.CreateCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="images/add.png" Stretch="Uniform"/>
-                        <Label Padding="0">Add artist</Label>
+                        <Label Padding="0">Add performance</Label>
                     </StackPanel>
                 </Button>
             </Grid>

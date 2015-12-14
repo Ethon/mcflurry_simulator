@@ -175,6 +175,7 @@ namespace UFO.Commander.ViewModel {
                         try {
                             Performance p = performanceService.CreatePerformance(DateTimeInput, ArtistInput, VenueInput);
                             UpdatePerformancesForDay();
+                            PlatformService.Instance.ShowInformationMessage("Performance added", "Success");
                         } catch(DataValidationException ex) {
                             PlatformService.Instance.ShowErrorMessage(ex.Message, "Error creating performance");
                         }

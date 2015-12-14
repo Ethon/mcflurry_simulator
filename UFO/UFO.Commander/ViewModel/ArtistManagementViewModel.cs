@@ -84,11 +84,11 @@ namespace UFO.Commander.ViewModel {
                         Artist artist;
                         try { 
                             artist = artistService.CreateArtist(NameInput, EmailInput, CategoryInput, CountryInput, PicturePathInput, VideoPathInput);
+                            Artists.Add(new ArtistViewModel(artistService, categoryService, countryService, artist));
+                            PlatformService.Instance.ShowInformationMessage("Artist '" + artist.Name + "' added", "Success");
                         } catch(DataValidationException ex) {
                             PlatformService.Instance.ShowErrorMessage(ex.Message, "Error creating artist");
-                            return;
                         }
-                        Artists.Add(new ArtistViewModel(artistService, categoryService, countryService, artist));
                   });
                 }
                 return createCommand;
