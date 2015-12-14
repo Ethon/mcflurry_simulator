@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows;
 using UFO.Server;
 using UFO.Server.Data;
 
@@ -78,7 +79,7 @@ namespace UFO.Commander {
             if (performances.Count != 0) {
 
 
-                tableHeader += "<th class=''>Location</th>";
+                tableHeader += "<th class=''>Location | Time</th>";
                 for (int i = beginHour; i <= endHour; i++) {
                     tableHeader += "<th>" + i + "-" + (i + 1) + " Uhr</th>";
                 }
@@ -104,7 +105,9 @@ namespace UFO.Commander {
 
 
             Performance[] curVenuePerf = new Performance[endHour - beginHour + 1];
+            var last = performances[performances.Count - 1];
             foreach (var p in performances) {
+                
                 if (p.VenueId == curVId) {
                     curVenuePerf[p.Date.Hour - beginHour] = p;
                 } else {
@@ -115,7 +118,9 @@ namespace UFO.Commander {
                     curVId = p.VenueId;
                     curVenuePerf[p.Date.Hour - beginHour] = p;
                 }
-                
+                if(last == p) {
+                    tableContent += GenerateTableRow(vS.GetVenueById(curVId), curVenuePerf);
+                }
             }
             tableContent += "</tbody>";
             return tableContent;
@@ -124,7 +129,6 @@ namespace UFO.Commander {
         private String GenerateTableRow(Venue venue, Performance[] performances) {
             String tableRow = "<tr class='h4 tableCellCenter small'>";
             tableRow += "<td class='warning '><strong>" + HttpUtility.HtmlEncode(venue.Shortcut) + "</br>" + HttpUtility.HtmlEncode(venue.Name) + "</strong></td>";
-
             for (var i = 0; i < performances.Length; i++) {
                 if (performances[i] == null) {
                     tableRow += "<td></td>";
