@@ -13,6 +13,8 @@ namespace UFO.Commander {
         void ShowInformationMessage(string message, string caption);
         void ShowErrorMessage(string message, string caption);
         bool WarnAndAskForConfirmation(string message, string caption);
+
+        void RunByUiThread(Action action);
     }
 
     public class PlatformService {

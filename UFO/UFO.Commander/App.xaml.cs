@@ -76,5 +76,9 @@ namespace UFO.Commander {
             MessageBoxImage icon = MessageBoxImage.Warning;
             return MessageBox.Show(message, caption, button, icon) == MessageBoxResult.Yes;
         }
+
+        public void RunByUiThread(Action action) {
+            Dispatcher.Invoke(action);
+        }
     }
 }

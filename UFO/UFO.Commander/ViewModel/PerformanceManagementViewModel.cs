@@ -236,11 +236,16 @@ namespace UFO.Commander.ViewModel {
 
         public void UpdatePerformancesForDay() {
             PerformancesForDay.Clear();
-            foreach (var perf in performanceService.GetPerformancesForDay(CurrentDay.DateTime)) {
-                PerformanceViewModel vm = new PerformanceViewModel(performanceService, perf,
-                    artistService.GetArtistById(perf.ArtistId), venueService.GetVenueById(perf.VenueId));
-                PerformancesForDay.Add(vm);
-            }
+            Task.Run(() => {
+                List<Performance> performances = performanceService.GetPerformancesForDay(CurrentDay.DateTime);
+                foreach (var perf in performances) {
+                    PerformanceViewModel vm = new PerformanceViewModel(performanceService, perf,
+                        artistService.GetArtistById(perf.ArtistId), venueService.GetVenueById(perf.VenueId));
+                    PlatformService.Instance.RunByUiThread(() => {
+                        PerformancesForDay.Add(vm);
+                    });
+                }
+            });
         }
 
         public void UpdateVenues() {
