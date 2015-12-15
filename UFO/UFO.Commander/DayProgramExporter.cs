@@ -16,6 +16,7 @@ namespace UFO.Commander {
 
     public interface IDayProgramExporter {
         string exportDayProgram(DateTime date, string outFile);
+        string exportHtmlSource(DateTime date);
     }
 
     public class DayProgramHtmlExporter : IDayProgramExporter {
@@ -41,16 +42,24 @@ namespace UFO.Commander {
             return rootedName;
         }
 
+        public string exportHtmlSource(DateTime date) {
+            String exportHtml = GenerateHeader();
+            exportHtml += GenerateBody(date);
+            return exportHtml;
+        }
+
         public string exportDayProgram(DateTime date) {
             return exportDayProgram(date, String.Format("DayProgram_{0}_{1}_{2}.html", date.Year, date.Month, date.Day));
         }
 
         private String GenerateHeader() {
             String header = "<!DOCTYPE html><html lang='en'>";
-            header += "\n<head><meta charset = 'UTF - 8' >\n<link rel = 'stylesheet' type = 'text/css' href = 'css/bootstrap.min.css'>";
-            header += "\n<link rel = 'stylesheet' type = 'text / css' href = 'css/costum.css'>";
-            header += "\n<title>UFO-Commander Program</title>";
-            header += "\n</head>";
+            header += "<head><meta charset = 'UTF - 8' >\n<link rel = 'stylesheet' type = 'text/css' href = 'http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>";
+            header += "<style>.tableCellCenter th,td{ text-align: center;}.table > tbody > tr > td {vertical-align: middle;}</style>";
+       
+           // header += "<link rel = 'stylesheet' type = 'text / css' href = 'css/costum.css'>";
+            header += "<title>UFO-Commander Program</title>";
+            header += "</head>";
             return header;
         }
 
@@ -157,13 +166,17 @@ namespace UFO.Commander {
     public class DayProgramPdfExporter : IDayProgramExporter {
         private DayProgramHtmlExporter htmlExporter = new DayProgramHtmlExporter();
 
+        public string exportHtmlSource(DateTime date) {
+            return htmlExporter.exportHtmlSource(date);
+        }
+
         public string exportDayProgram(DateTime date, string outName) {
-            string htmlFilename = htmlExporter.exportDayProgram(date);
-            string htmlPath = MediaManager.Instance.GetFullPath(htmlFilename, MediaType.Html);
+            string htmlSource = exportHtmlSource(date);
 
             string fileName = System.IO.Path.GetTempPath() + outName;
             HtmlToPdf HtmlToPdf = new IronPdf.HtmlToPdf();
-            PdfResource pdf = HtmlToPdf.RenderUrlAsPdf(htmlPath);
+
+            PdfResource pdf = HtmlToPdf.RenderHtmlAsPdf(htmlSource);
             pdf.SaveAs(fileName);
             
             return MediaManager.Instance.RootPdf(fileName);
