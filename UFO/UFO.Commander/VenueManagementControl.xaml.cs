@@ -77,6 +77,13 @@ namespace UFO.Commander {
                 }
             }
         }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+
         void pin_MouseUp(object sender, MouseButtonEventArgs e) {
             e.Handled = true;
             _dragPin = false;

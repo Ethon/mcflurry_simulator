@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              Name="amc"
              DataContext=""
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="1024">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -53,7 +53,7 @@
                 <Label Grid.Row="5" Grid.Column="0" Content="Artist Video:" Margin="0,0,0,4" />
                 <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Amvm.VideoPathInput}" PreviewMouseDown="VideoPathInput_MouseDown" Margin="0,0,0,4" />
 
-                <Button Grid.Row="6" Grid.Column="0" Command="{Binding Amvm.CreateCommand}">
+                <Button Grid.Row="6" Grid.Column="0" Command="{Binding Amvm.CreateCommand}" Padding="3,3,3,3">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="images/add.png" Stretch="Uniform"/>
                         <Label Padding="0">Add artist</Label>
@@ -63,13 +63,13 @@
         </Border>
 
         <Border Margin="10" Grid.Row="1" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
-            <ScrollViewer Margin="10">
+            <ScrollViewer Margin="10" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <DataGrid Height="Auto" Name="dgArtists" AutoGenerateColumns="False" ItemsSource="{Binding Amvm.Artists}"
                             ScrollViewer.CanContentScroll="True" 
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Delete artist">
+                        <DataGridTemplateColumn Header="" Width="20">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding DataContext.Amvm, Source={StaticResource ProxyElement}}">
@@ -82,21 +82,21 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}"  />
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" />
-                        <DataGridComboBoxColumn Header="Category" SelectedItemBinding="{Binding Category}" DisplayMemberPath="Name"
+                        <DataGridTextColumn Header="ID" IsReadOnly="True" Binding="{Binding Id}"  Width="1*"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="7*"/>
+                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="8*" />
+                        <DataGridComboBoxColumn Header="Category" Width="7*" SelectedItemBinding="{Binding Category}" DisplayMemberPath="Name"
                                             ItemsSource="{Binding DataContext.Amvm.Categories, Source={StaticResource ProxyElement}}" />
-                        <DataGridComboBoxColumn Header="Country" SelectedItemBinding="{Binding Country}" DisplayMemberPath="Name"
+                        <DataGridComboBoxColumn Header="Country" Width="6*" SelectedItemBinding="{Binding Country}" DisplayMemberPath="Name"
                                             ItemsSource="{Binding DataContext.Amvm.Countries, Source={StaticResource ProxyElement}}" />
-                        <DataGridTemplateColumn Header="PicturePath">
+                        <DataGridTemplateColumn Header="PicturePath" Width="4*" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding PicturePath, Mode=TwoWay}" MouseDown="PicturePathColumn_MouseDown" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="VideoPath">
+                        <DataGridTemplateColumn Header="VideoPath" Width="4*" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding VideoPath, Mode=TwoWay}" MouseDown="VideoPathColumn_MouseDown" />

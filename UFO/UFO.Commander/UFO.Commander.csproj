@@ -123,6 +123,7 @@
     <Compile Include="ViewModel\PerformanceManagementViewModel.cs" />
     <Compile Include="ViewModel\PerformanceViewModel.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
+    <Compile Include="ViewModel\VenueManagementViewModel.cs" />
     <Compile Include="ViewModel\VenueViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +197,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Templates\OnProgramChangedMailSubject_en.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\mail.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

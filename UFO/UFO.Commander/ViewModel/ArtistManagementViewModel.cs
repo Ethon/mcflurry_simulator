@@ -109,9 +109,15 @@ namespace UFO.Commander.ViewModel {
 
         public void UpdateArtists() {
             Artists.Clear();
-            foreach (var artist in artistService.GetAllArtists()) {
-                Artists.Add(new ArtistViewModel(artistService, categoryService, countryService, artist));
-            }
+            Task.Run(() => {
+                List<Artist> artists = artistService.GetAllArtists();
+                foreach (var artist in artists) {
+                    ArtistViewModel vm = new ArtistViewModel(artistService,categoryService,countryService, artist);
+                    PlatformService.Instance.RunByUiThread(() => {
+                        Artists.Add(vm);
+                    });
+                }
+            });
         }
 
         public void UpdateCategories() {

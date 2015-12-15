@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:UFO.Commander"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -32,18 +32,18 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Content="Date/Time:"  Margin="0,0,0,4" />
+                <Label Grid.Row="0" Grid.Column="0" Content="Begin hour:"  Margin="0,0,0,4" />
                 <xctk:TimePicker Grid.Row="0" Grid.Column="1"
                                  Value="{Binding PmVm.TimeInput}" AllowSpin="False"
-                                 Format="Custom" FormatString="HH"  Margin="0,0,0,4"/>
+                                 Format="Custom" FormatString="HH"  Margin="0,0,0,4" Width="80" HorizontalAlignment="Left"/>
 
                 <Label Grid.Row="1" Grid.Column="0" Content="Venue:"  Margin="0,0,0,4" />
-                <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding PmVm.VenueInput}" DisplayMemberPath="Name" ItemsSource="{Binding PmVm.Venues}"  Margin="0,0,0,4" />
+                <ComboBox Grid.Row="1" Grid.Column="1" SelectedItem="{Binding PmVm.VenueInput}" Width="350" HorizontalAlignment="Left" DisplayMemberPath="Name" ItemsSource="{Binding PmVm.Venues}"  Margin="0,0,0,4" />
 
                 <Label Grid.Row="2" Grid.Column="0" Content="Artist:"  Margin="0,0,0,4" />
-                <ComboBox Grid.Row="2" Grid.Column="1" SelectedItem="{Binding PmVm.ArtistInput}" DisplayMemberPath="Name" ItemsSource="{Binding PmVm.Artists}"  Margin="0,0,0,4" />
+                <ComboBox Grid.Row="2" Grid.Column="1" SelectedItem="{Binding PmVm.ArtistInput}" Width="350" HorizontalAlignment="Left" DisplayMemberPath="Name" ItemsSource="{Binding PmVm.Artists}"  Margin="0,0,0,4" />
 
-                <Button Grid.Row="3" Grid.Column="0" Command="{Binding PmVm.CreateCommand}">
+                <Button Grid.Row="3" Grid.Column="0" Command="{Binding PmVm.CreateCommand}" Padding="3,3,3,3">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="images/add.png" Stretch="Uniform"/>
                         <Label Padding="0">Add performance</Label>
@@ -57,23 +57,25 @@
                 <Label Content="Day program for " />
                 <DatePicker SelectedDateFormat="Long" SelectedDate="{Binding PmVm.CurrentDay.DateTime}"
                             FirstDayOfWeek="Monday" />
-                <Button Content="Export as HTML" Command="{Binding PmVm.ExportHtmlCommand}" />
-                <Button Content="Export as PDF" Command="{Binding PmVm.ExportPdfCommand}" />
-                <Button Content="Inform artists about updates" Command="{Binding PmVm.InformArtistsCommand}" />
+                <Button Content="Export as HTML" Command="{Binding PmVm.ExportHtmlCommand}" Margin="5,0,5,0" Padding="5,0,5,0" />
+                <Button Content="Export as PDF" Command="{Binding PmVm.ExportPdfCommand}" Margin="0,0,5,0" Padding="5,0,5,0" />
+
+                <Button Content="Inform artists about updates" Command="{Binding PmVm.InformArtistsCommand}" Margin="0,0,5,0" Padding="5,0,5,0"/>
+
             </StackPanel>
         </Border>
 
         <Border Margin="10" Grid.Row="2" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
-            <ScrollViewer Margin="10">
+            <ScrollViewer Margin="10" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <DataGrid Height="Auto" Name="dgDayProgram" AutoGenerateColumns="False" ItemsSource="{Binding PmVm.PerformancesForDay}"
                             ScrollViewer.CanContentScroll="True" 
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Delete">
+                        <DataGridTemplateColumn Header="" Width="20">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding DataContext.PmVm, Source={StaticResource ProxyElement}}">
+                                    <Button Command="{Binding DeleteCommand}" CommandParameter="{Binding DataContext.PmVm, Source={StaticResource ProxyElement}}" >
                                         <Button.Template>
                                             <ControlTemplate>
                                                 <Image Source="images/delete.gif"/>
@@ -83,8 +85,8 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
-                        <DataGridTemplateColumn Header="Date/Time">
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="1*" />
+                        <DataGridTemplateColumn Header="Date/Time" Width="12*">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <xctk:DateTimePicker Value="{Binding Date, Mode=TwoWay}" AllowSpin="False" TimePickerAllowSpin="False"
@@ -92,9 +94,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridComboBoxColumn Header="Venue" SelectedItemBinding="{Binding Venue}" DisplayMemberPath="Name"
+                        <DataGridComboBoxColumn Header="Venue" Width="10*" SelectedItemBinding="{Binding Venue}" DisplayMemberPath="Name"
                                             ItemsSource="{Binding DataContext.PmVm.Venues, Source={StaticResource ProxyElement}}" />
-                        <DataGridComboBoxColumn Header="Artist" SelectedItemBinding="{Binding Artist}" DisplayMemberPath="Name"
+                        <DataGridComboBoxColumn Header="Artist" Width="10*" SelectedItemBinding="{Binding Artist}" DisplayMemberPath="Name"
                                             ItemsSource="{Binding DataContext.PmVm.Artists, Source={StaticResource ProxyElement}}" />
                     </DataGrid.Columns>
                 </DataGrid>

@@ -1,97 +1,15 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
-using UFO.Commander.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using UFO.Server;
 using UFO.Server.Data;
 
 namespace UFO.Commander.ViewModel {
-    public class VenueManagementViewModel :INotifyPropertyChanged {
-        private IVenueService venueService;
-        private VenueViewModel currentVenue;
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public string NameInput { get; set; }
-        public string ShortCutInput { get; set; }
-        public double LatitudeInput { get; set; }
-        public double LongitudeInput { get; set; }
-
-
-        private ICommand createCommand;
-
-
-        public ObservableCollection<VenueViewModel> Venues { get; set; }
-
-        public VenueManagementViewModel(IVenueService venueService) {
-            this.venueService = venueService;
-            NameInput = "";
-            ShortCutInput = "";
-            this.Venues = new ObservableCollection<VenueViewModel>();
-            UpdateVenues();
-            
-        }
-
-        public void UpdateVenues() {
-            CurrentVenue = null;
-            Venues.Clear();
-            foreach (var venue in venueService.GetAllVenues()) {
-                Venues.Add(new VenueViewModel(venueService, venue));
-            }
-        }
-        public VenueViewModel CurrentVenue {
-            get {
-                return this.currentVenue;
-            }
-            set {
-                if (this.currentVenue != value) {
-                    this.currentVenue = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentVenue)));
-                }
-            }
-        }
-
-
-        public ICommand CreateCommand {
-            get {
-                if (createCommand == null) {
-                    createCommand = new RelayCommand((param) => {
-                    Venue venue;
-                    try {
-                        venue = venueService.CreateVenue(NameInput, ShortCutInput,LatitudeInput,LongitudeInput);
-                    } catch (DataValidationException ex) {
-                        PlatformService.Instance.ShowErrorMessage(ex.Message, "Error creating venue");
-                        return;
-                    }
-                    VenueViewModel newVenue = new VenueViewModel(venueService, venue);
-                    Venues.Add(newVenue);
-                        PlatformService.Instance.ShowInformationMessage("Created venue '" + venue.Name + "'!","Information");
-                        NameInput = "";
-                        ShortCutInput = "";
-                        LongitudeInput = 0;
-                        LatitudeInput = 0;
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NameInput)));
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ShortCutInput)));
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatitudeInput)));
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LongitudeInput)));
-                        currentVenue = newVenue;
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentVenue)));
-                    });
-                }
-                return createCommand;
-            }
-        }
-
-
-
-
-    }
     public class VenueViewModel : INotifyPropertyChanged {
 
         private IVenueService venueService;
@@ -106,13 +24,16 @@ namespace UFO.Commander.ViewModel {
             this.venue = venue;
         }
 
-        public uint Id {
+        public uint Id
+        {
             get { return venue.Id; }
         }
 
-        public string ShortCut {
+        public string ShortCut
+        {
             get { return venue.Shortcut; }
-            set {
+            set
+            {
                 if (venue.Shortcut != value) {
                     venue.Shortcut = value;
                     venueService.UpdateVenue(venue);
@@ -120,9 +41,11 @@ namespace UFO.Commander.ViewModel {
                 }
             }
         }
-        public string Name {
+        public string Name
+        {
             get { return venue.Name; }
-            set {
+            set
+            {
                 if (venue.Name != value) {
                     venue.Name = value;
                     venueService.UpdateVenue(venue);
@@ -145,9 +68,11 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
-        public double Longitude {
+        public double Longitude
+        {
             get { return venue.Longitude; }
-            set {
+            set
+            {
                 if (venue.Longitude != value) {
                     venue.Longitude = value;
                     venueService.UpdateVenue(venue);
@@ -155,9 +80,11 @@ namespace UFO.Commander.ViewModel {
                 }
             }
         }
-        public double Latitude {
+        public double Latitude
+        {
             get { return venue.Latitude; }
-            set {
+            set
+            {
                 if (venue.Latitude != value) {
                     venue.Latitude = value;
                     venueService.UpdateVenue(venue);
@@ -174,7 +101,7 @@ namespace UFO.Commander.ViewModel {
                     deleteCommand = new RelayCommand((param) => {
                         if (PlatformService.Instance.WarnAndAskForConfirmation(
                                 "Do you really want to delete the venue '" + Name + "'?", "Confirm deletion")) {
-                    Delete();
+                            Delete();
                             VenueManagementViewModel VmVm = param as VenueManagementViewModel;
                             VmVm.UpdateVenues();
                         }
@@ -193,5 +120,4 @@ namespace UFO.Commander.ViewModel {
         }
 
     }
-
 }

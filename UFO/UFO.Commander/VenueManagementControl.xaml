@@ -55,7 +55,7 @@
                         <Label Grid.Row="5" Grid.Column="0" Content="Longitude:" Margin="0,0,0,4" />
                         <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding VmVm.LongitudeInput}" Margin="0,0,0,4" />
 
-                        <Button Grid.Row="6" Grid.Column="0" Command="{Binding VmVm.CreateCommand}">
+                        <Button Grid.Row="6" Grid.Column="0" Command="{Binding VmVm.CreateCommand}" Padding="3,3,3,3">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="images/add.png" Stretch="Uniform"/>
                                 <Label Padding="0">Add Venue</Label>
@@ -66,9 +66,8 @@
 
 
                 <Border Margin="10" Grid.Row="1" Background="LightSteelBlue" BorderBrush="Gainsboro" BorderThickness="1">
-                    <ScrollViewer Margin="10">
-                        <DataGrid Height="Auto" Name="dgVenues" AutoGenerateColumns="False" ItemsSource="{Binding VmVm.Venues}" SelectedItem="{Binding VmVm.CurrentVenue}"
-                                  
+                    <ScrollViewer Margin="10" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                        <DataGrid Height="Auto" Name="dgVenues" AutoGenerateColumns="False" ItemsSource="{Binding VmVm.Venues}" SelectedItem="{Binding VmVm.CurrentVenue}"     
                             ScrollViewer.CanContentScroll="True" 
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto">
