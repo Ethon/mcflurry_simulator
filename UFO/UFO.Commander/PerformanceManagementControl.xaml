@@ -57,11 +57,27 @@
                 <Label Content="Day program for " />
                 <DatePicker SelectedDateFormat="Long" SelectedDate="{Binding PmVm.CurrentDay.DateTime}"
                             FirstDayOfWeek="Monday" />
-                <Button Content="Export as HTML" Command="{Binding PmVm.ExportHtmlCommand}" Margin="5,0,5,0" Padding="5,0,5,0" />
-                <Button Content="Export as PDF" Command="{Binding PmVm.ExportPdfCommand}" Margin="0,0,5,0" Padding="5,0,5,0" />
+                
+                <Button Command="{Binding PmVm.ExportHtmlCommand}" Margin="5,0,5,0" Padding="5,0,5,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="images/html.png" Stretch="Uniform"/>
+                        <Label Padding="2">Export as HTML</Label>
+                    </StackPanel>
+                </Button>
+                
+                <Button Command="{Binding PmVm.ExportPdfCommand}" Margin="0,0,5,0" Padding="5,0,5,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="images/pdf.png" Stretch="Uniform"/>
+                        <Label Padding="2">Export as PDF</Label>
+                    </StackPanel>
+                </Button>
 
-                <Button Content="Inform artists about updates" Command="{Binding PmVm.InformArtistsCommand}" Margin="0,0,5,0" Padding="5,0,5,0"/>
-
+                <Button Command="{Binding PmVm.InformArtistsCommand}" Margin="0,0,5,0" Padding="5,0,5,0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="images/email.png" Stretch="Uniform"/>
+                        <Label Padding="2">Inform artists about updates</Label>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 
@@ -90,7 +106,8 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <xctk:DateTimePicker Value="{Binding Date, Mode=TwoWay}" AllowSpin="False" TimePickerAllowSpin="False"
-                                                         TimeFormat="Custom" TimeFormatString="HH"/>
+                                                         TimeFormat="Custom" TimeFormatString="HH"
+                                                         KeyDown="DateTimePicker_KeyDown" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

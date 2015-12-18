@@ -10,6 +10,8 @@ using UFO.Server.Data;
 
 namespace UFO.Commander.ViewModel {
     public class PerformanceViewModel : INotifyPropertyChanged {
+        private PerformanceManagementViewModel pmvm;
+
         private IPerformanceService performanceService;
 
         private Performance performance;
@@ -20,8 +22,11 @@ namespace UFO.Commander.ViewModel {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public PerformanceViewModel(IPerformanceService performanceService,
+        public PerformanceViewModel(PerformanceManagementViewModel pmvm, IPerformanceService performanceService,
             Performance performance, Artist artist, Venue venue) {
+
+            this.pmvm = pmvm;
+
             this.performanceService = performanceService;
 
             this.performance = performance;
@@ -40,11 +45,16 @@ namespace UFO.Commander.ViewModel {
                 return performance.Date;
             }
             set {
+                DateTime old = performance.Date;
                 if(performance.Date != value) {
                     performance.Date = value;
                     if(Update()) {
                         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Date)));
                     }
+                }
+                if(old.Year != value.Year || old.Month != value.Month || old.Day != value.Day) {
+                    pmvm.UpdatePerformancesForDay();
+                    pmvm.CurrentDay.DateTime = value;
                 }
             }
         }
@@ -79,10 +89,8 @@ namespace UFO.Commander.ViewModel {
             }
         }
 
-        public ICommand DeleteCommand
-        {
-            get
-            {
+        public ICommand DeleteCommand {
+            get {
                 if (deleteCommand == null) {
                     deleteCommand = new RelayCommand((param) => {
                         if (PlatformService.Instance.WarnAndAskForConfirmation(

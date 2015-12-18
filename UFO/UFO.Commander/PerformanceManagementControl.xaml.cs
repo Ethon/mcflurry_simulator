@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using UFO.Commander.ViewModel;
 using UFO.Server;
 using UFO.Server.Data;
+using Xceed.Wpf.Toolkit;
 
 namespace UFO.Commander {
     /// <summary>
@@ -63,6 +64,16 @@ namespace UFO.Commander {
 
         public void OnVenueUpdate(Venue venue) {
             PmVm.UpdateVenues();
+        }
+
+        private void DateTimePicker_KeyDown(object sender, KeyEventArgs e) {
+            DateTimePicker dtp = sender as DateTimePicker;
+            PerformanceViewModel pvm = dtp.DataContext as PerformanceViewModel;
+            if(e.Key.Equals(Key.Enter)) { 
+                if(dtp.Value.HasValue) {
+                    pvm.Date = dtp.Value.Value;
+                }
+            }
         }
     }
 }
