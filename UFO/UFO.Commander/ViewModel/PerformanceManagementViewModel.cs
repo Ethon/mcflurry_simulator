@@ -19,8 +19,7 @@ namespace UFO.Commander.ViewModel {
             DateTime = dt;
         }
 
-        public DateTime DateTime
-        {
+        public DateTime DateTime {
             get {
                 return dateTime;
             }
@@ -112,7 +111,7 @@ namespace UFO.Commander.ViewModel {
             get {
                 return currentDay;
             }
-            private set {
+            set {
                 if(currentDay != value) {
                     currentDay = value;
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentDay)));
@@ -239,7 +238,7 @@ namespace UFO.Commander.ViewModel {
             Task.Run(() => {
                 List<Performance> performances = performanceService.GetPerformancesForDay(CurrentDay.DateTime);
                 foreach (var perf in performances) {
-                    PerformanceViewModel vm = new PerformanceViewModel(performanceService, perf,
+                    PerformanceViewModel vm = new PerformanceViewModel(this, performanceService, perf,
                         artistService.GetArtistById(perf.ArtistId), venueService.GetVenueById(perf.VenueId));
                     PlatformService.Instance.RunByUiThread(() => {
                         PerformancesForDay.Add(vm);
