@@ -75,15 +75,19 @@ namespace UFO.Server {
         }
 
         public int ExecuteNonQuery(DbCommand command) {
-            DbConnection conn = GetOpenConnection();
-            MySqlCommand mysqlCommand = (MySqlCommand)command;
-            command.Connection = conn;
-            int executeResult = command.ExecuteNonQuery();
-            if ((int)mysqlCommand.LastInsertedId > 0) {
-                return (int)mysqlCommand.LastInsertedId;
-            } else {
-                return executeResult;
-            }
+            int result = 0;
+            doSynchronized(() => {
+                DbConnection conn = GetOpenConnection();
+                MySqlCommand mysqlCommand = (MySqlCommand)command;
+                command.Connection = conn;
+                int executeResult = command.ExecuteNonQuery();
+                if ((int)mysqlCommand.LastInsertedId > 0) {
+                    result= (int)mysqlCommand.LastInsertedId;
+                } else {
+                    result = executeResult;
+                }
+            });
+            return result;
         }
 
         public void Dispose() {
