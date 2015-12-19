@@ -144,7 +144,7 @@ namespace UFO.Commander {
                     tableRow += "<td></td>";
                 } else {
                     Artist a = aS.GetArtistById(performances[i].ArtistId);
-                    tableRow += "<td><strong>" + HttpUtility.HtmlEncode(a.Name) + " / "+ HttpUtility.HtmlEncode(catS.GetCategoryById(a.CategoryId).Shortcut)+ "</strong></br>(" + HttpUtility.HtmlEncode(couS.GetCountryById(a.CountryId).Name)+")</td>";
+                    tableRow += "<td><strong>" + HttpUtility.HtmlEncode(a.Name) + " / "+ HttpUtility.HtmlEncode(catS.GetCategoryById(a.CategoryId).Shortcut)+ "</strong></br> (" + HttpUtility.HtmlEncode(couS.GetCountryById(a.CountryId).Name)+")</td>";
                 }
 
             }
