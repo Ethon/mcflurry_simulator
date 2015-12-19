@@ -112,7 +112,7 @@ namespace UFO.Commander.ViewModel {
             Task.Run(() => {
                 List<Artist> artists = artistService.GetAllArtists();
                 foreach (var artist in artists) {
-                    ArtistViewModel vm = new ArtistViewModel(artistService,categoryService,countryService, artist);
+                    ArtistViewModel vm = new ArtistViewModel(artistService, categoryService, countryService, artist);
                     PlatformService.Instance.RunByUiThread(() => {
                         Artists.Add(vm);
                     });
@@ -122,16 +122,34 @@ namespace UFO.Commander.ViewModel {
 
         public void UpdateCategories() {
             Categories.Clear();
-            foreach (var category in categoryService.GetAllCategories()) {
-                Categories.Add(category);
-            }
+            Task.Run(() => {
+                List<Category> cats = categoryService.GetAllCategories();
+                cats.Sort((c1, c2) => {
+                    return c1.Name.ToLower().CompareTo(c2.Name.ToLower());
+                });
+
+                foreach (var cat in cats) {
+                    PlatformService.Instance.RunByUiThread(() => {
+                        Categories.Add(cat);
+                    });
+                }
+            });
         }
 
         public void UpdateCountries() {
             Countries.Clear();
-            foreach (var country in countryService.GetAllCountries()) {
-                Countries.Add(country);
-            }
+            Task.Run(() => {
+                List<Country> countries = countryService.GetAllCountries();
+                countries.Sort((c1, c2) => {
+                    return c1.Name.ToLower().CompareTo(c2.Name.ToLower());
+                });
+
+                foreach (var country in countries) {
+                    PlatformService.Instance.RunByUiThread(() => {
+                        Countries.Add(country);
+                    });
+                }
+            });
         }
     }
 }

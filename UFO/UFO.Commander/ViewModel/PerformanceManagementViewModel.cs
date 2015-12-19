@@ -249,16 +249,34 @@ namespace UFO.Commander.ViewModel {
 
         public void UpdateVenues() {
             Venues.Clear();
-            foreach (var venue in venueService.GetAllVenues()) {
-                Venues.Add(venue);
-            }
+            Task.Run(() => {
+                List<Venue> venues = venueService.GetAllVenues();
+                venues.Sort((v1, v2) => {
+                    return v1.Name.ToLower().CompareTo(v2.Name.ToLower());
+                });
+
+                foreach (var venue in venues) {
+                    PlatformService.Instance.RunByUiThread(() => {
+                        Venues.Add(venue);
+                    });
+                }
+            });
         }
 
         public void UpdateArtists() {
             Artists.Clear();
-            foreach (var artist in artistService.GetAllArtists()) {
-                Artists.Add(artist);
-            }
+            Task.Run(() => {
+                List<Artist> artists = artistService.GetAllArtists();
+                artists.Sort((a1, a2) => {
+                    return a1.Name.ToLower().CompareTo(a2.Name.ToLower());
+                });
+
+                foreach (var artist in artists) {
+                    PlatformService.Instance.RunByUiThread(() => {
+                        Artists.Add(artist);
+                    });
+                }
+            });
         }
     }
 }

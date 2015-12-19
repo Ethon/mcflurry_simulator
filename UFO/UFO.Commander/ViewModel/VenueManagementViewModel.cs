@@ -23,9 +23,7 @@ namespace UFO.Commander.ViewModel {
         public double LatitudeInput { get; set; }
         public double LongitudeInput { get; set; }
 
-
         private ICommand createCommand;
-
 
         public ObservableCollection<VenueViewModel> Venues { get; set; }
 
@@ -35,7 +33,6 @@ namespace UFO.Commander.ViewModel {
             ShortCutInput = "";
             this.Venues = new ObservableCollection<VenueViewModel>();
             UpdateVenues();
-            
         }
 
         public void UpdateVenues() {
@@ -51,6 +48,7 @@ namespace UFO.Commander.ViewModel {
                 }
             });
         }
+
         public VenueViewModel CurrentVenue {
             get {
                 return this.currentVenue;
@@ -62,7 +60,6 @@ namespace UFO.Commander.ViewModel {
                 }
             }
         }
-
 
         public ICommand CreateCommand {
             get {
@@ -93,11 +90,5 @@ namespace UFO.Commander.ViewModel {
                 return createCommand;
             }
         }
-
-
-
-
     }
-
-
 }
