@@ -50,10 +50,12 @@ namespace UFO.Server {
         public bool CheckCredentials(string email,string password) {
             var user = GetUserByEmailAddress(email);
             if (user == null) {
-                throw new DataValidationException("Unknown user '" + email + "'");
+                return false;
+                //throw new DataValidationException("Unknown user '" + email + "'");
             }
             if( user.Password != password) {
-                throw new DataValidationException("Wrong password for user '" + email + "'");
+                //throw new DataValidationException("Wrong password for user '" + email + "'");
+                return false;
             }
             return true;
         }

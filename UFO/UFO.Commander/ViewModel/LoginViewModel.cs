@@ -109,9 +109,10 @@ namespace UFO.Commander.ViewModel {
                 IsAuthenticated = userService.CheckCredentials(username, Password);
                 if (IsAuthenticated) {
                     loginControl.Close();
+                } else {
+                    LoginInfo = "Error: Wrong username or password";
                 }
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 LoginInfo = "Error: " +ex.Message;
             }
         }
