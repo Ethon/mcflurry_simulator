@@ -34,7 +34,5 @@ namespace UFO.WebService.Controllers {
         public Venue CreateVenue(String name, String shortcut,double latitude, double longitude) {
             return vs.CreateVenue(name, shortcut, latitude, longitude);
         }
-
-
     }
 }
