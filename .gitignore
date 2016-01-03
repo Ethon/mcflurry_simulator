@@ -202,3 +202,5 @@ UFO/UFO.Server/Program.cs
 UFO/UFO.Server/App.config
 
 images.rar
+UFO.Web/.classpath
+UFO.Web/.settings/org.eclipse.wst.common.project.facet.core.xml
