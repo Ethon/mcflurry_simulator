@@ -1,0 +1,15 @@
+<div xmlns:h="http://java.sun.com/jsf/html">
+	<div style="width:100%;font-size:36px;line-height:48px;background-color:navy;color:white">
+		UFO WEB
+	</div>
+	
+	<h:form id="navForm">
+		<h:panelGrid columns="5">
+			<h:commandButton type="submit" value="Home" action="GoHomeEvent" />
+			<h:commandButton type="submit" value="Performances" action="#{webShopUser.allArticles}" />
+			<!-- <h:commandButton type="submit" value="Browse Book with Search" action="#{webShopUser.allArticlesSearch}"/>
+			<h:commandButton type="submit" value="Show Cart" action="ShowCartEvent" />
+			<h:commandButton type="submit" value="Checkout" action="#{WebShopUser.checkout}" /> -->
+		</h:panelGrid>
+	</h:form>
+</div>
