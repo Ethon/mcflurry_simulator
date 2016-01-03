@@ -25,7 +25,7 @@ namespace UFO.Server {
         }
 
         private static bool IsValidDate(DateTime date) {
-            return date.Year >= DateTime.Now.Year && date.Year < DateTime.Now.Year + 10;
+            return date >= DateTime.Now && date.Year < DateTime.Now.Year + 10;
         }
 
         private bool IsVenueTakenAtTime(DateTime date, uint venueId, uint exclude = 0) {
