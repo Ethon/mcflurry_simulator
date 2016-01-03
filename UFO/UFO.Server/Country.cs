@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
-    [Serializable]
     public class Country {
         public Country(uint id, string name, string flagPath) {
             this.Id = id;
