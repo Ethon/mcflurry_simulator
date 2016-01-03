@@ -9,7 +9,6 @@ using UFO.Server;
 using UFO.Server.Data;
 
 namespace UFO.Server.Data {
-    [Serializable]
     public class Artist {
         public Artist(uint id, string name, string email, uint categoryId, uint countryId, string picturePath, string videoPath) {
             this.Id = id;
