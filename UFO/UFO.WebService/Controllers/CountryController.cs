@@ -10,37 +10,36 @@ using UFO.Server.Data;
 namespace UFO.WebService.Controllers
 {
     public class CountryController : ApiController {
-        private ICountryService cs;
+        private ICountryService countryService;
 
         public CountryController()
         {
-            IDatabase db = new MYSQLDatabase("Server = localhost; Database = ufo; Uid = root;");
-            cs = ServiceFactory.CreateCountryService(db);
+            countryService = ServiceFactory.CreateCountryService(DatabaseConnection.GetDatabase());
         }
 
         public Country GetCountryById(uint id)
         {
-            return cs.GetCountryById(id);
+            return countryService.GetCountryById(id);
         }
 
         public Country[] GetAllCountries()
         {
-            return cs.GetAllCountries().ToArray();
+            return countryService.GetAllCountries().ToArray();
         }
 
         public void UpdateCountry(Country country)
         {
-            cs.UpdateCountry(country);
+            countryService.UpdateCountry(country);
         }
 
         public void DeleteCountry(Country country)
         {
-            cs.DeleteCountry(country);
+            countryService.DeleteCountry(country);
         }
 
         public Country CreateCountry(String name, String flagPath)
         {
-            return cs.CreateCountry(name, flagPath);
+            return countryService.CreateCountry(name, flagPath);
         }
     }
 }
