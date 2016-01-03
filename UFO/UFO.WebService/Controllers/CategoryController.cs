@@ -19,7 +19,7 @@ namespace UFO.WebService.Controllers {
             return cs.GetCategoryById(id);
         }
 
-        public Category[] GetAllCategoryById() {
+        public Category[] GetAllCategories() {
             return cs.GetAllCategories().ToArray();
         }
 
