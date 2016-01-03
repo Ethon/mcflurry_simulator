@@ -3,7 +3,7 @@ package swk5.ufo.web.service;
 import swk5.ufo.web.model.CountryModel;
 
 public interface CountryService {
-	public CountryModel CreateCountry(String name, String flagPath);
+	public CountryModel CreateCountry(String name, String flagPath) throws ServiceCallException;
 
 	public void DeleteCountry(CountryModel country) throws ServiceCallException;
 
