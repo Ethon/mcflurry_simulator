@@ -18,26 +18,31 @@ namespace UFO.WebService.Controllers
             artistService = ServiceFactory.CreateArtistService(DatabaseConnection.GetDatabase());
         }
 
+        [HttpGet]
         public Artist GetArtistById(uint id)
         {
             return artistService.GetArtistById(id);
         }
 
+        [HttpGet]
         public Artist[] GetAllArtists()
         {
             return artistService.GetAllArtists().ToArray();
         }
 
+        [HttpPost]
         public void UpdateArtist(Artist artist)
         {
             artistService.UpdateArtist(artist);
         }
 
+        [HttpPost]
         public void DeleteArtist(Artist artist)
         {
             artistService.DeleteArtist(artist);
         }
 
+        [HttpGet]
         public Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath)
         {
             return artistService.CreateArtist(name, email, category, country, picturePath, videoPath);

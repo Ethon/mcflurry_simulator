@@ -15,17 +15,22 @@ namespace UFO.WebService.Controllers {
             us = ServiceFactory.CreateUserService(db);
         }
 
+        [HttpGet]
         public User GetUserById(uint id) {
             return us.GetUserById(id);
         }
 
+        [HttpGet]
         public User[] GetAllUsers() {
             return us.GetAllUsers().ToArray();
         }
-        public bool GetCheckCredentials(string email, string password) {
+
+        [HttpGet]
+        public bool CheckCredentials(string email, string password) {
             return us.CheckCredentials(email, password);
         }
 
+        [HttpGet]
         public User GetUserByEmailAdress(string email) {
             return us.GetUserByEmailAddress(email);
         }
