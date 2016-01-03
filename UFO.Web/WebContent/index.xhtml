@@ -12,6 +12,14 @@
 	</ui:define>
 	<ui:define name="content">
 		<h3>Welcome to UFO WEB (ASSHOLE EDITION)</h3>
+			 <h:dataTable value="#{restArtistService.allArtists}" var="item">
+	    	<h:column>
+	    		<f:facet name="header">
+	    			<h:outputText value="Id" />
+	    		</f:facet>
+		    	<h:outputText value="#{item.email}" />
+	    	</h:column>
+	    	</h:dataTable>
 	</ui:define>
 </ui:composition>
 </html>
