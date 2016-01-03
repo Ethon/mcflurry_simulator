@@ -29,7 +29,7 @@ namespace UFO.WebService.Controllers {
             ps.GetPerformancesForDay(date);
         }
 
-	[HttpPost]
+	    [HttpPost]
         public void DeletePerformance(Performance performance) {
             ps.DeletePerformance(performance);
         }
@@ -39,10 +39,18 @@ namespace UFO.WebService.Controllers {
             ps.UpdatePerformance(performance);
         }
 
-        [HttpGet]
-        public Performance CreatePerformance(DateTime date, Artist artist, Venue venue) {
-            return ps.CreatePerformance(date, artist, venue);
+        [HttpPost]
+        public Performance CreatePerformance(CreationParams paramz) {
+            return ps.CreatePerformance(paramz.Date, paramz.Artist, paramz.Venue);
         }
 
+        public class CreationParams
+        {
+            public DateTime Date { get; private set; }
+
+            public Artist Artist { get; private set; }
+
+            public Venue Venue { get; private set; }
+        }
     }
 }

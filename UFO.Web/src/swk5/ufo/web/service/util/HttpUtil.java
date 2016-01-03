@@ -24,7 +24,7 @@ public class HttpUtil {
 			final HttpResponse response = client.execute(get);
 			return EntityUtils.toString(response.getEntity());
 		} catch (final Exception e) {
-			throw new ServiceCallException("POST error", e);
+			throw new ServiceCallException("GET error", e);
 		}
 	}
 
