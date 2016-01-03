@@ -26,7 +26,7 @@ namespace UFO.WebService.Controllers {
             ps.GetPerformancesForDay(date);
         }
 
-        public void DeleteArtist(Performance performance) {
+        public void DeletePerformance(Performance performance) {
             ps.DeletePerformance(performance);
         }
 

@@ -1,9 +1,9 @@
 package swk5.ufo.web.service;
 
-import java.util.Locale.Category;
+import swk5.ufo.web.model.CategoryModel;
 
 public interface CategoryService {
-	public Category[] getAllCategories() throws ServiceCallException;
+	public CategoryModel[] getAllCategories() throws ServiceCallException;
 
-	public Category getCategoryById(int id) throws ServiceCallException;
+	public CategoryModel getCategoryById(int id) throws ServiceCallException;
 }
