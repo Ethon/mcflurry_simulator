@@ -19,5 +19,7 @@
 			<attribute name="owner.project.facets" value="jst.jsf"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/gson-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/primefaces-5.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
