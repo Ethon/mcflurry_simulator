@@ -8,7 +8,6 @@ using System.Data.Common;
 using System.Data;
 
 namespace UFO.Server.Data {
-    [Serializable]
     public class User {
         public User(uint id, string firstName, string lastName, string email, string password) {
             Id = id;
