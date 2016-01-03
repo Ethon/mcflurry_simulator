@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
-    [Serializable]
     public class Performance {
         public Performance(uint id, DateTime date, uint artistId, uint venueId) {
             Id = id;

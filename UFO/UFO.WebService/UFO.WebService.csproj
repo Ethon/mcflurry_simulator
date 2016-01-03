@@ -209,6 +209,7 @@
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PerformanceController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\VenueController.cs" />
     <Compile Include="DatabaseConnection.cs" />
