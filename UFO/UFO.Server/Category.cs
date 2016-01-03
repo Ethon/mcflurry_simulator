@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace UFO.Server.Data {
-    [Serializable]
     public class Category {
         public Category(uint id, string shortcut, string name) {
             this.Id = id;
