@@ -15,10 +15,12 @@ namespace UFO.WebService.Controllers {
             cs = ServiceFactory.CreateCategoryService(db);
         }
 
+        [HttpGet]
         public Category GetCategoryById(uint id) {
             return cs.GetCategoryById(id);
         }
 
+        [HttpGet]
         public Category[] GetAllCategories() {
             return cs.GetAllCategories().ToArray();
         }
