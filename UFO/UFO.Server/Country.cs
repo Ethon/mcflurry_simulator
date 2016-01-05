@@ -14,6 +14,10 @@ namespace UFO.Server.Data {
             this.FlagPath = flagPath;
         }
 
+        public Country()
+        {
+        }
+
         public uint Id {
             get; private set;
         }

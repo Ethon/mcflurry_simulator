@@ -15,6 +15,10 @@ namespace UFO.Server.Data {
             VenueId = venueId;
         }
 
+        public Performance()
+        {
+        }
+
         public uint Id {
             get; private set;
         }

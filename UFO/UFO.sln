@@ -13,6 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UFO.Commander", "UFO.Commander\UFO.Commander.csproj", "{6CDB0450-5DD5-4ADF-9525-62857697F3A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{67C4BDEE-9E0D-40F4-815D-16C8F7E1EBE3} = {67C4BDEE-9E0D-40F4-815D-16C8F7E1EBE3}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UFO.WebService", "UFO.WebService\UFO.WebService.csproj", "{67C4BDEE-9E0D-40F4-815D-16C8F7E1EBE3}"
 EndProject

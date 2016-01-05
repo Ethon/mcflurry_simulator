@@ -14,6 +14,10 @@ namespace UFO.Server.Data {
             this.Name = name;
         }
 
+        public Category()
+        {
+        }
+
         public uint Id {
             get; private set;
         }

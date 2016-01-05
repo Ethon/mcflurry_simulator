@@ -16,6 +16,10 @@ namespace UFO.Server.Data {
             Longitude = lng;
         }
 
+        public Venue()
+        {
+        }
+
         public uint Id {
             get; private set;
         }

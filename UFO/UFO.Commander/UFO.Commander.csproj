@@ -45,6 +45,10 @@
       <HintPath>..\packages\Microsoft.Maps.MapControl.WPF.1.0.0.3\lib\net40-Client\Microsoft.Maps.MapControl.WPF.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -125,6 +129,12 @@
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="ViewModel\VenueManagementViewModel.cs" />
     <Compile Include="ViewModel\VenueViewModel.cs" />
+    <Compile Include="WebService\ArtistWebService.cs" />
+    <Compile Include="WebService\CategoryWebService.cs" />
+    <Compile Include="WebService\CountryWebService.cs" />
+    <Compile Include="WebService\PerformanceWebService.cs" />
+    <Compile Include="WebService\UserWebService.cs" />
+    <Compile Include="WebService\VenueWebService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommanderWindow.xaml.cs">

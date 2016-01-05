@@ -21,6 +21,10 @@ namespace UFO.Server.Data {
             this.IsDeleted = false;
         }
 
+        public Artist()
+        {
+        }
+
         public uint Id {
             get; private set;
         }
