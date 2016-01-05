@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="WEB-INF/templates/basicTemplate.xhtml">
+	<ui:define name="title">
+	    UFO Web - Artists
+	</ui:define>
+	<ui:define name="content">
+		<h3>Artists Overview</h3>
+		 <p:dataGrid var="artist" value="#{restArtistService.allArtists}" columns="4" layout="grid"
+        rows="12" paginator="true" id="artists"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        rowsPerPageTemplate="6,12,16">
+ 
+        <f:facet name="header">
+            Artists
+        </f:facet>
+ 
+        <p:panel header="#{artist.id}" style="text-align:center">
+            <h:panelGrid columns="1" style="width:100%">
+ 
+                <h:outputText value="#{artist.name}" />
+ 
+
+            </h:panelGrid>
+        </p:panel>
+        
+ 
+    </p:dataGrid>
+		
+		
+    	<!--<h:dataTable value="#{restArtistService.allArtists}" var="item">
+	    	<h:column>
+	    		<f:facet name="header">
+	    			<h:outputText value="Id" />
+	    		</f:facet>
+		    	<h:outputText value="#{item.email}" />
+	    	</h:column>
+    	</h:dataTable>  -->
+	</ui:define>
+</ui:composition>
+</html>

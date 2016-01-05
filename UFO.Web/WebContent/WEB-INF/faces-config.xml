@@ -14,5 +14,25 @@
 		<managed-bean-class>swk5.ufo.web.service.rest.RestArtistService</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
-
+	<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>GoHomeEvent</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>BrowseAllArtistsEvent</from-outcome>
+			<to-view-id>/allArtists.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+		<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>BrowseAllPerformancesEvent</from-outcome>
+			<to-view-id>/allPerformances.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 </faces-config>
