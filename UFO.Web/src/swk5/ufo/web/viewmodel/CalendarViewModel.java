@@ -1,34 +1,45 @@
 package swk5.ufo.web.viewmodel;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.view.ViewScoped;
 
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
-@ManagedBean
-@ViewScoped
+import swk5.ufo.web.model.ArtistModel;
+import swk5.ufo.web.model.PerformanceModel;
+import swk5.ufo.web.service.ServiceCallException;
+import swk5.ufo.web.service.rest.RestArtistService;
+import swk5.ufo.web.service.rest.RestPerformanceService;
+
 public class CalendarViewModel implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 199280051805712317L;
 
 	private ScheduleModel eventModel;
 
 	private ScheduleModel lazyEventModel;
 
 	private ScheduleEvent event = new DefaultScheduleEvent();
+
+	private RestPerformanceService performanceService;
+	private RestArtistService artistService;
 
 	public void addEvent(ActionEvent actionEvent) {
 		if (event.getId() == null) {
@@ -63,7 +74,7 @@ public class CalendarViewModel implements Serializable {
 
 	public Date getInitialDate() {
 		final Calendar calendar = Calendar.getInstance();
-		calendar.set(calendar.get(Calendar.YEAR), Calendar.FEBRUARY, calendar.get(Calendar.DATE), 0, 0, 0);
+		calendar.set(calendar.get(Calendar.YEAR), Calendar.JULY, calendar.get(Calendar.DATE), 0, 0, 0);
 
 		return calendar.getTime();
 	}
@@ -84,42 +95,20 @@ public class CalendarViewModel implements Serializable {
 
 	@PostConstruct
 	public void init() {
+
+		performanceService = new RestPerformanceService();
+		artistService = new RestArtistService();
+		PerformanceModel[] performances = new PerformanceModel[0];
 		eventModel = new DefaultScheduleModel();
-		eventModel.addEvent(new DefaultScheduleEvent("Champions League Match", previousDay8Pm(), previousDay11Pm()));
-		eventModel.addEvent(new DefaultScheduleEvent("Birthday Party", today1Pm(), today6Pm()));
-		eventModel.addEvent(new DefaultScheduleEvent("Breakfast at Tiffanys", nextDay9Am(), nextDay11Am()));
-		eventModel
-				.addEvent(new DefaultScheduleEvent("Plant the new garden stuff", theDayAfter3Pm(), fourDaysLater3pm()));
+		try {
+			performances = performanceService.getAllPerformances();
+		} catch (final ServiceCallException e) {
+			e.printStackTrace();
+		}
 
-		lazyEventModel = new LazyScheduleModel() {
-
-			@Override
-			public void loadEvents(Date start, Date end) {
-				Date random = getRandomDate(start);
-				addEvent(new DefaultScheduleEvent("Lazy Event 1", random, random));
-
-				random = getRandomDate(start);
-				addEvent(new DefaultScheduleEvent("Lazy Event 2", random, random));
-			}
-		};
-	}
-
-	private Date nextDay11Am() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.AM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-		t.set(Calendar.HOUR, 11);
-
-		return t.getTime();
-	}
-
-	private Date nextDay9Am() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.AM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-		t.set(Calendar.HOUR, 9);
-
-		return t.getTime();
+		for (final PerformanceModel cur : performances) {
+			eventModel.addEvent(performanceToEvent(cur));
+		}
 	}
 
 	public void onDateSelect(SelectEvent selectEvent) {
@@ -144,35 +133,32 @@ public class CalendarViewModel implements Serializable {
 		event = (ScheduleEvent) selectEvent.getObject();
 	}
 
-	private Date previousDay11Pm() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
-		t.set(Calendar.HOUR, 11);
+	private DefaultScheduleEvent performanceToEvent(PerformanceModel p) {
+		final Instant instant = p.getDate().atZone(ZoneId.systemDefault()).toInstant();
+		final Date startDate = Date.from(instant);
+		final DefaultScheduleEvent event = new DefaultScheduleEvent();
 
-		return t.getTime();
-	}
+		final Calendar cal = Calendar.getInstance(); // creates calendar
+		cal.setTime(startDate); // sets calendar time/date
 
-	private Date previousDay8Pm() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
-		t.set(Calendar.HOUR, 8);
+		final ArtistModel artist;
+		event.setTitle("HORST");
+		try {
+			artist = artistService.getArtistById(p.getArtistId());
+			event.setTitle(artist.getName());
+		} catch (final ServiceCallException e) {
+			e.printStackTrace();
+		}
 
-		return t.getTime();
+		event.setStartDate(cal.getTime());
+		cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
+		event.setEndDate(cal.getTime());
+
+		return event;
 	}
 
 	public void setEvent(ScheduleEvent event) {
 		this.event = event;
-	}
-
-	private Date theDayAfter3Pm() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 2);
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.HOUR, 3);
-
-		return t.getTime();
 	}
 
 	private Calendar today() {
@@ -180,22 +166,6 @@ public class CalendarViewModel implements Serializable {
 		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
 
 		return calendar;
-	}
-
-	private Date today1Pm() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.HOUR, 1);
-
-		return t.getTime();
-	}
-
-	private Date today6Pm() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.HOUR, 6);
-
-		return t.getTime();
 	}
 
 }
