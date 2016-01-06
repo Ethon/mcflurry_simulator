@@ -9,13 +9,6 @@ using UFO.Server.Data;
 
 namespace UFO.Commander.WebService
 {
-    /*
-    GET api/Venue/GetVenueById/{id}	
-GET api/Venue/GetAllVenues	
-POST api/Venue/UpdateVenue	
-POST 	
-GET 
-*/
     class VenueWebService : IVenueService
     {
         private RestClient client;
@@ -24,6 +17,7 @@ GET
         public VenueWebService(RestClient client)
         {
             this.client = client;
+            listeners = new List<IVenueListener>();
         }
 
         public void AddListener(IVenueListener listener)
@@ -55,16 +49,23 @@ GET
             request.RequestFormat = DataFormat.Json;
             request.AddBody(venue);
             client.Execute(request);
+            foreach (var listener in listeners)
+            {
+                listener.OnVenueDeletion(venue);
+            }
         }
 
         public List<Venue> GetAllVenues()
         {
-            return new List<Venue>();
+            var request = new RestRequest("api/Venue/GetAllVenues", Method.GET);
+            return client.Execute<List<Venue>>(request).Data;
         }
 
         public Venue GetVenueById(uint id)
         {
-            return new Venue();
+            var request = new RestRequest("api/Venue/GetVenueById/{id}", Method.GET);
+            request.AddUrlSegment("id", id.ToString());
+            return client.Execute<Venue>(request).Data;
         }
 
         public void RemoveListener(IVenueListener listener)
@@ -74,7 +75,14 @@ GET
 
         public void UpdateVenue(Venue venue)
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/Venue/UpdateVenue", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(venue);
+            client.Execute(request);
+            foreach (var listener in listeners)
+            {
+                listener.OnVenueUpdate(venue);
+            }
         }
     }
 }
