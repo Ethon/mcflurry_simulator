@@ -25,6 +25,12 @@ namespace UFO.WebService.Controllers
         }
 
         [HttpGet]
+        public Artist GetArtistByName(string name)
+        {
+            return artistService.GetArtistByName(name);
+        }
+
+        [HttpGet]
         public Artist[] GetAllArtists()
         {
             return artistService.GetAllArtists().ToArray();
@@ -42,10 +48,11 @@ namespace UFO.WebService.Controllers
             artistService.DeleteArtist(artist);
         }
 
-        [HttpGet]
-        public Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath)
+        [HttpPost]
+        public Artist CreateArtist(Artist artist)
         {
-            return artistService.CreateArtist(name, email, category, country, picturePath, videoPath);
+            return artistService.CreateArtist(artist.Name, artist.Email, new Category(artist.CategoryId, null, null),
+                new Country(artist.CountryId, null, null), artist.PicturePath, artist.VideoPath);
         }
     }
 }

@@ -14,6 +14,7 @@ public class ServiceConfig {
 
 	// ArtistService
 	public final static String ARTIST_GETBYID = SERVICE_BASE + "api/Artist/GetArtistById/%s";
+	public final static String ARTIST_GETBYNAME = SERVICE_BASE + "api/Artist/GetArtistByName?name=%s";
 	public final static String ARTIST_GETALL = SERVICE_BASE + "api/Artist/GetAllArtists";
 	public final static String ARTIST_UPDATE = SERVICE_BASE + "api/Artist/UpdateArtist";
 	public final static String ARTIST_DELETE = SERVICE_BASE + "api/Artist/DeleteArtist";
@@ -39,6 +40,7 @@ public class ServiceConfig {
 
 	// PerformanceService
 	public final static String PERFORMANCE_GETBYID = SERVICE_BASE + "api/Performance/GetPerformanceById/%s";
+	public final static String PERFORMANCE_GETFORDAY = SERVICE_BASE + "api/Performance/GetPerformancesForDay?date=%s";
 	public final static String PERFORMANCE_GETALL = SERVICE_BASE + "api/Performance/GetAllPerformances";
 	public final static String PERFORMANCE_UPDATE = SERVICE_BASE + "api/Performance/UpdatePerformance";
 	public final static String PERFORMANCE_DELETE = SERVICE_BASE + "api/Country/DeletePerformance";

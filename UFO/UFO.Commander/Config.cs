@@ -41,6 +41,8 @@ namespace UFO.Commander {
 
         public Config() {
             MediaRootPath = @"C:\";
+            UseWebServices = false;
+            WebServiceBase = "http://localhost:56566";
             DatabaseServer = "localhost";
             DatabaseName = "ufo";
             DatabaseUser = "root";
@@ -55,6 +57,10 @@ namespace UFO.Commander {
         }
 
         public string MediaRootPath { get; set; }
+
+        public bool UseWebServices { get; set; }
+
+        public string WebServiceBase { get; set; }
 
         public string DatabaseServer { get; set; }
 

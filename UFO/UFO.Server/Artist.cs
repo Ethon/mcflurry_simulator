@@ -26,7 +26,7 @@ namespace UFO.Server.Data {
         }
 
         public uint Id {
-            get; private set;
+            get; set;
         }
 
         public string Name {
@@ -92,7 +92,7 @@ namespace UFO.Server.Data {
     public class ArtistDao : IArtistDao {
 
         private const string SQL_FIND_BY_ID = "SELECT * FROM Artist WHERE artistId=@artistId";
-        private const string SQL_FIND_BY_NAME = "SELECT * FROM Artist WHERE name LIKE @name";
+        private const string SQL_FIND_BY_NAME = "SELECT * FROM Artist WHERE name LIKE %@name%";
         private const string SQL_FIND_ALL = "SELECT * FROM Artist WHERE deleted=0";
         private const string SQL_UPDATE = "UPDATE Artist SET name=@name,email=@email,categoryId=@categoryId,countryId=@countryId,picturePath=@picturePath,videoPath=@videoPath,deleted=@deleted WHERE artistId=@artistId";
         private const string SQL_INSERT = "INSERT INTO Artist (name,email,categoryId,countryId,picturePath,videoPath) VALUES(@name,@email,@categoryId,@countryId,@picturePath,@videoPath)";

@@ -19,7 +19,7 @@ namespace UFO.Server.Data {
         }
 
         public uint Id {
-            get; private set;
+            get; set;
         }
 
         public string Name {

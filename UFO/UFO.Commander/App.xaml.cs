@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,20 +18,26 @@ namespace UFO.Commander {
             PlatformService.Instance = this;
             Config config = Config.Load();
 
-            string connectionString = String.Format("Server = {0}; Database = {1}; Uid = {2};",
-                config.DatabaseServer, config.DatabaseName, config.DatabaseUser);
-            IDatabase db = null;
-            try { 
-                db = new MYSQLDatabase(connectionString);
-                
-            } catch(Exception ex) {
-                PlatformService.Instance.ShowErrorMessage(
-                    "Could not connect to database '" + connectionString + "'\n\n" + ex.Message,
-                    "Database connection failure");
-                Environment.Exit(-1);
+            if(!config.UseWebServices) {
+                string connectionString = String.Format("Server = {0}; Database = {1}; Uid = {2};",
+                    config.DatabaseServer, config.DatabaseName, config.DatabaseUser);
+                IDatabase db = null;
+                try { 
+                    db = new MYSQLDatabase(connectionString);
+                } catch(Exception ex) {
+                    PlatformService.Instance.ShowErrorMessage(
+                        "Could not connect to database '" + connectionString + "'\n\n" + ex.Message,
+                        "Database connection failure");
+                    Environment.Exit(-1);
+                }
+                SharedServices.Init(db);
+            }
+            else
+            {
+                var client = new RestClient(config.WebServiceBase);
+                SharedServices.Init(client);
             }
 
-            SharedServices.Init(db);
             base.OnStartup(e);
         }
 

@@ -25,8 +25,9 @@ namespace UFO.WebService.Controllers {
         }
 
         [HttpGet]
-        public void GetPerformancesForDay(DateTime date) {
-            ps.GetPerformancesForDay(date);
+        public Performance[] GetPerformancesForDay(string date) {
+            string[] parts = date.Split('-');
+            return ps.GetPerformancesForDay(new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]))).ToArray();
         }
 
 	    [HttpPost]
@@ -40,17 +41,8 @@ namespace UFO.WebService.Controllers {
         }
 
         [HttpPost]
-        public Performance CreatePerformance(CreationParams paramz) {
-            return ps.CreatePerformance(paramz.Date, paramz.Artist, paramz.Venue);
-        }
-
-        public class CreationParams
-        {
-            public DateTime Date { get; private set; }
-
-            public Artist Artist { get; private set; }
-
-            public Venue Venue { get; private set; }
+        public Performance CreatePerformance(Performance param) {
+            return ps.CreatePerformance(param.Date, new Artist { Id = param.ArtistId }, new Venue { Id = param.VenueId });
         }
     }
 }
