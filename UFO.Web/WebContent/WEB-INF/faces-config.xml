@@ -19,7 +19,19 @@
 		<managed-bean-name>calendarViewModel</managed-bean-name>
 		<managed-bean-class>swk5.ufo.web.viewmodel.CalendarViewModel</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
+
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>restVenueService</managed-bean-name>
+		<managed-bean-class>swk5.ufo.web.service.rest.RestVenueService</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>dataStorage</managed-bean-name>
+		<managed-bean-class>swk5.ufo.web.DataStorage</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
 	<navigation-rule>
 		<from-view-id>/*</from-view-id>
 		<navigation-case>
@@ -27,6 +39,7 @@
 			<to-view-id>/index.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	
 	<navigation-rule>
 		<from-view-id>/*</from-view-id>
 		<navigation-case>
@@ -34,11 +47,20 @@
 			<to-view-id>/allArtists.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-		<navigation-rule>
+	
+	<navigation-rule>
 		<from-view-id>/*</from-view-id>
 		<navigation-case>
 			<from-outcome>BrowseAllPerformancesEvent</from-outcome>
 			<to-view-id>/allPerformances.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/*</from-view-id>
+		<navigation-case>
+			<from-outcome>BrowseAllVenuesEvent</from-outcome>
+			<to-view-id>/allVenues.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
