@@ -20,32 +20,49 @@ namespace UFO.Commander.WebService
 
         public Performance CreatePerformance(DateTime date, Artist artist, Venue venue)
         {
-            return new Performance();
+            Performance param = new Performance(0, date, artist.Id, venue.Id);
+            var request = new RestRequest("api/Performance/CreatePerformance", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(param);
+            return client.Execute<Performance>(request).Data;
         }
 
         public void DeletePerformance(Performance performance)
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/Performance/DeletePerformance", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(performance);
+            client.Execute(request);
         }
 
         public List<Performance> GetAllPerformances()
         {
-            return new List<Performance>();
+            var request = new RestRequest("api/Performance/GetAllPerformances", Method.GET);
+            return client.Execute<List<Performance>>(request).Data;
         }
 
         public Performance GetPerformanceById(uint id)
         {
-            return new Performance();
+            var request = new RestRequest("api/Performance/GetPerformanceById/{id}", Method.GET);
+            request.AddUrlSegment("id", id.ToString());
+            return client.Execute<Performance>(request).Data;
         }
 
         public List<Performance> GetPerformancesForDay(DateTime date)
         {
-            return new List<Performance>();
+            var request = new RestRequest("api/Performance/GetPerformancesForDay?date={date}", Method.GET);
+            string dateString = string.Format("{0}-{1}-{2}", date.Year, date.Month, date.Day);
+            string escapedDateString = System.Uri.EscapeDataString(dateString);
+            request.AddUrlSegment("date", escapedDateString);
+            return client.Execute<List<Performance>>(request).Data;
         }
 
         public void UpdatePerformance(Performance performance)
         {
-            throw new NotImplementedException();
+            var request = new RestRequest("api/Performance/UpdatePerformance", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(performance);
+            client.Execute(request);
         }
     }
 }
