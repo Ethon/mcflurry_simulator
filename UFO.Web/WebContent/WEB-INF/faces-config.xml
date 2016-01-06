@@ -25,6 +25,11 @@
 		<managed-bean-class>swk5.ufo.web.service.rest.RestVenueService</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>dataStorage</managed-bean-name>
+		<managed-bean-class>swk5.ufo.web.DataStorage</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
 	
 	<navigation-rule>
 		<from-view-id>/*</from-view-id>
