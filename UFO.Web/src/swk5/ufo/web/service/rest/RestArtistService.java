@@ -11,13 +11,13 @@ import swk5.ufo.web.service.util.HttpUtil;
 public class RestArtistService implements ArtistService {
 
 	@Override
-	public ArtistModel CreateArtist(String name, String email, CategoryModel category, CountryModel country,
+	public ArtistModel createArtist(String name, String email, CategoryModel category, CountryModel country,
 			String picturePath, String videoPath) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void DeleteArtist(ArtistModel artist) throws ServiceCallException {
+	public void deleteArtist(ArtistModel artist) throws ServiceCallException {
 		throw new UnsupportedOperationException();
 
 	}
@@ -34,7 +34,13 @@ public class RestArtistService implements ArtistService {
 	}
 
 	@Override
-	public void UpdateArtist(ArtistModel artist) throws ServiceCallException {
+	public ArtistModel getArtistByName(String name) throws ServiceCallException {
+		final String url = String.format(ServiceConfig.ARTIST_GETBYNAME, name);
+		return HttpUtil.getFromJsonService(url, ArtistModel.class);
+	}
+
+	@Override
+	public void updateArtist(ArtistModel artist) throws ServiceCallException {
 		throw new UnsupportedOperationException();
 
 	}

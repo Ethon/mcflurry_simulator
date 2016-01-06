@@ -5,15 +5,17 @@ import swk5.ufo.web.model.CategoryModel;
 import swk5.ufo.web.model.CountryModel;
 
 public interface ArtistService {
-	public ArtistModel CreateArtist(String name, String email, CategoryModel category, CountryModel country,
+	public ArtistModel createArtist(String name, String email, CategoryModel category, CountryModel country,
 			String picturePath, String videoPath);
 
-	public void DeleteArtist(ArtistModel artist) throws ServiceCallException;
+	public void deleteArtist(ArtistModel artist) throws ServiceCallException;
 
 	public ArtistModel[] getAllArtists() throws ServiceCallException;
 
 	public ArtistModel getArtistById(int id) throws ServiceCallException;
 
-	public void UpdateArtist(ArtistModel artist) throws ServiceCallException;
+	public ArtistModel getArtistByName(String name) throws ServiceCallException;
+
+	public void updateArtist(ArtistModel artist) throws ServiceCallException;
 
 }

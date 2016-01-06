@@ -67,6 +67,11 @@ namespace UFO.Commander.WebService
             return client.Execute<Artist>(request).Data;
         }
 
+        public Artist GetArtistByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveListener(IArtistListener listener)
         {
             listeners.Remove(listener);

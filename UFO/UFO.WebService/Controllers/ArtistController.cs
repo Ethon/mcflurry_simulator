@@ -25,6 +25,12 @@ namespace UFO.WebService.Controllers
         }
 
         [HttpGet]
+        public Artist GetArtistByName(string name)
+        {
+            return artistService.GetArtistByName(name);
+        }
+
+        [HttpGet]
         public Artist[] GetAllArtists()
         {
             return artistService.GetAllArtists().ToArray();

@@ -17,6 +17,7 @@ namespace UFO.Server {
     public interface IArtistService {
         Artist CreateArtist(string name, string email, Category category, Country country, string picturePath, string videoPath);
         Artist GetArtistById(uint id);
+        Artist GetArtistByName(string name);
         List<Artist> GetAllArtists();
         void UpdateArtist(Artist artist);
         void DeleteArtist(Artist artist);
@@ -138,6 +139,11 @@ namespace UFO.Server {
 
         public void RemoveListener(IArtistListener listener) {
             listeners.Remove(listener);
+        }
+
+        public Artist GetArtistByName(string name)
+        {
+            return aDao.GetArtistByName(name);
         }
     }
 }
