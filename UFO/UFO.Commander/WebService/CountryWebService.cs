@@ -20,7 +20,7 @@ namespace UFO.Commander.WebService
 
         public Country CreateCountry(string name, string flagPath)
         {
-            return new Country();
+            throw new NotImplementedException();
         }
 
         public void DeleteCountry(Country country)
@@ -30,12 +30,15 @@ namespace UFO.Commander.WebService
 
         public List<Country> GetAllCountries()
         {
-            return new List<Country>();
+            var request = new RestRequest("api/Country/GetAllCountries", Method.GET);
+            return client.Execute<List<Country>>(request).Data;
         }
 
         public Country GetCountryById(uint id)
         {
-            return new Country();
+            var request = new RestRequest("api/Country/GetCountryById/{id}", Method.GET);
+            request.AddUrlSegment("id", id.ToString());
+            return client.Execute<Country>(request).Data;
         }
 
         public void UpdateCountry(Country country)
