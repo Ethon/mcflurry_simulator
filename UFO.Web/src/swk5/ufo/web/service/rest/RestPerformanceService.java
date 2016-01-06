@@ -13,12 +13,12 @@ import swk5.ufo.web.service.util.HttpUtil;
 public class RestPerformanceService implements PerformanceService {
 
 	@Override
-	public PerformanceModel CreatePerformance(LocalDateTime date, ArtistModel artist, VenueModel venue) {
+	public PerformanceModel createPerformance(LocalDateTime date, ArtistModel artist, VenueModel venue) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public void DeletePerformance(PerformanceModel performance) throws ServiceCallException {
+	public void deletePerformance(PerformanceModel performance) throws ServiceCallException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -34,14 +34,15 @@ public class RestPerformanceService implements PerformanceService {
 	}
 
 	@Override
-	public void GetPerformancesForDay(LocalDateTime date) {
-		// TODO Auto-generated method stub
-
+	public PerformanceModel[] getPerformancesForDay(LocalDateTime date) throws ServiceCallException {
+		final String dateString = String.format("%d-%d-%d", date.getYear(), date.getMonth().getValue(),
+				date.getDayOfWeek().getValue());
+		final String url = String.format(ServiceConfig.PERFORMANCE_GETFORDAY, dateString);
+		return HttpUtil.getFromJsonService(url, PerformanceModel[].class);
 	}
 
 	@Override
-	public void UpdatePerformance(PerformanceModel performance) throws ServiceCallException {
+	public void updatePerformance(PerformanceModel performance) throws ServiceCallException {
 		throw new UnsupportedOperationException();
 	}
-
 }

@@ -39,6 +39,7 @@ public class ServiceConfig {
 
 	// PerformanceService
 	public final static String PERFORMANCE_GETBYID = SERVICE_BASE + "api/Performance/GetPerformanceById/%s";
+	public final static String PERFORMANCE_GETFORDAY = SERVICE_BASE + "api/Performance/GetPerformancesForDay?date=%s";
 	public final static String PERFORMANCE_GETALL = SERVICE_BASE + "api/Performance/GetAllPerformances";
 	public final static String PERFORMANCE_UPDATE = SERVICE_BASE + "api/Performance/UpdatePerformance";
 	public final static String PERFORMANCE_DELETE = SERVICE_BASE + "api/Country/DeletePerformance";
