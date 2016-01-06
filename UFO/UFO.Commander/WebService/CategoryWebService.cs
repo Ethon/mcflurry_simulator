@@ -20,12 +20,15 @@ namespace UFO.Commander.WebService
 
         public List<Category> GetAllCategories()
         {
-            return new List<Category>();
+            var request = new RestRequest("api/Category/GetAllCategories", Method.GET);
+            return client.Execute<List<Category>>(request).Data;
         }
 
         public Category GetCategoryById(uint id)
         {
-            return new Category();
+            var request = new RestRequest("api/Category/GetCategoryById/{id}", Method.GET);
+            request.AddUrlSegment("id", id.ToString());
+            return client.Execute<Category>(request).Data;
         }
     }
 }
