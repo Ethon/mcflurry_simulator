@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
 import swk5.ufo.web.model.ArtistModel;
 import swk5.ufo.web.model.PerformanceModel;
 import swk5.ufo.web.model.VenueModel;
@@ -17,6 +20,8 @@ import swk5.ufo.web.service.rest.RestArtistService;
 import swk5.ufo.web.service.rest.RestPerformanceService;
 import swk5.ufo.web.service.rest.RestVenueService;
 
+@ManagedBean(name = "dataStorage")
+@RequestScoped
 public class DataStorage {
 	private final ArtistService artistService;
 	private final List<ArtistModel> artists;

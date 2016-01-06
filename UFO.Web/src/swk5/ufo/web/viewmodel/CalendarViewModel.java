@@ -5,9 +5,11 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -19,11 +21,9 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import swk5.ufo.web.DataStorage;
 import swk5.ufo.web.model.ArtistModel;
 import swk5.ufo.web.model.PerformanceModel;
-import swk5.ufo.web.service.ServiceCallException;
-import swk5.ufo.web.service.rest.RestArtistService;
-import swk5.ufo.web.service.rest.RestPerformanceService;
 
 public class CalendarViewModel implements Serializable {
 
@@ -38,8 +38,8 @@ public class CalendarViewModel implements Serializable {
 
 	private ScheduleEvent event = new DefaultScheduleEvent();
 
-	private RestPerformanceService performanceService;
-	private RestArtistService artistService;
+	@ManagedProperty(value = "#{dataStorage}")
+	private DataStorage dataStorage;
 
 	public void addEvent(ActionEvent actionEvent) {
 		if (event.getId() == null) {
@@ -55,13 +55,8 @@ public class CalendarViewModel implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
-	private Date fourDaysLater3pm() {
-		final Calendar t = (Calendar) today().clone();
-		t.set(Calendar.AM_PM, Calendar.PM);
-		t.set(Calendar.DATE, t.get(Calendar.DATE) + 4);
-		t.set(Calendar.HOUR, 3);
-
-		return t.getTime();
+	public DataStorage getDataStorage() {
+		return dataStorage;
 	}
 
 	public ScheduleEvent getEvent() {
@@ -96,15 +91,8 @@ public class CalendarViewModel implements Serializable {
 	@PostConstruct
 	public void init() {
 
-		performanceService = new RestPerformanceService();
-		artistService = new RestArtistService();
-		PerformanceModel[] performances = new PerformanceModel[0];
 		eventModel = new DefaultScheduleModel();
-		try {
-			performances = performanceService.getAllPerformances();
-		} catch (final ServiceCallException e) {
-			e.printStackTrace();
-		}
+		final List<PerformanceModel> performances = dataStorage.getPerformances();
 
 		for (final PerformanceModel cur : performances) {
 			eventModel.addEvent(performanceToEvent(cur));
@@ -141,13 +129,11 @@ public class CalendarViewModel implements Serializable {
 		final Calendar cal = Calendar.getInstance(); // creates calendar
 		cal.setTime(startDate); // sets calendar time/date
 
-		final ArtistModel artist;
-		event.setTitle("HORST");
-		try {
-			artist = artistService.getArtistById(p.getArtistId());
+		final ArtistModel artist = dataStorage.getArtistById(p.getArtistId());
+		if (artist == null) {
+			event.setTitle("Unknown artist " + String.valueOf(p.getArtistId()));
+		} else {
 			event.setTitle(artist.getName());
-		} catch (final ServiceCallException e) {
-			e.printStackTrace();
 		}
 
 		event.setStartDate(cal.getTime());
@@ -155,6 +141,10 @@ public class CalendarViewModel implements Serializable {
 		event.setEndDate(cal.getTime());
 
 		return event;
+	}
+
+	public void setDataStorage(DataStorage dataStorage) {
+		this.dataStorage = dataStorage;
 	}
 
 	public void setEvent(ScheduleEvent event) {
