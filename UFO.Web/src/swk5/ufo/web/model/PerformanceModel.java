@@ -1,6 +1,7 @@
 package swk5.ufo.web.model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +11,7 @@ public class PerformanceModel {
 	private final int id;
 
 	@SerializedName("Date")
-	private final LocalDateTime date;
+	private final String date;
 
 	@SerializedName("ArtistId")
 	private final int artistId;
@@ -18,7 +19,7 @@ public class PerformanceModel {
 	@SerializedName("VenueId")
 	private final int venueId;
 
-	public PerformanceModel(int id, LocalDateTime date, int artistId, int venueId) {
+	public PerformanceModel(int id, String date, int artistId, int venueId) {
 		this.id = id;
 		this.date = date;
 		this.artistId = artistId;
@@ -61,7 +62,8 @@ public class PerformanceModel {
 	}
 
 	public LocalDateTime getDate() {
-		return date;
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd'T'H:m:s");
+		return LocalDateTime.parse(date, formatter);
 	}
 
 	public int getId() {
