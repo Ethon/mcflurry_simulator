@@ -1,4 +1,4 @@
-package swk5.ufo.web.planer;
+package swk5.ufo.web.viewmodel;
 
 public class Commands {
 	public static final String GO_HOME = "GoHomeEvent";

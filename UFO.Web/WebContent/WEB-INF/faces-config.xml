@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
     version="2.2">
+    
 	<managed-bean>
 		<managed-bean-name>restPerformanceService</managed-bean-name>
 		<managed-bean-class>swk5.ufo.web.service.rest.RestPerformanceService</managed-bean-class>
@@ -12,6 +13,11 @@
 	<managed-bean>
 		<managed-bean-name>restArtistService</managed-bean-name>
 		<managed-bean-class>swk5.ufo.web.service.rest.RestArtistService</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>calendarViewModel</managed-bean-name>
+		<managed-bean-class>swk5.ufo.web.viewmodel.CalendarViewModel</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	<navigation-rule>
@@ -35,4 +41,5 @@
 			<to-view-id>/allPerformances.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	
 </faces-config>

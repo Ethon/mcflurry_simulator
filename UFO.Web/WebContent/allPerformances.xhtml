@@ -4,22 +4,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="WEB-INF/templates/basicTemplate.xhtml">
 	<ui:define name="title">
-	    UFO Web - Performances
+	    UFO Web - Performances 123
 	</ui:define>
-	<ui:define name="content">
-		<h3>Performances Overview</h3>
-    	<h:dataTable value="#{restPerformanceService.allPerformances}" var="item">
-	    	<h:column>
-	    		<f:facet name="header">
-	    			<h:outputText value="Id" />
-	    		</f:facet>
-		    	<h:outputText value="#{item.id}" />
-	    	</h:column>
-    	</h:dataTable>
+  	<ui:define name="content">
+  		<h3>Performance Calendarrrrr</h3>
+		<h:form>
+		  <p:growl id="messages" showDetail="true" />
+    <h:panelGrid columnClasses="value">
+        <h3 style="margin-top: 0">Editable Schedule</h3>
+        <p:schedule id="schedule" value="#{calenderViewModel.eventModel}" widgetVar="myschedule" timeZone="GMT+2">
+ 
+
+        </p:schedule>
+  
+
+    </h:panelGrid>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>
+
+
